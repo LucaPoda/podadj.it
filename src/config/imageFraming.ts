@@ -67,7 +67,7 @@ export const cardFramingConfig: Record<string, CardFraming> = {
       imageJpg: '/assets/bg-tech.jpg',
     },
     mobile: {
-      position: 'center 50%', // Inquadratura calibrata per bg-tech-mobile
+      position: 'center 77%', // Inquadratura calibrata per bg-tech-mobile
       zoom: 1.0,
       imageWebp: '/assets/bg-tech-mobile.webp', // Nuova immagine dedicata mobile!
       imageJpg: '/assets/bg-tech-mobile.jpg',
