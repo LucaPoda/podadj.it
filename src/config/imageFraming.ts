@@ -10,8 +10,8 @@ export interface CardFraming {
     zoom?: number;    // Fattore di scala (default: 1.0)
   };
   mobile: {
-    position: string; // CSS background-position per mobile (es. 'center 15%')
-    zoom?: number;    // Fattore di scala per mobile (default: 1.0)
+    position: string; // CSS background-position per mobile
+    zoom?: number;    // Fattore di scala per mobile
   };
 }
 
@@ -48,11 +48,11 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'tech-side': {
     desktop: {
-      position: 'center 20%', // Inquadra Luca e la cassa audio sul desktop
+      position: 'center 20%', // Inquadratura verticale desktop
       zoom: 1.0,
     },
     mobile: {
-      position: 'center 15%', // Centra il viso e il busto evitando che la testa sia tagliata
+      position: 'center 15%', // Ottimale con card mobile più alta (h-40) per mostrare viso e cassa
       zoom: 1.0,
     },
   },
@@ -62,7 +62,7 @@ export const cardFramingConfig: Record<string, CardFraming> = {
       zoom: 1.0,
     },
     mobile: {
-      position: 'center 45%',
+      position: 'center center', // Inquadra la consolle CDJ nella card quadrata
       zoom: 1.0,
     },
   },
@@ -72,7 +72,7 @@ export const cardFramingConfig: Record<string, CardFraming> = {
       zoom: 1.0,
     },
     mobile: {
-      position: 'center 35%',
+      position: 'center center', // Inquadra la folla nella card quadrata
       zoom: 1.0,
     },
   },
@@ -82,7 +82,7 @@ export const cardFramingConfig: Record<string, CardFraming> = {
       zoom: 1.0,
     },
     mobile: {
-      position: 'center 35%',
+      position: 'center 22%', // Mostra i 4 volti e mezzo busto senza tagliare le teste
       zoom: 1.0,
     },
   },
