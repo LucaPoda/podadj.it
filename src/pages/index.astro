@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { useTranslations } from '../i18n/ui';
+
+const locale = 'it';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <Header locale={locale} />
+  
+  <main class="w-full mt-8 md:mt-10">
+    <div class="text-center py-12 text-white">
+      <h2 class="text-2xl font-bold uppercase tracking-wider text-outline">
+        PODA DJ — Piattaforma Ufficiale
+      </h2>
+      <p class="text-gray-300 mt-2 text-sm text-shadow-soft">
+        Fase 1 completata: Architettura Astro 5, i18n & Assets Pipeline attivi.
+      </p>
+    </div>
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

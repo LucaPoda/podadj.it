@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PODA DJ — Web Platform
 
-## Getting Started
+Sito web ufficiale e showcase musicale per **PODA DJ** (Electronic Music & Pro Audio Systems).
 
-First, run the development server:
+## Tech Stack
+- **Framework:** [Astro 5](https://astro.build/) (Static Site Generation & Islands Architecture)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) con palette personalizzata (`neonPurple`, `neonBlue`, glassmorphism)
+- **i18n:** Supporto bilingue nativo (Italiano alla root `/` e Inglese su `/en/`)
+- **Hosting / Deploy:** Ottimizzato per Vercel (`@astrojs/vercel`)
+- **Assets Pipeline:** Pipeline automatizzata (`sharp`) per conversione immagini in WebP/AVIF responsive
+
+## Script Disponibili
 
 ```bash
+# Avvia il server di sviluppo locale
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Compila il sito per la produzione (SSG)
+npm run build
+
+# Anteprima locale della build di produzione
+npm run preview
+
+# Ottimizzazione e compressione immagini
+npm run optimize-images
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Struttura del Progetto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+├── assets/                 # Asset sorgente ad alta risoluzione (fotocamera)
+├── public/assets/          # Asset web-ottimizzati (WebP / JPG / PNG compressi)
+├── src/
+│   ├── components/         # Componenti riutilizzabili (Header, Footer, BentoCard, ecc.)
+│   ├── content/            # Archivio dati strutturati (eventi, live-sets)
+│   ├── i18n/               # Dizionari lingua (it.json, en.json) e helper di routing
+│   ├── layouts/            # Layout di base con SEO e Open Graph
+│   ├── pages/              # Routing pagine (Home, Formats, Events, Service)
+│   └── styles/             # CSS globale e regole per effetti neon/glass
+├── astro.config.mjs        # Configurazione Astro e i18n
+└── tailwind.config.mjs     # Configurazione Tailwind
+```

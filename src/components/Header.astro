@@ -1,0 +1,131 @@
+---
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  showBackHome?: boolean;
+}
+
+const { locale, showBackHome = false } = Astro.props;
+const t = useTranslations(locale);
+const homeUrl = getLocalizedPath('/', locale);
+---
+
+<header class="flex flex-col items-center w-full">
+  <!-- Top bar with Language Switcher and optional Back to Home -->
+  <div class="w-full max-w-5xl flex items-center justify-between px-2 mb-3">
+    {showBackHome ? (
+      <a
+        href={homeUrl}
+        class="inline-flex items-center gap-2 text-xs md:text-sm font-semibold tracking-wider uppercase text-gray-300 hover:text-neonPurple bg-black/50 border border-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all duration-300 shadow-lg hover:border-neonPurple/60 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+      >
+        <i class="fas fa-arrow-left"></i>
+        <span>{t.nav.backHome}</span>
+      </a>
+    ) : (
+      <div></div>
+    )}
+    
+    <LanguageSwitcher currentLocale={locale} />
+  </div>
+
+  <!-- Mobile Avatar Profile (visible < 768px) -->
+  <div class="block md:hidden mb-4 relative">
+    <img
+      src="/assets/profile-pic.webp"
+      alt="Poda DJ Profile"
+      width="96"
+      height="96"
+      class="w-24 h-24 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_20px_rgba(168,85,247,0.6)]"
+      onerror="this.onerror=null; this.src='/assets/profile-pic.jpg';"
+    />
+  </div>
+
+  <!-- Glassmorphism Header Box -->
+  <div class="w-full max-w-5xl bg-black/40 border border-white/10 backdrop-blur-md rounded-3xl p-5 md:p-6 lg:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex-1 flex flex-col items-center justify-center gap-5 text-shadow-soft w-full text-center">
+      
+      <!-- PODA DJ Logo -->
+      <div class="w-full flex justify-center">
+        <a href={homeUrl} class="transition-transform duration-300 hover:scale-[1.02]">
+          <img
+            src="/assets/logo.png"
+            alt="Poda DJ Logo"
+            width="240"
+            height="80"
+            class="w-40 md:w-48 lg:w-60 drop-shadow-lg mb-1"
+          />
+        </a>
+        <h1 class="sr-only">Poda DJ</h1>
+      </div>
+
+      <!-- Tagline items -->
+      <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-gray-100 text-xs md:text-sm font-medium tracking-widest uppercase px-2">
+        {t.header.tagline.map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < t.header.tagline.length - 1 && (
+              <span class="text-neonPurple/60">|</span>
+            )}
+          </>
+        ))}
+      </div>
+
+      <!-- Divider line -->
+      <div class="w-20 h-[2px] bg-white/20 rounded-full mt-1"></div>
+
+      <!-- Social Links -->
+      <div class="flex gap-5 justify-center mt-2">
+        <a
+          href="https://instagram.com/podadj_official"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"
+        >
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a
+          href="https://tiktok.com/@podadj_official"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"
+        >
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a
+          href="https://soundcloud.com/podadj"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="SoundCloud"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"
+        >
+          <i class="fab fa-soundcloud"></i>
+        </a>
+        <a
+          href="https://mixcloud.com/podadj"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Mixcloud"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"
+        >
+          <i class="fab fa-mixcloud"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Desktop Profile Image (>= 768px) -->
+    <div class="hidden md:flex flex-none items-center justify-end">
+      <img
+        src="/assets/profile-pic.webp"
+        alt="Poda DJ Profile"
+        width="220"
+        height="275"
+        class="w-full max-w-[180px] lg:max-w-[220px] aspect-[4/5] object-cover rounded-2xl border border-neonPurple/50 shadow-[0_0_25px_rgba(168,85,247,0.35)]"
+        onerror="this.onerror=null; this.src='/assets/profile-pic.jpg';"
+      />
+    </div>
+  </div>
+</header>

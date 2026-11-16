@@ -1,0 +1,22 @@
+{
+  "id": "summer-open-air-2026",
+  "date": "2026-08-15",
+  "title": {
+    "it": "Summer Open Air Festival",
+    "en": "Summer Open Air Festival"
+  },
+  "location": "Riva del Garda (TN)",
+  "venue": "Lakeside Arena",
+  "format": "THE GROOVE SIDE",
+  "audioSetup": "2x RCF TT+ Line Array, 2x RCF Sub 18\", Pioneer CDJ-3000 + DJM-900NXS2",
+  "notes": {
+    "it": "Set al tramonto con progressione da deep house a tech house incalzante fino a 128 BPM. Risposta eccezionale del pubblico durante il peak time.",
+    "en": "Sunset session transitioning from deep house to high-energy tech house up to 128 BPM. Outstanding crowd response during peak time."
+  },
+  "tracklist": [
+    { "index": 1, "title": "Rhyme Dust", "artist": "MK, Dom Dolla", "bpm": 126, "key": "8A" },
+    { "index": 2, "title": "Drugs From Amsterdam", "artist": "Mau P", "bpm": 125, "key": "4A" },
+    { "index": 3, "title": "Losing It", "artist": "FISHER", "bpm": 125, "key": "11A" },
+    { "index": 4, "title": "Move Your Body", "artist": "Marshall Jefferson, Solardo", "bpm": 126, "key": "1A" }
+  ]
+}

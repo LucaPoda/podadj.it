@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Poda DJ | Electronic Music & Audio Systems",
+    "description": "DJ Producer & Audio Solutions per festival, club ed eventi privati a Brescia, Trento e Lago di Garda. Scopri i format musicali e il service audio/luci."
+  },
+  "header": {
+    "tagline": [
+      "Electronic Music",
+      "Festival Energy",
+      "Clubbing",
+      "Pro Audio Solutions"
+    ]
+  },
+  "nav": {
+    "home": "Home",
+    "partySide": "The Party Side",
+    "grooveSide": "The Groove Side",
+    "mainstageSide": "The Mainstage Side",
+    "techSide": "The Tech Side",
+    "demoLive": "Demo & Live Sets",
+    "events": "Events",
+    "partyhive": "Partyhive",
+    "backHome": "Torna alla Home"
+  },
+  "cards": {
+    "partySide": {
+      "title": "The Party Side",
+      "subtitle": "Pop & Latin Hits House/EDM Remix",
+      "badge": "Nuovo Format",
+      "shortDesc": "Remix house ed EDM di brani pop, commerciali, latin e afro. Il sound coinvolgente e ritmato ideale per aperitivi, feste private ed eventi generalisti.",
+      "cta": "Dettagli"
+    },
+    "grooveSide": {
+      "title": "The Groove Side",
+      "subtitle": "Club House, Tech House & Techno",
+      "badge": "Club & Open-Air",
+      "shortDesc": "Un'atmosfera house e techno sofisticata, costruita su selezioni ricercate e groove incalzanti. Il sound ideale per club ed eventi con identità elegante.",
+      "cta": "Dettagli"
+    },
+    "mainstageSide": {
+      "title": "The Mainstage Side",
+      "subtitle": "Festival Techno, Hardstyle & Bass House",
+      "badge": "Festival Energy",
+      "shortDesc": "Il mix perfetto tra l'adrenalina dei festival elettronici e il coinvolgimento dei grandi party. Techno potente, hardstyle e bass house per massima energia.",
+      "cta": "Dettagli"
+    },
+    "techSide": {
+      "title": "The Tech Side",
+      "subtitle": "Audio & Lighting Service",
+      "badge": "Service Pro",
+      "shortDesc": "Soluzioni audio professionali e servizio chiavi in mano per DJ set ed eventi fino a 250 persone. Suono impeccabile, luci dinamiche e nessun imprevisto.",
+      "cta": "Dettagli"
+    },
+    "demoLive": {
+      "title": "Demo & Live Sets",
+      "subtitle": "Audio Recording & Set",
+      "shortDesc": "Ascolta le demo selezionate per genere e i live set completi registrati durante le serate.",
+      "cta": "Dettagli"
+    },
+    "events": {
+      "title": "Events",
+      "subtitle": "Archivio Serate & Tracklist",
+      "shortDesc": "Report post-evento con debriefing tecnico, setup impianto audio e tracklist completa di ogni set.",
+      "cta": "Dettagli"
+    },
+    "partyhive": {
+      "title": "Partyhive",
+      "subtitle": "Community & Partner",
+      "shortDesc": "Progetto ed ecosistema eventi e serate partner per giovani ed appassionati di musica.",
+      "cta": "Dettagli"
+    }
+  },
+  "footer": {
+    "bookingTitle": "Booking & Contact",
+    "locations": "Brescia, Trento, Garda",
+    "email": "booking@podadj.com",
+    "instagram": "@podadj_official",
+    "tiktok": "@podadj_official",
+    "soundcloud": "soundcloud.com/podadj",
+    "mixcloud": "mixcloud.com/podadj",
+    "copyright": "© 2026 Poda DJ. Tutti i diritti riservati.",
+    "privacy": "Privacy Policy"
+  },
+  "common": {
+    "details": "Dettagli",
+    "listenOn": "Ascolta su",
+    "requestQuote": "Richiedi Preventivo",
+    "tracklist": "Tracklist",
+    "audioSetup": "Setup Impianto Audio",
+    "technicalNotes": "Note Tecniche",
+    "subgenres": "Sottogeneri Musicali",
+    "target": "Target / Ideale Per",
+    "demoSection": "Demo per Sottogenere",
+    "liveSetsSection": "Live Sets Registrati"
+  }
+}
