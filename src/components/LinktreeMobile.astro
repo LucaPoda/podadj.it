@@ -15,72 +15,79 @@ const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
 
-const links = [
+// 1. I 3 Format Musicali
+const musicalFormats = [
   {
+    id: 'party-side',
     title: t.cards.partySide.title,
-    subtitle: t.cards.partySide.subtitle,
-    badge: t.cards.partySide.badge,
-    badgeColor: 'border-neonPurple/50 text-neonPurple bg-neonPurple/20',
+    desc: t.cards.partySide.shortDesc,
+    cta: t.cards.partySide.cta,
     url: partySideUrl,
     image: '/assets/bg-party.webp',
     imageJpg: '/assets/bg-party.jpg',
     isExternal: false,
   },
   {
+    id: 'groove-side',
     title: t.cards.grooveSide.title,
-    subtitle: t.cards.grooveSide.subtitle,
-    badge: t.cards.grooveSide.badge,
-    badgeColor: 'border-blue-400/50 text-neonBlue bg-blue-500/20',
+    desc: t.cards.grooveSide.shortDesc,
+    cta: t.cards.grooveSide.cta,
     url: grooveSideUrl,
     image: '/assets/bg-deeper.webp',
     imageJpg: '/assets/bg-deeper.jpg',
     isExternal: false,
   },
   {
+    id: 'mainstage-side',
     title: t.cards.mainstageSide.title,
-    subtitle: t.cards.mainstageSide.subtitle,
-    badge: t.cards.mainstageSide.badge,
-    badgeColor: 'border-red-400/50 text-red-400 bg-red-500/20',
+    desc: t.cards.mainstageSide.shortDesc,
+    cta: t.cards.mainstageSide.cta,
     url: mainstageSideUrl,
     image: '/assets/bg-harder.webp',
     imageJpg: '/assets/bg-harder.jpg',
     isExternal: false,
   },
+];
+
+// 2. Service Audio & Luci
+const techService = {
+  id: 'tech-side',
+  title: t.cards.techSide.title,
+  desc: t.cards.techSide.shortDesc,
+  cta: t.cards.techSide.cta,
+  url: techSideUrl,
+  image: '/assets/bg-tech.webp',
+  imageJpg: '/assets/bg-tech.jpg',
+  isExternal: false,
+};
+
+// 3. Link Minori / Secondari
+const secondaryLinks = [
   {
-    title: t.cards.techSide.title,
-    subtitle: t.cards.techSide.subtitle,
-    badge: t.cards.techSide.badge,
-    badgeColor: 'border-emerald-400/50 text-emerald-400 bg-emerald-500/20',
-    url: techSideUrl,
-    image: '/assets/bg-tech.webp',
-    imageJpg: '/assets/bg-tech.jpg',
-    isExternal: false,
-  },
-  {
+    id: 'demo-live',
     title: t.cards.demoLive.title,
-    subtitle: t.cards.demoLive.subtitle,
-    badge: 'Audio Sets',
-    badgeColor: 'border-purple-400/50 text-purple-300 bg-purple-500/20',
+    desc: t.cards.demoLive.shortDesc,
+    cta: t.cards.demoLive.cta,
     url: demoLiveUrl,
     image: '/assets/bg-livesets.webp',
     imageJpg: '/assets/bg-livesets.jpg',
     isExternal: false,
   },
   {
+    id: 'events',
     title: t.cards.events.title,
-    subtitle: t.cards.events.subtitle,
-    badge: 'Tracklists',
-    badgeColor: 'border-amber-400/50 text-amber-300 bg-amber-500/20',
+    desc: t.cards.events.shortDesc,
+    cta: t.cards.events.cta,
     url: eventsUrl,
     image: '/assets/bg-events.webp',
     imageJpg: '/assets/bg-events.jpg',
     isExternal: false,
   },
   {
+    id: 'partyhive',
     title: t.cards.partyhive.title,
-    subtitle: t.cards.partyhive.subtitle,
-    badge: 'Partner',
-    badgeColor: 'border-pink-400/50 text-pink-300 bg-pink-500/20',
+    desc: t.cards.partyhive.shortDesc,
+    cta: t.cards.partyhive.cta,
     url: 'https://instagram.com/partyhive_official',
     image: '/assets/bg-partyhive.webp',
     imageJpg: '/assets/bg-partyhive.jpg',
@@ -89,54 +96,241 @@ const links = [
 ];
 ---
 
-<nav aria-label="Menu Linktree Rapido" class="flex md:hidden flex-col gap-3 w-full mt-6">
+<nav aria-label="Menu Mobile Linktree" class="flex md:hidden flex-col w-full mt-4">
   
-  <!-- 7 Linktree Cards Stacked -->
-  {links.map((link) => (
-    <a
-      href={link.url}
-      target={link.isExternal ? '_blank' : undefined}
-      rel={link.isExternal ? 'noopener noreferrer' : undefined}
-      class="group relative w-full h-[82px] sm:h-[88px] rounded-2xl overflow-hidden flex items-center justify-between px-4 sm:px-5 border border-white/20 shadow-xl transition-all duration-200 active:scale-[0.98] active:border-neonPurple/80"
-    >
-      <!-- Background image -->
+  <!-- ========================================== -->
+  <!-- GRUPPO 1: I 3 FORMAT MUSICALI              -->
+  <!-- ========================================== -->
+  <div class="flex flex-col gap-3 w-full">
+    {musicalFormats.map((item) => (
       <div
-        class="absolute inset-0 bg-cover bg-center filter brightness-[0.4] group-active:brightness-[0.3] transition-all duration-300"
-        style={`background-image: url('${link.image}'), url('${link.imageJpg}');`}
-      ></div>
+        class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+        data-card-id={item.id}
+      >
+        <!-- Background image: Brightness 0.85 (come desktop), si sfoca all'apertura -->
+        <div
+          class="card-bg absolute inset-0 bg-cover bg-center transition-all duration-500 filter brightness-[0.8] contrast-[1.05]"
+          style={`background-image: url('${item.image}'), url('${item.imageJpg}');`}
+        ></div>
 
-      <!-- Gradient overlay for strong readability -->
-      <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/75 z-[1]"></div>
-      
-      <!-- Text content -->
-      <div class="relative z-10 flex flex-col items-start gap-1 pr-3">
-        <span class={`text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full border ${link.badgeColor}`}>
-          {link.badge}
-        </span>
-        <h2 class="text-base sm:text-lg font-bold text-white uppercase tracking-wider text-outline leading-tight">
-          {link.title}
-        </h2>
-        <span class="text-[11px] sm:text-xs text-gray-300 font-medium tracking-wide truncate max-w-[220px] sm:max-w-xs text-shadow-soft">
-          {link.subtitle}
+        <!-- Sottile gradiente di contrasto per garantire perfetta leggibilità del titolo -->
+        <div class="card-overlay absolute inset-0 bg-black/25 transition-colors duration-300 z-[1]"></div>
+        
+        <!-- Header cliccabile per aprire/chiudere l'anteprima -->
+        <div
+          class="relative z-10 w-full min-h-[78px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer select-none"
+          data-card-toggle
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <!-- Titolo pulito (senza etichette sopra o sotto) -->
+          <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight pr-2">
+            {item.title}
+          </h2>
+
+          <!-- Icone di azione a destra: Toggle Chevron + Link Diretto -->
+          <div class="flex items-center gap-2 flex-none">
+            <!-- Pulsante Link Diretto (porta subito alla pagina) -->
+            <a
+              href={item.url}
+              target={item.isExternal ? '_blank' : undefined}
+              rel={item.isExternal ? 'noopener noreferrer' : undefined}
+              class="w-9 h-9 rounded-full bg-black/40 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+              data-direct-link
+              title={`${t.common.details}: ${item.title}`}
+              aria-label={`${t.common.details}: ${item.title}`}
+            >
+              <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+
+            <!-- Indicatore Chevron per espandere/comprimere -->
+            <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/70 transition-transform duration-300">
+              <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Contenuto Espandibile (Descrizione + Tasto Dettagli stile hover desktop) -->
+        <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+          <div class="pt-1 pb-4 flex flex-col items-start gap-3 border-t border-white/15">
+            <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">
+              {item.desc}
+            </p>
+            <a
+              href={item.url}
+              class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-neonPurple hover:text-white transition-all shadow-lg active:scale-95"
+            >
+              <span>{item.cta}</span>
+              <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bordo Neon attivo al tocco/apertura -->
+        <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MARGINE AMPIO DI SEPARAZIONE PRIMA DI THE TECH SIDE                       -->
+  <!-- ========================================================================= -->
+  <div class="w-full mt-7 mb-2 flex items-center justify-center">
+    <span class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400/80 px-3 py-0.5 rounded-full bg-black/40 border border-white/10 backdrop-blur-sm">
+      {locale === 'it' ? 'Audio & Lighting Service' : 'Pro Audio & Lighting'}
+    </span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- GRUPPO 2: THE TECH SIDE (SERVICE)          -->
+  <!-- ========================================== -->
+  <div
+    class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+    data-card-id={techService.id}
+  >
+    <div
+      class="card-bg absolute inset-0 bg-cover bg-center transition-all duration-500 filter brightness-[0.8] contrast-[1.05]"
+      style={`background-image: url('${techService.image}'), url('${techService.imageJpg}');`}
+    ></div>
+
+    <div class="card-overlay absolute inset-0 bg-black/25 transition-colors duration-300 z-[1]"></div>
+    
+    <div
+      class="relative z-10 w-full min-h-[78px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer select-none"
+      data-card-toggle
+      role="button"
+      tabindex="0"
+      aria-expanded="false"
+    >
+      <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight pr-2">
+        {techService.title}
+      </h2>
+
+      <div class="flex items-center gap-2 flex-none">
+        <a
+          href={techService.url}
+          class="w-9 h-9 rounded-full bg-black/40 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+          data-direct-link
+          title={`${t.common.details}: ${techService.title}`}
+          aria-label={`${t.common.details}: ${techService.title}`}
+        >
+          <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+
+        <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/70 transition-transform duration-300">
+          <i class="fas fa-chevron-down text-xs"></i>
         </span>
       </div>
+    </div>
 
-      <!-- Action Arrow Button -->
-      <div class="relative z-10 flex-none w-9 h-9 rounded-full bg-white/10 border border-white/25 backdrop-blur-md flex items-center justify-center text-white/90 group-active:bg-neonPurple group-active:text-white group-active:border-neonPurple transition-all shadow-md">
-        {link.isExternal ? (
-          <i class="fas fa-arrow-up-right-from-square text-xs"></i>
-        ) : (
-          <i class="fas fa-chevron-right text-xs"></i>
-        )}
+    <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+      <div class="pt-1 pb-4 flex flex-col items-start gap-3 border-t border-white/15">
+        <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">
+          {techService.desc}
+        </p>
+        <a
+          href={techService.url}
+          class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-neonPurple hover:text-white transition-all shadow-lg active:scale-95"
+        >
+          <span>{techService.cta}</span>
+          <i class="fas fa-arrow-right text-[10px]"></i>
+        </a>
       </div>
+    </div>
 
-      <!-- Neon active glow border -->
-      <div class="absolute inset-0 rounded-2xl border border-transparent group-active:border-neonPurple pointer-events-none transition-colors"></div>
-    </a>
-  ))}
+    <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+  </div>
 
-  <!-- Mobile Quick Action Tap Bar (Contact directly with 1 tap) -->
-  <div class="w-full mt-4 p-4 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md shadow-xl flex flex-col gap-3 text-center">
+  <!-- ========================================================================= -->
+  <!-- LINEA DI SEPARAZIONE FISICA PRIMA DEI LINK MINORI                         -->
+  <!-- ========================================================================= -->
+  <div class="w-full flex items-center gap-3 my-6">
+    <div class="flex-1 h-px bg-white/20"></div>
+    <span class="text-[9px] font-bold uppercase tracking-widest text-white/40">Archive & Projects</span>
+    <div class="flex-1 h-px bg-white/20"></div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- GRUPPO 3: LINK MINORI (3 CARD)             -->
+  <!-- ========================================== -->
+  <div class="flex flex-col gap-3 w-full">
+    {secondaryLinks.map((item) => (
+      <div
+        class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+        data-card-id={item.id}
+      >
+        <div
+          class="card-bg absolute inset-0 bg-cover bg-center transition-all duration-500 filter brightness-[0.8] contrast-[1.05]"
+          style={`background-image: url('${item.image}'), url('${item.imageJpg}');`}
+        ></div>
+
+        <div class="card-overlay absolute inset-0 bg-black/25 transition-colors duration-300 z-[1]"></div>
+        
+        <div
+          class="relative z-10 w-full min-h-[72px] flex items-center justify-between px-4 sm:px-5 py-2.5 cursor-pointer select-none"
+          data-card-toggle
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <h3 class="text-base sm:text-lg font-bold uppercase tracking-wider text-white text-outline leading-tight pr-2">
+            {item.title}
+          </h3>
+
+          <div class="flex items-center gap-2 flex-none">
+            <a
+              href={item.url}
+              target={item.isExternal ? '_blank' : undefined}
+              rel={item.isExternal ? 'noopener noreferrer' : undefined}
+              class="w-9 h-9 rounded-full bg-black/40 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+              data-direct-link
+              title={`${t.common.details}: ${item.title}`}
+              aria-label={`${t.common.details}: ${item.title}`}
+            >
+              {item.isExternal ? (
+                <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+              ) : (
+                <i class="fas fa-arrow-right text-xs"></i>
+              )}
+            </a>
+
+            <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/70 transition-transform duration-300">
+              <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+          <div class="pt-1 pb-4 flex flex-col items-start gap-3 border-t border-white/15">
+            <p class="text-xs text-gray-100 font-medium leading-relaxed text-outline">
+              {item.desc}
+            </p>
+            <a
+              href={item.url}
+              target={item.isExternal ? '_blank' : undefined}
+              rel={item.isExternal ? 'noopener noreferrer' : undefined}
+              class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-neonPurple hover:text-white transition-all shadow-lg active:scale-95"
+            >
+              <span>{item.cta}</span>
+              {item.isExternal ? (
+                <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+              ) : (
+                <i class="fas fa-arrow-right text-[10px]"></i>
+              )}
+            </a>
+          </div>
+        </div>
+
+        <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BARRA TAP-TO-ACTION RAPIDA PER MOBILE      -->
+  <!-- ========================================== -->
+  <div class="w-full mt-6 p-4 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md shadow-xl flex flex-col gap-3 text-center">
     <span class="text-xs uppercase tracking-widest font-semibold text-gray-300">
       {locale === 'it' ? 'Contatto Rapido & Booking' : 'Quick Contact & Booking'}
     </span>
@@ -173,3 +367,120 @@ const links = [
   </div>
 
 </nav>
+
+<script>
+  // Gestione dell'interazione accordion su mobile
+  function setupMobileCards() {
+    const cards = document.querySelectorAll('.mobile-expandable-card');
+    
+    cards.forEach((card) => {
+      const toggle = card.querySelector('[data-card-toggle]');
+      const drawer = card.querySelector('.card-drawer');
+      const bg = card.querySelector('.card-bg');
+      const overlay = card.querySelector('.card-overlay');
+      const chevron = card.querySelector('.chevron-indicator');
+      const neonBorder = card.querySelector('.neon-border');
+      const directBtn = card.querySelector('[data-direct-link]');
+
+      if (!toggle || !drawer) return;
+
+      // Se si clicca sul tasto diretto, impedisci il toggle dell'accordion
+      if (directBtn) {
+        directBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      function toggleAccordion() {
+        const isOpen = card.classList.contains('is-expanded');
+
+        // Chiudi le altre card aperte per mantenere l'interfaccia pulita
+        cards.forEach((otherCard) => {
+          if (otherCard !== card && otherCard.classList.contains('is-expanded')) {
+            closeCard(otherCard);
+          }
+        });
+
+        if (isOpen) {
+          closeCard(card);
+        } else {
+          openCard(card);
+        }
+      }
+
+      function openCard(targetCard: Element) {
+        targetCard.classList.add('is-expanded');
+        toggle?.setAttribute('aria-expanded', 'true');
+        
+        const d = targetCard.querySelector('.card-drawer') as HTMLElement;
+        const b = targetCard.querySelector('.card-bg') as HTMLElement;
+        const o = targetCard.querySelector('.card-overlay') as HTMLElement;
+        const c = targetCard.querySelector('.chevron-indicator') as HTMLElement;
+        const nb = targetCard.querySelector('.neon-border') as HTMLElement;
+
+        if (d) {
+          d.style.maxHeight = d.scrollHeight + 30 + 'px';
+          d.classList.remove('opacity-0');
+          d.classList.add('opacity-100');
+        }
+        if (b) {
+          b.style.filter = 'blur(6px) brightness(0.4)';
+          b.style.transform = 'scale(1.04)';
+        }
+        if (o) {
+          o.style.backgroundColor = 'rgba(0, 0, 0, 0.45)';
+        }
+        if (c) {
+          c.style.transform = 'rotate(180deg)';
+        }
+        if (nb) {
+          nb.style.borderColor = '#a855f7';
+          nb.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.5)';
+        }
+      }
+
+      function closeCard(targetCard: Element) {
+        targetCard.classList.remove('is-expanded');
+        toggle?.setAttribute('aria-expanded', 'false');
+
+        const d = targetCard.querySelector('.card-drawer') as HTMLElement;
+        const b = targetCard.querySelector('.card-bg') as HTMLElement;
+        const o = targetCard.querySelector('.card-overlay') as HTMLElement;
+        const c = targetCard.querySelector('.chevron-indicator') as HTMLElement;
+        const nb = targetCard.querySelector('.neon-border') as HTMLElement;
+
+        if (d) {
+          d.style.maxHeight = '0px';
+          d.classList.remove('opacity-100');
+          d.classList.add('opacity-0');
+        }
+        if (b) {
+          b.style.filter = 'brightness(0.8) contrast(1.05)';
+          b.style.transform = 'scale(1)';
+        }
+        if (o) {
+          o.style.backgroundColor = 'rgba(0, 0, 0, 0.25)';
+        }
+        if (c) {
+          c.style.transform = 'rotate(0deg)';
+        }
+        if (nb) {
+          nb.style.borderColor = 'transparent';
+          nb.style.boxShadow = 'none';
+        }
+      }
+
+      toggle.addEventListener('click', toggleAccordion);
+      toggle.addEventListener('keydown', (e: any) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAccordion();
+        }
+      });
+    });
+  }
+
+  // Esegui al caricamento e dopo transizioni di pagina Astro
+  setupMobileCards();
+  document.addEventListener('astro:page-load', setupMobileCards);
+</script>

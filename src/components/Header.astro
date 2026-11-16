@@ -13,12 +13,12 @@ const homeUrl = getLocalizedPath('/', locale);
 ---
 
 <header class="flex flex-col items-center w-full">
-  <!-- Top bar with Language Switcher and optional Back to Home -->
-  <div class="w-full max-w-5xl flex items-center justify-between px-2 mb-3">
+  <!-- Mobile-only Top Bar with Language Switcher and optional Back to Home (< 768px) -->
+  <div class="w-full max-w-5xl flex md:hidden items-center justify-between px-1 mb-3">
     {showBackHome ? (
       <a
         href={homeUrl}
-        class="inline-flex items-center gap-2 text-xs md:text-sm font-semibold tracking-wider uppercase text-gray-300 hover:text-neonPurple bg-black/50 border border-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all duration-300 shadow-lg hover:border-neonPurple/60 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+        class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-gray-300 hover:text-neonPurple bg-black/50 border border-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all duration-300 shadow-lg hover:border-neonPurple/60"
       >
         <i class="fas fa-arrow-left"></i>
         <span>{t.nav.backHome}</span>
@@ -30,21 +30,41 @@ const homeUrl = getLocalizedPath('/', locale);
     <LanguageSwitcher currentLocale={locale} />
   </div>
 
-  <!-- Mobile Avatar Profile (visible < 768px) -->
-  <div class="block md:hidden mb-4 relative">
+  <!-- Mobile Avatar Profile (visible only on < 768px) -->
+  <div class="block md:hidden mb-3 relative">
     <img
       src="/assets/profile-pic.webp"
       alt="Poda DJ Profile"
-      width="96"
-      height="96"
-      class="w-24 h-24 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_20px_rgba(168,85,247,0.6)]"
+      width="90"
+      height="90"
+      class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_20px_rgba(168,85,247,0.6)]"
       onerror="this.onerror=null; this.src='/assets/profile-pic.jpg';"
     />
   </div>
 
-  <!-- Glassmorphism Header Box -->
-  <div class="w-full max-w-5xl bg-black/40 border border-white/10 backdrop-blur-md rounded-3xl p-5 md:p-6 lg:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-    <div class="flex-1 flex flex-col items-center justify-center gap-5 text-shadow-soft w-full text-center">
+  <!-- Glassmorphism Header Box (Hero Section) -->
+  <div class="relative w-full max-w-5xl bg-black/40 border border-white/10 backdrop-blur-md rounded-3xl p-4 sm:p-5 md:py-4 md:px-7 lg:py-5 lg:px-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+    
+    <!-- Desktop Back to Home (integrated into Hero Card, top-left) -->
+    {showBackHome && (
+      <div class="hidden md:flex absolute top-4 left-5 z-20">
+        <a
+          href={homeUrl}
+          class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-gray-300 hover:text-neonPurple bg-black/60 border border-white/20 backdrop-blur-md px-3 py-1 rounded-full transition-all duration-300 shadow-md hover:border-neonPurple/60 hover:shadow-[0_0_12px_rgba(168,85,247,0.3)]"
+        >
+          <i class="fas fa-arrow-left text-[11px]"></i>
+          <span>{t.nav.backHome}</span>
+        </a>
+      </div>
+    )}
+
+    <!-- Desktop Language Switcher (integrated seamlessly into Hero Card, top-right) -->
+    <div class="hidden md:flex absolute top-4 right-5 z-20">
+      <LanguageSwitcher currentLocale={locale} />
+    </div>
+
+    <!-- Center Content: Logo, Tagline, Socials -->
+    <div class="flex-1 flex flex-col items-center justify-center gap-3 sm:gap-4 text-shadow-soft w-full text-center">
       
       <!-- PODA DJ Logo -->
       <div class="w-full flex justify-center">
@@ -52,16 +72,16 @@ const homeUrl = getLocalizedPath('/', locale);
           <img
             src="/assets/logo.png"
             alt="Poda DJ Logo"
-            width="240"
-            height="80"
-            class="w-40 md:w-48 lg:w-60 drop-shadow-lg mb-1"
+            width="220"
+            height="70"
+            class="w-36 sm:w-40 md:w-44 lg:w-48 drop-shadow-lg"
           />
         </a>
         <h1 class="sr-only">Poda DJ</h1>
       </div>
 
       <!-- Tagline items -->
-      <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-gray-100 text-xs md:text-sm font-medium tracking-widest uppercase px-2">
+      <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-gray-100 text-xs sm:text-xs md:text-sm font-medium tracking-widest uppercase px-2">
         {t.header.tagline.map((item, index) => (
           <>
             <span>{item}</span>
@@ -73,10 +93,10 @@ const homeUrl = getLocalizedPath('/', locale);
       </div>
 
       <!-- Divider line -->
-      <div class="w-20 h-[2px] bg-white/20 rounded-full mt-1"></div>
+      <div class="w-16 h-[2px] bg-white/20 rounded-full"></div>
 
       <!-- Social Links -->
-      <div class="flex gap-5 justify-center mt-2">
+      <div class="flex gap-5 justify-center">
         <a
           href="https://instagram.com/podadj_official"
           target="_blank"
@@ -116,14 +136,14 @@ const homeUrl = getLocalizedPath('/', locale);
       </div>
     </div>
 
-    <!-- Desktop Profile Image (>= 768px) -->
+    <!-- Desktop Profile Image (>= 768px, proportioned so it fits within first viewport) -->
     <div class="hidden md:flex flex-none items-center justify-end">
       <img
         src="/assets/profile-pic.webp"
         alt="Poda DJ Profile"
-        width="220"
-        height="275"
-        class="w-full max-w-[180px] lg:max-w-[220px] aspect-[4/5] object-cover rounded-2xl border border-neonPurple/50 shadow-[0_0_25px_rgba(168,85,247,0.35)]"
+        width="160"
+        height="200"
+        class="w-full max-w-[130px] lg:max-w-[150px] aspect-[4/5] object-cover rounded-2xl border border-neonPurple/50 shadow-[0_0_20px_rgba(168,85,247,0.35)]"
         onerror="this.onerror=null; this.src='/assets/profile-pic.jpg';"
       />
     </div>
