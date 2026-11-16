@@ -5,10 +5,11 @@
  */
 
 export interface CardDeviceConfig {
-  position: string;     // CSS background-position (es. 'center 60%')
-  zoom?: number;        // Fattore di scala (default: 1.0)
-  imageWebp?: string;   // Immagine specifica (default: usa l'asset principale della card)
-  imageJpg?: string;    // Fallback JPG specifico
+  position: string;        // CSS background-position (es. 'center 60%')
+  zoom?: number;           // Fattore di scala (default: 1.0)
+  transformOrigin?: string;// CSS transform-origin (es. '15%', 'left center')
+  imageWebp?: string;      // Immagine specifica (default: usa l'asset principale della card)
+  imageJpg?: string;       // Fallback JPG specifico
 }
 
 export interface CardFraming {
@@ -61,16 +62,18 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'tech-side': {
     desktop: {
-      position: 'center 20%', // Inquadratura verticale desktop
-      zoom: 1.0,
+      position: 'center 65%',
+      zoom: 1.2,
+      transformOrigin: '15%',
       imageWebp: '/assets/bg-tech.webp',
       imageJpg: '/assets/bg-tech.jpg',
     },
     mobile: {
-      position: 'center 77%', // Inquadratura calibrata per bg-tech-mobile
-      zoom: 1.0,
-      imageWebp: '/assets/bg-tech-mobile.webp', // Nuova immagine dedicata mobile!
-      imageJpg: '/assets/bg-tech-mobile.jpg',
+      position: 'left 70%',
+      zoom: 1.1,
+      transformOrigin: '15%',
+      imageWebp: '/assets/bg-tech.webp',
+      imageJpg: '/assets/bg-tech.jpg',
     },
   },
   'demo-live': {

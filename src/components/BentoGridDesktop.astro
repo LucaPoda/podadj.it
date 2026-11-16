@@ -16,13 +16,14 @@ const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
 
-// Helper per generare lo stile dell'immagine con supporto a immagine, inquadratura e zoom dedicati
+// Helper per generare lo stile dell'immagine con supporto a immagine, inquadratura, zoom e transform-origin dedicati
 function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
   const conf = cardFramingConfig[key]?.desktop || { position: 'center center', zoom: 1.0 };
   const webp = conf.imageWebp || defaultWebp;
   const jpg = conf.imageJpg || defaultJpg;
   const zoom = conf.zoom || 1.0;
-  return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});`;
+  const origin = conf.transformOrigin ? ` transform-origin: ${conf.transformOrigin};` : '';
+  return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
 }
 ---
 
