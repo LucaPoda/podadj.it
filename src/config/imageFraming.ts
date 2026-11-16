@@ -62,14 +62,14 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'tech-side': {
     desktop: {
-      position: 'center 65%',
-      zoom: 1.2,
+      position: 'left 55%',
+      zoom: 1.1,
       transformOrigin: '15%',
       imageWebp: '/assets/bg-tech.webp',
       imageJpg: '/assets/bg-tech.jpg',
     },
     mobile: {
-      position: 'left 70%',
+      position: 'left 55%',
       zoom: 1.1,
       transformOrigin: '15%',
       imageWebp: '/assets/bg-tech.webp',
@@ -78,41 +78,43 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'demo-live': {
     desktop: {
-      position: 'center center',
-      zoom: 1.0,
+      position: 'center 45%',
+      zoom: 1.5,
       imageWebp: '/assets/bg-livesets.webp',
       imageJpg: '/assets/bg-livesets.jpg',
     },
     mobile: {
-      position: 'center 55%',
-      zoom: 1.0,
+      position: 'center 45%',
+      zoom: 1.5,
       imageWebp: '/assets/bg-livesets.webp',
       imageJpg: '/assets/bg-livesets.jpg',
     },
   },
   'events': {
     desktop: {
-      position: 'center center',
-      zoom: 1.0,
+      position: 'center 40%',
+      zoom: 2.0,
+      transformOrigin: '60%',
       imageWebp: '/assets/bg-events.webp',
       imageJpg: '/assets/bg-events.jpg',
     },
     mobile: {
       position: 'center 40%',
-      zoom: 1.0,
+      zoom: 2,
+      transformOrigin: '60%',
       imageWebp: '/assets/bg-events.webp',
       imageJpg: '/assets/bg-events.jpg',
     },
   },
   'partyhive': {
     desktop: {
-      position: 'center center',
+      position: 'center 40%',
       zoom: 1.0,
       imageWebp: '/assets/bg-partyhive.webp',
       imageJpg: '/assets/bg-partyhive.jpg',
     },
     mobile: {
-      position: 'center 35%',
+      position: 'center 40%',
       zoom: 1.0,
       imageWebp: '/assets/bg-partyhive.webp',
       imageJpg: '/assets/bg-partyhive.jpg',

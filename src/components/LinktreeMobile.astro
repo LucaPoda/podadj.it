@@ -89,9 +89,9 @@ const techService = {
         <!-- Sottile overlay di contrasto -->
         <div class="card-overlay absolute inset-0 bg-black/25 transition-colors duration-300 z-[1]"></div>
         
-        <!-- Header cliccabile per aprire/chiudere l'anteprima -->
+        <!-- Header cliccabile per aprire/chiudere l'anteprima (Altezza modulare base: 92px) -->
         <div
-          class="relative z-10 w-full min-h-[78px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer select-none"
+          class="relative z-10 w-full min-h-[92px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer select-none"
           data-card-toggle
           role="button"
           tabindex="0"
@@ -162,8 +162,9 @@ const techService = {
 
     <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20 transition-colors duration-300 z-[1]"></div>
     
+    <!-- Header Card Service: Altezza modulare 300px (= 3 card musicali 92px + 2 margini interni 12px) -->
     <div
-      class="relative z-10 w-full min-h-[300px] sm:min-h-[315px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      class="relative z-10 w-full min-h-[300px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
       data-card-toggle
       role="button"
       tabindex="0"
@@ -225,16 +226,16 @@ const techService = {
   </div>
 
   <!-- ========================================================================= -->
-  <!-- GRUPPO 3: SEZIONE INFERIORE (2 CARD AD ALTEZZA PARTYHIVE + PARTYHIVE)     -->
+  <!-- GRUPPO 3: SEZIONE INFERIORE (ALTEZZA MODULARE 300px = 144px + 12px + 144px) -->
   <!-- ========================================================================= -->
   
-  <!-- 1. Grid 2 Colonne: DEMO & LIVE SETS ed EVENTS (Altezza = h-[135px] come Partyhive) -->
+  <!-- 1. Grid 2 Colonne: DEMO & LIVE SETS ed EVENTS (Altezza modulare = h-[144px]) -->
   <div class="grid grid-cols-2 gap-3 w-full mb-3">
     
-    <!-- Card Sinistra: DEMO & LIVE SETS (Altezza h-[135px] uguale a Partyhive, Click Diretto) -->
+    <!-- Card Sinistra: DEMO & LIVE SETS (Altezza modulare h-[144px], Click Diretto) -->
     <a
       href={demoLiveUrl}
-      class="group relative w-full h-[135px] sm:h-[145px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+      class="group relative w-full h-[144px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
@@ -259,10 +260,10 @@ const techService = {
       <div class="absolute inset-0 rounded-2xl border border-transparent group-hover:border-neonPurple pointer-events-none transition-colors"></div>
     </a>
 
-    <!-- Card Destra: EVENTS (Altezza h-[135px] uguale a Partyhive, Click Diretto) -->
+    <!-- Card Destra: EVENTS (Altezza modulare h-[144px], Click Diretto) -->
     <a
       href={eventsUrl}
-      class="group relative w-full h-[135px] sm:h-[145px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+      class="group relative w-full h-[144px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
@@ -288,7 +289,7 @@ const techService = {
     </a>
   </div>
 
-  <!-- 2. Card Panoramica Sotto: PARTYHIVE (Invariata a h-[135px], Mezzo Busto & Social) -->
+  <!-- 2. Card Panoramica Sotto: PARTYHIVE (Altezza modulare h-[144px], Mezzo Busto & Social) -->
   <div
     class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
     data-card-id="partyhive"
@@ -301,7 +302,7 @@ const techService = {
     <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20 transition-colors duration-300 z-[1]"></div>
     
     <div
-      class="relative z-10 w-full min-h-[135px] sm:min-h-[150px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      class="relative z-10 w-full min-h-[144px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
       data-card-toggle
       role="button"
       tabindex="0"
