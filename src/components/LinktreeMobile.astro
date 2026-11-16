@@ -16,9 +16,11 @@ const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
 
-// Helper per generare lo stile dell'immagine mobile con posizione e zoom dedicati
-function getMobileBgStyle(key: string, webp: string, jpg: string) {
+// Helper per generare lo stile dell'immagine mobile con supporto a immagine, posizione e zoom dedicati
+function getMobileBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
   const conf = cardFramingConfig[key]?.mobile || { position: 'center center', zoom: 1.0 };
+  const webp = conf.imageWebp || defaultWebp;
+  const jpg = conf.imageJpg || defaultJpg;
   const zoom = conf.zoom || 1.0;
   return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});`;
 }
@@ -140,42 +142,34 @@ const techService = {
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MARGINE AMPIO DI SEPARAZIONE PRIMA DI THE TECH SIDE                       -->
+  <!-- MARGINE VUOTO PIÙ MARCATO PRIMA DI THE TECH SIDE (SENZA ETICHETTE)         -->
   <!-- ========================================================================= -->
-  <div class="w-full mt-7 mb-2 flex items-center justify-center">
-    <span class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400/80 px-3 py-0.5 rounded-full bg-black/40 border border-white/10 backdrop-blur-sm">
-      {locale === 'it' ? 'Audio & Lighting Service' : 'Pro Audio & Lighting'}
-    </span>
-  </div>
+  <div class="w-full mt-7 sm:mt-8"></div>
 
   <!-- ========================================================================= -->
-  <!-- GRUPPO 2: THE TECH SIDE (ALTEZZA AUMENTATA A ~165-175px COME I QUADRATI)  -->
+  <!-- GRUPPO 2: THE TECH SIDE (IMMAGINE DEDICATA MOBILE, SOLO TITOLO PULITO)    -->
   <!-- ========================================================================= -->
   <div
     class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
     data-card-id={techService.id}
   >
-    <!-- Background inquadrato con altezza generosa (stessa altezza dei quadrati) -->
+    <!-- Background dedicato mobile bg-tech-mobile -->
     <div
       class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
       style={getMobileBgStyle(techService.id, techService.image, techService.imageJpg)}
     ></div>
 
-    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20 transition-colors duration-300 z-[1]"></div>
+    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20 transition-colors duration-300 z-[1]"></div>
     
     <div
-      class="relative z-10 w-full min-h-[165px] sm:min-h-[175px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      class="relative z-10 w-full min-h-[300px] sm:min-h-[315px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
       data-card-toggle
       role="button"
       tabindex="0"
       aria-expanded="false"
     >
-      <!-- Top Bar: Badge Service e Azioni -->
-      <div class="flex items-center justify-between w-full">
-        <span class="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/50 text-white backdrop-blur-md shadow-sm">
-          Service Pro
-        </span>
-
+      <!-- Top Row: Solo Azioni Diretta + Chevron (Nessun badge) -->
+      <div class="flex items-center justify-end w-full">
         <div class="flex items-center gap-2 flex-none">
           <a
             href={techService.url}
@@ -193,18 +187,15 @@ const techService = {
         </div>
       </div>
 
-      <!-- Bottom Title -->
+      <!-- Bottom: Solo Titolo THE TECH SIDE Pulito (Senza etichette o sottotitoli) -->
       <div>
         <h2 class="text-xl sm:text-2xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight">
           {techService.title}
         </h2>
-        <span class="text-xs text-gray-300 font-medium tracking-wide text-shadow-soft">
-          {t.cards.techSide.subtitle}
-        </span>
       </div>
     </div>
 
-    <!-- Drawer Descrizione Espandibile -->
+    <!-- Drawer Descrizione Espandibile al Tap -->
     <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
       <div class="pt-2 pb-4 flex flex-col items-start gap-3 border-t border-white/20">
         <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">

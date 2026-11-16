@@ -16,9 +16,11 @@ const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
 
-// Helper per generare lo stile dell'immagine con inquadratura e zoom personalizzati
-function getBgStyle(key: string, webp: string, jpg: string) {
+// Helper per generare lo stile dell'immagine con supporto a immagine, inquadratura e zoom dedicati
+function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
   const conf = cardFramingConfig[key]?.desktop || { position: 'center center', zoom: 1.0 };
+  const webp = conf.imageWebp || defaultWebp;
+  const jpg = conf.imageJpg || defaultJpg;
   const zoom = conf.zoom || 1.0;
   return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});`;
 }
@@ -143,7 +145,7 @@ function getBgStyle(key: string, webp: string, jpg: string) {
       <div class="bg-image" style={getBgStyle('tech-side', '/assets/bg-tech.webp', '/assets/bg-tech.jpg')}></div>
       <div class="overlay"></div>
       
-      <!-- Default state -->
+      <!-- Default state: Clean Title ONLY -->
       <div class="absolute inset-0 flex items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
         <h2 class="text-2xl lg:text-3xl xl:text-4xl font-extrabold tracking-wider text-white uppercase text-outline">
           {t.cards.techSide.title}

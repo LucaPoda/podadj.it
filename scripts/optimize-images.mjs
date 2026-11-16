@@ -23,32 +23,35 @@ for (const file of files) {
   const stats = await fs.stat(srcPath);
   console.log(`Processing ${file} (${(stats.size / 1024 / 1024).toFixed(2)} MB)...`);
 
-  if (ext === '.png') {
-    // Keep PNG for logo with transparency
+  if (file === 'logo.png') {
+    // Keep transparent PNG for logo
     await sharp(srcPath)
       .png({ quality: 90, compressionLevel: 9 })
       .toFile(path.join(outDir, `${baseName}.png`));
-    console.log(` -> Saved ${baseName}.png`);
-  } else if (file === 'profile-pic.JPEG' || file === 'profile-pic.jpeg' || file === 'profile-pic.jpg') {
+    await sharp(srcPath)
+      .webp({ quality: 90 })
+      .toFile(path.join(outDir, `${baseName}.webp`));
+    console.log(` -> Saved ${baseName}.png & webp`);
+  } else if (file.toLowerCase().startsWith('profile-pic')) {
     await sharp(srcPath)
       .resize({ width: 800, withoutEnlargement: true })
       .jpeg({ quality: 85, mozjpeg: true })
       .toFile(path.join(outDir, `profile-pic.jpg`));
-    // Also generate webp
     await sharp(srcPath)
       .resize({ width: 800, withoutEnlargement: true })
       .webp({ quality: 85 })
       .toFile(path.join(outDir, `profile-pic.webp`));
     console.log(` -> Saved profile-pic.jpg & webp`);
   } else {
-    // Background images
-    const img = sharp(srcPath).resize({ width: 1920, withoutEnlargement: true });
+    // All background images (JPG or PNG like bg-tech-mobile.png)
+    const img = sharp(srcPath).resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true });
     
-    // Output both modern WebP and optimized JPG for complete backwards compatibility
     await img.clone().webp({ quality: 82 }).toFile(path.join(outDir, `${baseName}.webp`));
-    await img.clone().jpeg({ quality: 80, mozjpeg: true }).toFile(path.join(outDir, `${baseName}.jpg`));
-    
-    console.log(` -> Saved ${baseName}.webp & ${baseName}.jpg`);
+    await img.clone().jpeg({ quality: 82, mozjpeg: true }).toFile(path.join(outDir, `${baseName}.jpg`));
+    if (ext === '.png') {
+      await img.clone().png({ quality: 85, compressionLevel: 8 }).toFile(path.join(outDir, `${baseName}.png`));
+    }
+    console.log(` -> Saved ${baseName}.webp, jpg${ext === '.png' ? ', png' : ''}`);
   }
 }
 
