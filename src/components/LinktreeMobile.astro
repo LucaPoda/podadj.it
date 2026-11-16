@@ -26,8 +26,17 @@ function getMobileBgStyle(key: string, defaultWebp: string, defaultJpg: string) 
   return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
 }
 
-// 1. I 3 Format Musicali
+// 1. I 3 Format Musicali (Nuovo Ordine: Mainstage -> Party -> Groove)
 const musicalFormats = [
+  {
+    id: 'mainstage-side',
+    title: t.cards.mainstageSide.title,
+    desc: t.cards.mainstageSide.shortDesc,
+    cta: t.cards.mainstageSide.cta,
+    url: mainstageSideUrl,
+    image: '/assets/bg-harder.webp',
+    imageJpg: '/assets/bg-harder.jpg',
+  },
   {
     id: 'party-side',
     title: t.cards.partySide.title,
@@ -45,15 +54,6 @@ const musicalFormats = [
     url: grooveSideUrl,
     image: '/assets/bg-deeper.webp',
     imageJpg: '/assets/bg-deeper.jpg',
-  },
-  {
-    id: 'mainstage-side',
-    title: t.cards.mainstageSide.title,
-    desc: t.cards.mainstageSide.shortDesc,
-    cta: t.cards.mainstageSide.cta,
-    url: mainstageSideUrl,
-    image: '/assets/bg-harder.webp',
-    imageJpg: '/assets/bg-harder.jpg',
   },
 ];
 

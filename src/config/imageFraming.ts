@@ -20,42 +20,42 @@ export interface CardFraming {
 export const cardFramingConfig: Record<string, CardFraming> = {
   'party-side': {
     desktop: {
-      position: 'center 70%',
+      position: 'center 45%',
       zoom: 1.0,
       imageWebp: '/assets/bg-party.webp',
       imageJpg: '/assets/bg-party.jpg',
     },
     mobile: {
-      position: 'center 60%',
-      zoom: 1.05,
+      position: 'center 40%',
+      zoom: 1.0,
       imageWebp: '/assets/bg-party.webp',
       imageJpg: '/assets/bg-party.jpg',
     },
   },
   'groove-side': {
     desktop: {
-      position: 'center 65%',
-      zoom: 1.2,
+      position: 'center 79%',
+      zoom: 1.1,
       imageWebp: '/assets/bg-deeper.webp',
       imageJpg: '/assets/bg-deeper.jpg',
     },
     mobile: {
-      position: 'center 65%',
-      zoom: 1.05,
+      position: 'center 70%',
+      zoom: 1.1,
       imageWebp: '/assets/bg-deeper.webp',
       imageJpg: '/assets/bg-deeper.jpg',
     },
   },
   'mainstage-side': {
     desktop: {
-      position: 'center 55%',
+      position: 'center 65%',
       zoom: 1.1,
       imageWebp: '/assets/bg-harder.webp',
       imageJpg: '/assets/bg-harder.jpg',
     },
     mobile: {
-      position: 'center 60%',
-      zoom: 1.05,
+      position: 'center 57%',
+      zoom: 1.0,
       imageWebp: '/assets/bg-harder.webp',
       imageJpg: '/assets/bg-harder.jpg',
     },
