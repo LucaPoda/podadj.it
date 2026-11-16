@@ -149,22 +149,22 @@ const techService = {
   </div>
 
   <!-- ========================================================================= -->
-  <!-- GRUPPO 2: THE TECH SIDE (SERVICE PIÙ ALTO PER FAR RESPIRARE LA FOTO)       -->
+  <!-- GRUPPO 2: THE TECH SIDE (ALTEZZA AUMENTATA A ~165-175px COME I QUADRATI)  -->
   <!-- ========================================================================= -->
   <div
     class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
     data-card-id={techService.id}
   >
-    <!-- Background inquadrato per mostrare viso e cassa audio con altezza confortevole -->
+    <!-- Background inquadrato con altezza generosa (stessa altezza dei quadrati) -->
     <div
       class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
       style={getMobileBgStyle(techService.id, techService.image, techService.imageJpg)}
     ></div>
 
-    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 transition-colors duration-300 z-[1]"></div>
+    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20 transition-colors duration-300 z-[1]"></div>
     
     <div
-      class="relative z-10 w-full min-h-[150px] sm:min-h-[165px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      class="relative z-10 w-full min-h-[165px] sm:min-h-[175px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
       data-card-toggle
       role="button"
       tabindex="0"
@@ -233,16 +233,16 @@ const techService = {
   </div>
 
   <!-- ========================================================================= -->
-  <!-- GRUPPO 3: SEZIONE INFERIORE (2 CARD QUADRATE AFFIANCATE + PARTYHIVE SOTTO) -->
+  <!-- GRUPPO 3: SEZIONE INFERIORE (2 CARD AD ALTEZZA PARTYHIVE + PARTYHIVE)     -->
   <!-- ========================================================================= -->
   
-  <!-- 1. Grid 2 Colonne: DEMO & LIVE SETS ed EVENTS (Navigazione Diretta) -->
+  <!-- 1. Grid 2 Colonne: DEMO & LIVE SETS ed EVENTS (Altezza = h-[135px] come Partyhive) -->
   <div class="grid grid-cols-2 gap-3 w-full mb-3">
     
-    <!-- Card Sinistra: DEMO & LIVE SETS (Click Diretto) -->
+    <!-- Card Sinistra: DEMO & LIVE SETS (Altezza h-[135px] uguale a Partyhive, Click Diretto) -->
     <a
       href={demoLiveUrl}
-      class="group relative w-full aspect-square sm:aspect-[4/3] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+      class="group relative w-full h-[135px] sm:h-[145px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
@@ -270,10 +270,10 @@ const techService = {
       <div class="absolute inset-0 rounded-2xl border border-transparent group-hover:border-neonPurple pointer-events-none transition-colors"></div>
     </a>
 
-    <!-- Card Destra: EVENTS (Click Diretto) -->
+    <!-- Card Destra: EVENTS (Altezza h-[135px] uguale a Partyhive, Click Diretto) -->
     <a
       href={eventsUrl}
-      class="group relative w-full aspect-square sm:aspect-[4/3] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+      class="group relative w-full h-[135px] sm:h-[145px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
@@ -302,7 +302,7 @@ const techService = {
     </a>
   </div>
 
-  <!-- 2. Card Panoramica Sotto: PARTYHIVE (Larghezza Piena, Respiro Verticale con Mezzo Busto) -->
+  <!-- 2. Card Panoramica Sotto: PARTYHIVE (Invariata a h-[135px], Mezzo Busto & Social) -->
   <div
     class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
     data-card-id="partyhive"
