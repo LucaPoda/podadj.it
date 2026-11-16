@@ -9,7 +9,8 @@
       "Festival Energy",
       "Clubbing",
       "Pro Audio Solutions"
-    ]
+    ],
+    "bio": "DJ & Sound System specialist. Tre format musicali distinti per aperitivi, club e festival, affiancati da soluzioni audio e luci professionali per eventi privati e open-air."
   },
   "nav": {
     "home": "Home",
@@ -27,28 +28,28 @@
       "title": "The Party Side",
       "subtitle": "Pop & Latin Hits House/EDM Remix",
       "badge": "Nuovo Format",
-      "shortDesc": "Remix house ed EDM di brani pop, commerciali, latin e afro. Il sound coinvolgente e ritmato ideale per aperitivi, feste private ed eventi generalisti.",
+      "shortDesc": "Format House/EDM più accessibile e commerciale, impostato su misura per il pubblico e il tipo di evento. Vocal riconoscibili, remix attuali e l'energia giusta per far ballare chiunque. Focus su un'identità elettronica precisa, senza reggaeton, trap o commerciale scontata.",
       "cta": "Dettagli"
     },
     "grooveSide": {
       "title": "The Groove Side",
       "subtitle": "Club House, Tech House & Techno",
       "badge": "Club & Open-Air",
-      "shortDesc": "Un'atmosfera house e techno sofisticata, costruita su selezioni ricercate e groove incalzanti. Il sound ideale per club ed eventi con identità elegante.",
+      "shortDesc": "House, Tech House e vera Techno: dalle melodie open-air e gli aperitivi ricercati fino ai groove ipnotici e all'energia peak-time da club. Nessun trend da seguire, solo selezione elettronica di qualità cucita sulla serata.",
       "cta": "Dettagli"
     },
     "mainstageSide": {
       "title": "The Mainstage Side",
       "subtitle": "Festival Techno, Hardstyle & Bass House",
       "badge": "Festival Energy",
-      "shortDesc": "Il mix perfetto tra l'adrenalina dei festival elettronici e il coinvolgimento dei grandi party. Techno potente, hardstyle e bass house per massima energia.",
+      "shortDesc": "Format pensato per grandi palchi e massima energia. Pura atmosfera da festival dove Techno, Hard Techno e Hard Dance incontrano vocal e melodie iconiche per far saltare tutta la pista insieme.",
       "cta": "Dettagli"
     },
     "techSide": {
       "title": "The Tech Side",
       "subtitle": "Audio & Lighting Service",
       "badge": "Service Pro",
-      "shortDesc": "Soluzioni audio professionali e servizio chiavi in mano per DJ set ed eventi fino a 250 persone. Suono impeccabile, luci dinamiche e nessun imprevisto.",
+      "shortDesc": "Soluzioni audio professionali e servizio chiavi in mano per DJ set ed eventi fino a 250 persone. Suono impeccabile, luci dinamiche, consolle Pioneer DJ e supporto tecnico dedicato.",
       "cta": "Dettagli"
     },
     "demoLive": {
@@ -91,6 +92,7 @@
     "subgenres": "Sottogeneri Musicali",
     "target": "Target / Ideale Per",
     "demoSection": "Demo per Sottogenere",
-    "liveSetsSection": "Live Sets Registrati"
+    "liveSetsSection": "Live Sets Registrati",
+    "scrollPrompt": "Demo, Eventi & Progetti"
   }
 }
