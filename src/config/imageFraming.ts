@@ -36,28 +36,28 @@ export const cardFramingConfig: Record<string, CardFraming> = {
     desktop: {
       position: 'center 79%',
       zoom: 1.1,
-      imageWebp: '/assets/bg-deeper.webp',
-      imageJpg: '/assets/bg-deeper.jpg',
+      imageWebp: '/assets/bg-groove.webp',
+      imageJpg: '/assets/bg-groove.jpg',
     },
     mobile: {
       position: 'center 70%',
       zoom: 1.1,
-      imageWebp: '/assets/bg-deeper.webp',
-      imageJpg: '/assets/bg-deeper.jpg',
+      imageWebp: '/assets/bg-groove.webp',
+      imageJpg: '/assets/bg-groove.jpg',
     },
   },
   'mainstage-side': {
     desktop: {
       position: 'center 65%',
       zoom: 1.1,
-      imageWebp: '/assets/bg-harder.webp',
-      imageJpg: '/assets/bg-harder.jpg',
+      imageWebp: '/assets/bg-mainstage.webp',
+      imageJpg: '/assets/bg-mainstage.jpg',
     },
     mobile: {
       position: 'center 57%',
       zoom: 1.0,
-      imageWebp: '/assets/bg-harder.webp',
-      imageJpg: '/assets/bg-harder.jpg',
+      imageWebp: '/assets/bg-mainstage.webp',
+      imageJpg: '/assets/bg-mainstage.jpg',
     },
   },
   'tech-side': {
@@ -69,8 +69,8 @@ export const cardFramingConfig: Record<string, CardFraming> = {
       imageJpg: '/assets/bg-tech.jpg',
     },
     mobile: {
-      position: 'left 55%',
-      zoom: 1.1,
+      position: 'left 58%',
+      zoom: 1.2,
       transformOrigin: '15%',
       imageWebp: '/assets/bg-tech.webp',
       imageJpg: '/assets/bg-tech.jpg',
@@ -78,8 +78,8 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'demo-live': {
     desktop: {
-      position: 'center 45%',
-      zoom: 1.5,
+      position: 'center 40%',
+      zoom: 1.3,
       imageWebp: '/assets/bg-livesets.webp',
       imageJpg: '/assets/bg-livesets.jpg',
     },
@@ -108,8 +108,8 @@ export const cardFramingConfig: Record<string, CardFraming> = {
   },
   'partyhive': {
     desktop: {
-      position: 'center 40%',
-      zoom: 1.0,
+      position: 'center 33%',
+      zoom: 1.2,
       imageWebp: '/assets/bg-partyhive.webp',
       imageJpg: '/assets/bg-partyhive.jpg',
     },
