@@ -17,10 +17,20 @@ for (const file of files) {
   }
 
   const srcPath = path.join(srcDir, file);
+  const stats = await fs.stat(srcPath);
+  if (stats.isDirectory()) {
+    console.log(`Skipping directory: ${file}`);
+    continue;
+  }
+
   const ext = path.extname(file).toLowerCase();
+  const validExts = ['.jpg', '.jpeg', '.png', '.webp'];
+  if (!validExts.includes(ext)) {
+    console.log(`Skipping non-image file: ${file}`);
+    continue;
+  }
   const baseName = path.basename(file, path.extname(file));
 
-  const stats = await fs.stat(srcPath);
   console.log(`Processing ${file} (${(stats.size / 1024 / 1024).toFixed(2)} MB)...`);
 
   if (file === 'logo.png') {

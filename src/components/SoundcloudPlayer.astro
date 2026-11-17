@@ -1,0 +1,28 @@
+---
+import MediaEmbed from './MediaEmbed.astro';
+
+interface Props {
+  url: string;
+  title?: string;
+  accentColor?: string;
+  height?: number;
+  class?: string;
+}
+
+const {
+  url,
+  title = 'SoundCloud Player',
+  accentColor = '#a855f7',
+  height,
+  class: className = '',
+} = Astro.props;
+---
+
+<MediaEmbed
+  url={url}
+  type="soundcloud"
+  title={title}
+  accentColor={accentColor}
+  height={height}
+  class={className}
+/>

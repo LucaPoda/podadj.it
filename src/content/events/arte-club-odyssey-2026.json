@@ -1,0 +1,21 @@
+{
+  "id": "arte-club-odyssey-2026",
+  "date": "2026-05-10",
+  "title": {
+    "it": "Underground Odyssey @ Discoteca Artè",
+    "en": "Underground Odyssey @ Discoteca Artè"
+  },
+  "location": "Brescia (BS)",
+  "venue": "Discoteca Artè (Clubroom)",
+  "format": "THE GROOVE SIDE",
+  "audioSetup": "Funktion-One Resolution 2, 4x F118 Sub, Pioneer CDJ-3000 + Allen & Heath Xone:96",
+  "notes": {
+    "it": "Club night underground. Flusso continuo da Tech House incalzante a 127 BPM fino alle sonorità più scure e serrate dell'Acid Techno stile Drumcode.",
+    "en": "Underground club night. Seamless progression from driving 127 BPM Tech House into the darker, relentless textures of Drumcode-style Acid Techno."
+  },
+  "tracklist": [
+    { "index": 1, "title": "Rhyme Dust", "artist": "Dom Dolla", "bpm": 126, "key": "8A" },
+    { "index": 2, "title": "Your Mind", "artist": "Adam Beyer", "bpm": 128, "key": "11A" },
+    { "index": 3, "title": "The Sound of Techno", "artist": "Enrico Sangiuliano", "bpm": 130, "key": "4A" }
+  ]
+}

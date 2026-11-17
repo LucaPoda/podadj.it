@@ -1,0 +1,21 @@
+{
+  "id": "tuenno-openair-2026",
+  "date": "2026-07-31",
+  "title": {
+    "it": "Tuenno Open Air Festival",
+    "en": "Tuenno Open Air Festival"
+  },
+  "location": "Tuenno, Val di Non (TN)",
+  "venue": "Piazza Centrale Tuenno",
+  "format": "THE MAINSTAGE SIDE",
+  "audioSetup": "Palco piazza centrale con transenne antipanico, DJ booth 'DJ SERVICE', show luci wash/beam, haze generator e console Pioneer DJ",
+  "notes": {
+    "it": "Piazza completamente gremita per uno dei momenti clou dell'estate in Val di Non. Set Mainstage con buildup continui ed esplosioni hard techno che hanno fatto saltare centinaia di persone all'unisono.",
+    "en": "Square packed to capacity for one of the summer highlights in Val di Non. Mainstage festival set with relentless buildups and hard techno drops keeping hundreds jumping as one."
+  },
+  "tracklist": [
+    { "index": 1, "title": "Meet Her At The Love Parade", "artist": "Da Hool (Festival Rework)", "bpm": 136, "key": "8A" },
+    { "index": 2, "title": "Miracle (Hard Techno Edit)", "artist": "Calvin Harris, Ellie Goulding", "bpm": 145, "key": "11A" },
+    { "index": 3, "title": "Lose My Mind", "artist": "Brennan Heart & Wildstylez", "bpm": 150, "key": "7B" }
+  ]
+}

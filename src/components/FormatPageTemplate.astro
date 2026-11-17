@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import SoundcloudPlayer from './SoundcloudPlayer.astro';
+import LiveSetAccordion from './LiveSetAccordion.astro';
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import { liveSetsData } from '../data/liveSets';
+import { demosData } from '../data/demos';
+
+interface Props {
+  locale: Locale;
+  formatKey: 'mainstage' | 'party' | 'groove';
+  accent: 'amber' | 'fuchsia' | 'cyan';
+  accentHex: string;
+  bgImageWebp: string;
+}
+
+const { locale, formatKey, accent, accentHex, bgImageWebp } = Astro.props;
+const t = useTranslations(locale);
+
+const formatStrings = t.formatPages[formatKey];
+const metaStrings = {
+  mainstage: {
+    title: t.meta.mainstageTitle,
+    desc: t.meta.mainstageDesc,
+  },
+  party: {
+    title: t.meta.partyTitle,
+    desc: t.meta.partyDesc,
+  },
+  groove: {
+    title: t.meta.grooveTitle,
+    desc: t.meta.grooveDesc,
+  },
+}[formatKey];
+
+const framingKeys = {
+  mainstage: 'mainstage-side',
+  party: 'party-side',
+  groove: 'groove-side',
+};
+
+// Fetch matching demo
+const demo = demosData.find((d) => d.format === formatKey) || demosData[0];
+
+// Format-specific live sets
+const formatLiveSets = liveSetsData.filter((s) => s.format === formatKey);
+
+const accentQuoteBorders = {
+  amber: 'border-l-2 border-amber-400/80',
+  fuchsia: 'border-l-2 border-fuchsia-400/80',
+  cyan: 'border-l-2 border-cyan-400/80',
+}[accent];
+---
+
+<BaseLayout title={metaStrings.title} description={metaStrings.desc} locale={locale}>
+  <!-- Hero Banner with exact device framing & compact padding -->
+  <HeroBanner
+    locale={locale}
+    title={formatStrings.title}
+    subtitle={formatStrings.subtitle}
+    badge={formatStrings.badge}
+    framingKey={framingKeys[formatKey]}
+    bgImageWebp={bgImageWebp}
+    accent={accent}
+    quickNavItems={[
+      { label: t.nav.jumpToDemo, href: '#demo' },
+      { label: t.nav.jumpToLiveSets, href: '#live-sets' },
+    ]}
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-8 sm:gap-10">
+    
+    <!-- 1. UNIFIED FORMAT IDENTITY (Clean, Minimal Single Card) -->
+    <section aria-label="Format Identity" class="w-full">
+      <div class="rounded-3xl bg-black/40 border border-white/10 p-5 sm:p-7 backdrop-blur-md shadow-xl flex flex-col md:flex-row gap-6 md:gap-8 items-start justify-between">
+        <!-- Left: Signature Mood Quote -->
+        <div class={`flex-1 pl-4 sm:pl-5 py-1 ${accentQuoteBorders}`}>
+          <blockquote class="text-sm sm:text-base font-medium text-white italic leading-relaxed text-shadow-soft">
+            "{formatStrings.mood}"
+          </blockquote>
+        </div>
+
+        <!-- Right: Compact Specs (Genres & Target) -->
+        <div class="w-full md:w-[320px] lg:w-[360px] flex flex-col gap-3.5 text-xs border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 flex-shrink-0">
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
+              {formatStrings.genresLabel}
+            </span>
+            <p class="text-gray-200 leading-relaxed font-normal">
+              {formatStrings.genres}
+            </p>
+          </div>
+
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
+              {formatStrings.targetLabel}
+            </span>
+            <p class="text-gray-300 leading-relaxed font-normal">
+              {formatStrings.target}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DEMO SECTION (#demo) -->
+    <section id="demo" aria-labelledby="format-demo-heading" class="w-full scroll-mt-6">
+      <div class="flex items-center justify-between gap-3 mb-3.5">
+        <h2 id="format-demo-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {formatStrings.demoSectionTitle}
+        </h2>
+        <span class="text-xs text-gray-400 font-mono">
+          {demo.date}
+        </span>
+      </div>
+
+      <!-- SoundCloud Player (Sleek, minimal wrapper) -->
+      <div class="mb-4">
+        <SoundcloudPlayer
+          url={demo.soundcloudUrl}
+          title={demo.title[locale]}
+          accentColor={accentHex}
+          height={166}
+        />
+      </div>
+
+      <!-- Compact Details: Context & Tracklist in a single clean row/card -->
+      <div class="rounded-2xl bg-black/40 border border-white/10 p-4 sm:p-5 backdrop-blur-md shadow-lg grid grid-cols-1 md:grid-cols-2 gap-5 text-xs text-gray-300">
+        <!-- Context -->
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+            {t.common.technicalNotes}
+          </span>
+          <p class="leading-relaxed text-gray-200 font-normal">
+            {formatStrings.demoContext}
+          </p>
+          {demo.styleNotes && (
+            <p class="leading-relaxed text-gray-400 italic pt-2 border-t border-white/5">
+              {demo.styleNotes[locale]}
+            </p>
+          )}
+        </div>
+
+        <!-- Tracklist highlights -->
+        <div class="flex flex-col gap-2 border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-5">
+          <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+            {formatStrings.tracklistTitle}
+          </span>
+          <ul class="flex flex-col gap-1.5 font-mono text-[11px]">
+            {demo.tracklistHighlights.map((track, i) => (
+              <li class="flex items-baseline gap-2 truncate text-gray-300">
+                <span class="text-gray-500 text-[10px]">0{i + 1}.</span>
+                <span class="text-white font-sans font-semibold">{track.title}</span>
+                <span class="text-gray-400 font-sans truncate">— {track.artist}</span>
+                {track.remix && (
+                  <span class="text-[10px] font-sans" style={`color: ${accentHex};`}>
+                    ({track.remix})
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. RECORDED LIVE SETS SECTION (#live-sets) -->
+    <section id="live-sets" aria-labelledby="format-livesets-heading" class="w-full scroll-mt-6">
+      <div class="flex items-center justify-between gap-3 mb-3.5">
+        <h2 id="format-livesets-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {formatStrings.liveSetsTitle}
+        </h2>
+        <a
+          href={getLocalizedPath('/demo-live-sets', locale)}
+          class="text-xs font-semibold text-gray-400 hover:text-white transition-colors uppercase tracking-wider"
+        >
+          {t.common.viewFullArchive} <i class="fas fa-arrow-right text-[9px] ml-1"></i>
+        </a>
+      </div>
+
+      <LiveSetAccordion
+        sets={formatLiveSets}
+        locale={locale}
+        accentColor={accentHex}
+        filterFormat={formatKey}
+      />
+    </section>
+
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

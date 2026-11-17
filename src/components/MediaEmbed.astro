@@ -1,0 +1,134 @@
+---
+interface Props {
+  url: string;
+  type?: 'auto' | 'soundcloud' | 'mixcloud' | 'youtube';
+  title?: string;
+  accentColor?: string;
+  height?: number;
+  class?: string;
+}
+
+const {
+  url,
+  type = 'auto',
+  title = 'Media Player',
+  accentColor = '#a855f7',
+  height,
+  class: className = '',
+} = Astro.props;
+
+function resolveEmbed(inputUrl: string, explicitType: string, accent: string) {
+  let platform = explicitType;
+  if (platform === 'auto') {
+    if (inputUrl.includes('mixcloud.com')) platform = 'mixcloud';
+    else if (inputUrl.includes('youtube.com') || inputUrl.includes('youtu.be')) platform = 'youtube';
+    else platform = 'soundcloud';
+  }
+
+  if (platform === 'mixcloud') {
+    let feedPath = '';
+    try {
+      const parsed = new URL(inputUrl);
+      feedPath = parsed.pathname;
+    } catch {
+      feedPath = inputUrl;
+    }
+    if (!feedPath.endsWith('/')) feedPath += '/';
+    // Mixcloud official dark mode via light=0
+    const embedSrc = `https://player-widget.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(
+      feedPath
+    )}&light=0&hide_cover=1`;
+    return {
+      platform: 'mixcloud',
+      embedSrc,
+      defaultHeight: 120,
+      isVideo: false,
+      filterDark: false,
+      icon: 'fab fa-mixcloud',
+      label: 'Mixcloud',
+    };
+  }
+
+  if (platform === 'youtube') {
+    let videoId = '';
+    let startSeconds = 0;
+    try {
+      const parsed = new URL(inputUrl);
+      if (parsed.hostname.includes('youtu.be')) {
+        videoId = parsed.pathname.slice(1);
+      } else {
+        videoId = parsed.searchParams.get('v') || '';
+      }
+      const tParam = parsed.searchParams.get('t') || '';
+      if (tParam) {
+        startSeconds = parseInt(tParam.replace('s', ''), 10) || 0;
+      }
+    } catch {
+      videoId = inputUrl;
+    }
+    const startQuery = startSeconds ? `&start=${startSeconds}` : '';
+    // YouTube native dark theme
+    const embedSrc = `https://www.youtube-nocookie.com/embed/${videoId}?theme=dark&color=white&modestbranding=1&rel=0${startQuery}`;
+    return {
+      platform: 'youtube',
+      embedSrc,
+      defaultHeight: 315,
+      isVideo: true,
+      filterDark: false,
+      icon: 'fab fa-youtube',
+      label: 'YouTube',
+    };
+  }
+
+  // SoundCloud with CSS dark inversion filter
+  const cleanColorHex = accent.replace('#', '%23');
+  const embedSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+    inputUrl
+  )}&color=${cleanColorHex}&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+  return {
+    platform: 'soundcloud',
+    embedSrc,
+    defaultHeight: 166,
+    isVideo: false,
+    filterDark: true,
+    icon: 'fab fa-soundcloud',
+    label: 'SoundCloud',
+  };
+}
+
+const info = resolveEmbed(url, type, accentColor);
+const playerHeight = height || info.defaultHeight;
+---
+
+<div
+  class={`relative w-full rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md p-2 sm:p-2.5 shadow-xl overflow-hidden group transition-all duration-300 hover:border-white/25 ${className}`}
+>
+  <!-- Subtle ambient glow matching format color -->
+  <div
+    class="absolute -top-10 -left-10 w-40 h-40 rounded-full blur-3xl opacity-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-20"
+    style={`background-color: ${accentColor};`}
+  ></div>
+
+  <!-- Player Frame -->
+  <div class={`relative w-full rounded-xl overflow-hidden bg-black/40 ${info.isVideo ? 'aspect-video' : ''}`}>
+    <iframe
+      width="100%"
+      height={info.isVideo ? '100%' : playerHeight}
+      scrolling="no"
+      frameborder="no"
+      allow={info.isVideo ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' : 'autoplay'}
+      allowfullscreen={info.isVideo}
+      loading="lazy"
+      title={title}
+      src={info.embedSrc}
+      class={`w-full border-0 block ${info.filterDark ? 'soundcloud-dark-filter' : ''}`}
+    ></iframe>
+  </div>
+</div>
+
+<style>
+  /* Invert SoundCloud white widget into dark mode while preserving waveform and color fidelity */
+  .soundcloud-dark-filter {
+    filter: invert(0.93) hue-rotate(180deg) brightness(0.88) contrast(1.08);
+  }
+</style>

@@ -1,0 +1,22 @@
+{
+  "id": "rave-stage-openair-2026",
+  "date": "2026-07-04",
+  "title": {
+    "it": "Open Air Rave Stage — Festival Peak",
+    "en": "Open Air Rave Stage — Festival Peak"
+  },
+  "location": "Brescia (BS)",
+  "venue": "Arena Fiera Brescia",
+  "format": "THE MAINSTAGE SIDE",
+  "audioSetup": "D&B Audiotechnik J-Series Line Array, 8x B22 Sub, Pioneer CDJ-3000 + DJM-A9",
+  "notes": {
+    "it": "Slot serale ad altissima intensità. Scaletta serrata da Festival Techno a 135 BPM verso Hardstyle e Rawstyle con kick devastanti a 155 BPM. Reazione travolgente del pubblico.",
+    "en": "High-intensity evening festival slot. Relentless progression from 135 BPM Festival Techno to 155 BPM Hardstyle & Rawstyle kicks. Outstanding crowd energy."
+  },
+  "tracklist": [
+    { "index": 1, "title": "Heute Nacht", "artist": "Maddix", "bpm": 138, "key": "4A" },
+    { "index": 2, "title": "Judgement Day", "artist": "Hardwell, Sub Zero Project", "bpm": 150, "key": "8A" },
+    { "index": 3, "title": "City Lights", "artist": "Rebelion (PODA Edit)", "bpm": 155, "key": "11A" },
+    { "index": 4, "title": "Push Up", "artist": "Creeds", "bpm": 160, "key": "1A" }
+  ]
+}
