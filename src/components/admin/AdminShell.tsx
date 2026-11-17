@@ -6,6 +6,7 @@ import {
 } from './AdminWorkspaceContext';
 import { DraftPromptModal } from './DraftPromptModal';
 import { ReviewPublishTab } from './ReviewPublishTab';
+import { TracklistsTab } from './TracklistsTab';
 import type { SiteLinks } from '../../schemas/siteLinks';
 
 interface AdminShellProps {
@@ -198,9 +199,13 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
               </div>
             </section>
 
-            {/* Desktop (>= 1024px) Placeholder Workspace */}
+            {/* Desktop (>= 1024px) Workspace */}
             <div className="hidden lg:block">
-              <TabPlaceholderPanel tab={activeTab} />
+              {activeTab.id === 'tracklists' ? (
+                <TracklistsTab />
+              ) : (
+                <TabPlaceholderPanel tab={activeTab} />
+              )}
             </div>
           </>
         ) : activeTab.id === 'review-publish' ? (
@@ -255,11 +260,11 @@ const TabContentMobileFriendly: React.FC<MobileTabProps> = ({
   if (tab.id === 'overview') {
     const statCards = [
       { label: 'Eventi JSON', value: stats.eventsCount, icon: 'fa-calendar-days', accent: 'text-neonPurple' },
+      { label: 'Tracklist JSON', value: stats.tracklistsCount, icon: 'fa-list-ol', accent: 'text-emerald-300' },
       { label: 'Demo Ufficiali', value: stats.demosCount, icon: 'fa-compact-disc', accent: 'text-amber-300' },
       { label: 'Live Sets', value: stats.liveSetsCount, icon: 'fa-wave-square', accent: 'text-cyan-300' },
       { label: 'Pacchetti Service', value: stats.techPackagesCount, icon: 'fa-sliders', accent: 'text-blue-300' },
-      { label: 'Card Framing', value: stats.framingCardsCount, icon: 'fa-crop-simple', accent: 'text-fuchsia-300' },
-      { label: 'Senza Tracklist', value: stats.eventsWithoutTracklist, icon: 'fa-list-check', accent: 'text-emerald-300' },
+      { label: 'Senza Tracklist', value: stats.eventsWithoutTracklist, icon: 'fa-list-check', accent: 'text-fuchsia-300' },
     ];
 
     return (

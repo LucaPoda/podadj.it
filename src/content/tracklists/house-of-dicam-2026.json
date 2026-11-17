@@ -1,0 +1,108 @@
+{
+  "id": "house-of-dicam-2026",
+  "title": "House of DICAM — University Fest",
+  "sourceType": "history",
+  "sourceName": "HISTORIES / 2026-11-13 House of DICAM",
+  "recordedDate": "2026-11-13",
+  "updatedAt": "2026-11-13T23:55:00.000Z",
+  "tracks": [
+    {
+      "index": 1,
+      "title": "Where You Are",
+      "artist": "John Summit, Hayla",
+      "trackType": "original",
+      "playedVersion": {},
+      "originalTracks": [
+        {
+          "title": "Where You Are",
+          "artist": "John Summit, Hayla"
+        }
+      ],
+      "bpm": 126,
+      "key": "8B",
+      "genre": "Vocal House",
+      "myTags": ["Peak Time", "Vocal"],
+      "rating": 5,
+      "label": "Off The Grid",
+      "releaseYear": 2023,
+      "syncMeta": {
+        "normalizedTitle": "whereyouare",
+        "normalizedArtists": "haylajohnsummit"
+      }
+    },
+    {
+      "index": 2,
+      "title": "Take It Off",
+      "artist": "FISHER, Aatig",
+      "trackType": "original",
+      "playedVersion": {},
+      "originalTracks": [
+        {
+          "title": "Take It Off",
+          "artist": "FISHER, Aatig"
+        }
+      ],
+      "bpm": 127,
+      "key": "4A",
+      "genre": "Tech House",
+      "myTags": ["Club", "Groove"],
+      "rating": 4,
+      "label": "Catch & Release",
+      "releaseYear": 2023,
+      "syncMeta": {
+        "normalizedTitle": "takeitoff",
+        "normalizedArtists": "aatigfisher"
+      }
+    },
+    {
+      "index": 3,
+      "title": "Satisfaction",
+      "artist": "David Guetta vs Benny Benassi",
+      "trackType": "remix",
+      "playedVersion": {
+        "label": "David Guetta & Benny Benassi 2022"
+      },
+      "originalTracks": [
+        {
+          "title": "Satisfaction",
+          "artist": "Benny Benassi"
+        }
+      ],
+      "bpm": 126,
+      "key": "11A",
+      "genre": "Electro House",
+      "myTags": ["Anthem", "Classic"],
+      "rating": 4,
+      "releaseYear": 2022,
+      "syncMeta": {
+        "normalizedTitle": "satisfaction",
+        "normalizedArtists": "bennybenassidavidguetta"
+      }
+    },
+    {
+      "index": 4,
+      "title": "Danielle (PODA VIP)",
+      "artist": "Fred again..",
+      "trackType": "edit",
+      "playedVersion": {
+        "label": "PODA VIP"
+      },
+      "originalTracks": [
+        {
+          "title": "Danielle (smile on my face)",
+          "artist": "Fred again.."
+        }
+      ],
+      "bpm": 128,
+      "key": "1A",
+      "genre": "UK House",
+      "myTags": ["VIP Edit", "Peak Time"],
+      "rating": 5,
+      "releaseYear": 2022,
+      "syncMeta": {
+        "normalizedTitle": "daniellepodavip",
+        "normalizedArtists": "fredagain"
+      }
+    }
+  ]
+}

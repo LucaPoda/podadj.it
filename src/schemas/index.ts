@@ -6,3 +6,4 @@ export * from './techSide';
 export * from './imageFraming';
 export * from './events';
 export * from './i18n';
+export * from './tracklist';

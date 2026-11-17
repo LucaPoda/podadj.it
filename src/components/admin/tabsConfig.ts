@@ -41,11 +41,11 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     icon: 'fas fa-list-ol',
     desktopOnly: true,
     phase: 'Fase 3',
-    summary: 'Editor tabellare per le tracklist degli eventi con BPM, tonalità Camelot/key e riordino.',
+    summary: 'Archivio tracklist indipendenti (src/content/tracklists/), wizard XML Rekordbox client-side, Spotify Web API e sync globale tag.',
     plannedFeatures: [
-      'Import rapido da export Rekordbox / CSV / testo',
-      'Modifica inline di titolo, artista, BPM e key con validazione Zod',
-      'Riordino tracce drag-and-drop e numerazione automatica',
+      'Import da XML Rekordbox client-side con navigazione HISTORIES/Playlist e analisi formattazione',
+      'Tabella editabile completa (mashup/edit/remix, originali multipli, BPM, Key, Rating 0..5, My Tag, Anno)',
+      'Ricerca batch preview Spotify Web API + Sync Globale Tag Libreria con doppio controllo hash/titolo',
     ],
   },
   {

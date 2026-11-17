@@ -9,6 +9,7 @@ import {
   LiveSetsDataSchema,
   SiteLinksSchema,
   TechSideDataSchema,
+  TracklistSchema,
 } from '../src/schemas';
 
 const DATA_SCHEMA_MAP: Record<string, ZodTypeAny> = {
@@ -89,6 +90,19 @@ async function main() {
   const eventFiles = (await fs.readdir(eventsDir)).filter((f) => f.endsWith('.json')).sort();
   for (const file of eventFiles) {
     results.push(await validateJsonFile(path.join(eventsDir, file), EventSchema));
+  }
+
+  // 4. Validate src/content/tracklists/*.json (if any)
+  const tracklistsDir = 'src/content/tracklists';
+  try {
+    const tracklistFiles = (await fs.readdir(tracklistsDir)).filter((f) => f.endsWith('.json')).sort();
+    for (const file of tracklistFiles) {
+      results.push(await validateJsonFile(path.join(tracklistsDir, file), TracklistSchema));
+    }
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw err;
+    }
   }
 
   let hasError = false;

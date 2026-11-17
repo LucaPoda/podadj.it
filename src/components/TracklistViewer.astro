@@ -1,0 +1,491 @@
+---
+import type { TracklistEntry } from '../schemas/tracklist';
+import type { EventTrack } from '../schemas/events';
+import type { Locale } from '../i18n/ui';
+
+type TrackInput = TracklistEntry | EventTrack;
+
+interface Props {
+  tracks: TrackInput[];
+  locale?: Locale;
+  accentColor?: string;
+}
+
+const { tracks, locale = 'it', accentColor = '#a855f7' } = Astro.props;
+
+interface NormalizedRow {
+  index: number;
+  title: string;
+  artist: string;
+  trackType: 'original' | 'remix' | 'edit' | 'bootleg' | 'mashup';
+  playedVersionLabel?: string;
+  playedSpotifyUrl?: string;
+  playedSoundcloudUrl?: string;
+  originalTracks: Array<{
+    title: string;
+    artist: string;
+    spotifyUrl?: string;
+    soundcloudUrl?: string;
+  }>;
+  bpm?: number;
+  key?: string;
+  genre?: string;
+  myTags: string[];
+  rating?: number;
+  label?: string;
+  releaseYear?: number;
+  hasAnyPreview: boolean;
+}
+
+function isFullEntry(item: TrackInput): item is TracklistEntry {
+  return 'syncMeta' in item;
+}
+
+function extractSpotifyTrackId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?track\/([a-zA-Z0-9]+)/);
+  return match ? match[1] : null;
+}
+
+function buildSpotifyEmbedUrl(url?: string): string | null {
+  const id = extractSpotifyTrackId(url);
+  return id ? `https://open.spotify.com/embed/track/${id}?utm_source=generator&theme=0` : null;
+}
+
+function buildSoundcloudEmbedUrl(url?: string, hex = '#a855f7'): string | null {
+  if (!url) return null;
+  const cleanHex = hex.replace('#', '%23');
+  return `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+    url
+  )}&color=${cleanHex}&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+}
+
+const rows: NormalizedRow[] = tracks.map((t) => {
+  if (isFullEntry(t)) {
+    const hasPlayed = Boolean(t.playedVersion?.spotifyUrl || t.playedVersion?.soundcloudUrl);
+    const hasOrig = (t.originalTracks || []).some((o) => Boolean(o.spotifyUrl || o.soundcloudUrl));
+    return {
+      index: t.index,
+      title: t.title,
+      artist: t.artist,
+      trackType: t.trackType || 'original',
+      playedVersionLabel: t.playedVersion?.label,
+      playedSpotifyUrl: t.playedVersion?.spotifyUrl,
+      playedSoundcloudUrl: t.playedVersion?.soundcloudUrl,
+      originalTracks: t.originalTracks || [],
+      bpm: t.bpm,
+      key: t.key,
+      genre: t.genre,
+      myTags: t.myTags || [],
+      rating: t.rating,
+      label: t.label,
+      releaseYear: t.releaseYear,
+      hasAnyPreview: hasPlayed || hasOrig,
+    };
+  }
+
+  return {
+    index: t.index,
+    title: t.title,
+    artist: t.artist,
+    trackType: 'original',
+    originalTracks: [],
+    bpm: t.bpm,
+    key: t.key,
+    myTags: [],
+    hasAnyPreview: false,
+  };
+});
+
+const typeBadgeStyles: Record<string, { label: string; className: string }> = {
+  remix: { label: 'Remix', className: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/35' },
+  edit: { label: 'Edit', className: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/35' },
+  bootleg: { label: 'Bootleg', className: 'bg-amber-500/15 text-amber-300 border-amber-500/35' },
+  mashup: { label: 'Mashup', className: 'bg-purple-500/20 text-purple-300 border-purple-500/40' },
+};
+
+const labels = {
+  playedVersion: locale === 'it' ? 'Versione Suonata' : 'Played Version',
+  originals: locale === 'it' ? 'Tracce Originali' : 'Original Tracks',
+  noPreview: locale === 'it' ? 'Nessuna preview disponibile per questa traccia.' : 'No preview available for this track.',
+  openOn: locale === 'it' ? 'Apri su' : 'Open on',
+  playPreview: locale === 'it' ? 'Ascolta preview' : 'Play preview',
+};
+---
+
+<div class="tracklist-viewer flex flex-col gap-1.5 w-full" data-tracklist-viewer>
+  {rows.map((row) => {
+    const typeBadge = row.trackType !== 'original' ? typeBadgeStyles[row.trackType] : null;
+    const origCredits =
+      row.trackType !== 'original' && row.originalTracks.length > 0
+        ? row.originalTracks.map((o) => o.artist).filter(Boolean).join(', ')
+        : null;
+
+    const playedSpotifyEmbed = buildSpotifyEmbedUrl(row.playedSpotifyUrl);
+    const playedSoundcloudEmbed = buildSoundcloudEmbedUrl(row.playedSoundcloudUrl, accentColor);
+
+    const hasExpandedContent =
+      Boolean(row.bpm) ||
+      Boolean(row.label) ||
+      row.myTags.length > 0 ||
+      row.originalTracks.length > 0 ||
+      row.hasAnyPreview;
+
+    return (
+      <div
+        class="tracklist-row rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all overflow-hidden"
+        data-track-row
+      >
+        {/* Compact Row (Always visible) */}
+        <div
+          role={hasExpandedContent ? 'button' : undefined}
+          tabindex={hasExpandedContent ? 0 : undefined}
+          aria-expanded={hasExpandedContent ? 'false' : undefined}
+          data-track-toggle={hasExpandedContent ? '' : undefined}
+          class={`flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs ${
+            hasExpandedContent ? 'cursor-pointer select-none' : ''
+          }`}
+        >
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <span class="font-mono text-gray-400 w-6 text-center flex-shrink-0 text-[11px]">
+              {String(row.index).padStart(2, '0')}
+            </span>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="font-semibold text-white truncate">{row.title}</span>
+                {typeBadge && (
+                  <span
+                    class={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border flex-shrink-0 ${typeBadge.className}`}
+                  >
+                    {typeBadge.label}
+                  </span>
+                )}
+              </div>
+
+              <div class="text-[11px] text-gray-300 truncate mt-0.5">
+                <span>{row.artist}</span>
+                {origCredits && (
+                  <span class="text-gray-400 ml-1.5">
+                    • orig: {origCredits}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Compact right metadata: Genre, Key, Rating, Year + Single Play Button */}
+          <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            {row.genre && (
+              <span class="hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] bg-white/5 border border-white/10 text-gray-300 max-w-[120px] truncate">
+                {row.genre}
+              </span>
+            )}
+
+            {row.key && (
+              <span class="font-mono text-[11px] text-gray-300 px-1.5 py-0.5 rounded bg-black/40 border border-white/10">
+                {row.key}
+              </span>
+            )}
+
+            {row.rating !== undefined && row.rating > 0 && (
+              <span
+                class="hidden sm:inline-flex items-center text-amber-300 text-[10px] tracking-tight"
+                title={`${row.rating}/5`}
+              >
+                {'★'.repeat(row.rating)}
+              </span>
+            )}
+
+            {row.releaseYear && (
+              <span class="hidden sm:inline-block font-mono text-[11px] text-gray-400">
+                {row.releaseYear}
+              </span>
+            )}
+
+            {row.hasAnyPreview ? (
+              <button
+                type="button"
+                data-play-btn
+                aria-label={`${labels.playPreview}: ${row.title}`}
+                class="w-7 h-7 rounded-full flex items-center justify-center bg-white/10 hover:bg-neonPurple text-white border border-white/20 transition-all flex-shrink-0"
+              >
+                <i class="fas fa-play text-[9px] ml-0.5" data-play-icon />
+              </button>
+            ) : hasExpandedContent ? (
+              <span class="w-7 h-7 rounded-full flex items-center justify-center text-gray-500 flex-shrink-0">
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" data-chevron />
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Expanded Accordion Panel (Single-Row + Lazy-Loaded Embeds) */}
+        {hasExpandedContent && (
+          <div
+            data-track-panel
+            class="hidden border-t border-white/10 bg-black/40 px-4 py-3.5 flex-col gap-3 text-xs"
+          >
+            {/* Secondary Metadata: BPM, Label, My Tag */}
+            <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+              {row.bpm && (
+                <span class="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 font-mono">
+                  {row.bpm} BPM
+                </span>
+              )}
+              {row.label && (
+                <span class="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10">
+                  Label: <strong class="text-white">{row.label}</strong>
+                </span>
+              )}
+              {row.genre && (
+                <span class="md:hidden px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10">
+                  {row.genre}
+                </span>
+              )}
+              {row.releaseYear && (
+                <span class="sm:hidden px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 font-mono">
+                  {row.releaseYear}
+                </span>
+              )}
+              {row.myTags.map((tag) => (
+                <span class="px-2 py-0.5 rounded-full bg-neonPurple/15 border border-neonPurple/35 text-purple-200 text-[10px] font-semibold">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Played Version Player */}
+            {(playedSpotifyEmbed || playedSoundcloudEmbed || row.playedVersionLabel) && (
+              <div class="rounded-xl bg-white/[0.03] border border-white/10 p-3 flex flex-col gap-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-[10px] uppercase font-bold tracking-wider text-purple-300">
+                    {labels.playedVersion}
+                    {row.playedVersionLabel ? `: ${row.playedVersionLabel}` : ''}
+                  </span>
+                  <div class="flex items-center gap-2">
+                    {row.playedSpotifyUrl && (
+                      <a
+                        href={row.playedSpotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-[11px] text-emerald-300 hover:text-emerald-200 inline-flex items-center gap-1"
+                      >
+                        <i class="fab fa-spotify" />
+                        <span>{labels.openOn} Spotify</span>
+                      </a>
+                    )}
+                    {row.playedSoundcloudUrl && (
+                      <a
+                        href={row.playedSoundcloudUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-[11px] text-orange-300 hover:text-orange-200 inline-flex items-center gap-1"
+                      >
+                        <i class="fab fa-soundcloud" />
+                        <span>{labels.openOn} SoundCloud</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {playedSpotifyEmbed && (
+                  <iframe
+                    data-embed-src={playedSpotifyEmbed}
+                    title={`${row.title} - Spotify`}
+                    width="100%"
+                    height="80"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    class="w-full rounded-xl border-0 bg-black/50"
+                  />
+                )}
+
+                {playedSoundcloudEmbed && (
+                  <iframe
+                    data-embed-src={playedSoundcloudEmbed}
+                    title={`${row.title} - SoundCloud`}
+                    width="100%"
+                    height="120"
+                    allow="autoplay"
+                    loading="lazy"
+                    class="w-full rounded-xl border-0 soundcloud-dark-filter"
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Original Tracks Players */}
+            {row.originalTracks.length > 0 && (
+              <div class="flex flex-col gap-2">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                  {labels.originals}
+                </span>
+                {row.originalTracks.map((orig) => {
+                  const spEmbed = buildSpotifyEmbedUrl(orig.spotifyUrl);
+                  const scEmbed = buildSoundcloudEmbedUrl(orig.soundcloudUrl, accentColor);
+
+                  return (
+                    <div class="rounded-xl bg-white/[0.03] border border-white/10 p-2.5 flex flex-col gap-2">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-xs text-white font-medium">
+                          {orig.title} <span class="text-gray-400">— {orig.artist}</span>
+                        </span>
+                        <div class="flex items-center gap-2.5">
+                          {orig.spotifyUrl && (
+                            <a
+                              href={orig.spotifyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="text-[11px] text-emerald-300 hover:text-emerald-200 inline-flex items-center gap-1"
+                            >
+                              <i class="fab fa-spotify" />
+                              <span>Spotify</span>
+                            </a>
+                          )}
+                          {orig.soundcloudUrl && (
+                            <a
+                              href={orig.soundcloudUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="text-[11px] text-orange-300 hover:text-orange-200 inline-flex items-center gap-1"
+                            >
+                              <i class="fab fa-soundcloud" />
+                              <span>SoundCloud</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {spEmbed && (
+                        <iframe
+                          data-embed-src={spEmbed}
+                          title={`${orig.title} - Spotify`}
+                          width="100%"
+                          height="80"
+                          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                          loading="lazy"
+                          class="w-full rounded-xl border-0 bg-black/50"
+                        />
+                      )}
+
+                      {scEmbed && (
+                        <iframe
+                          data-embed-src={scEmbed}
+                          title={`${orig.title} - SoundCloud`}
+                          width="100%"
+                          height="120"
+                          allow="autoplay"
+                          loading="lazy"
+                          class="w-full rounded-xl border-0 soundcloud-dark-filter"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {!row.hasAnyPreview && (
+              <p class="text-[11px] text-gray-500 italic">{labels.noPreview}</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .soundcloud-dark-filter {
+    filter: invert(0.93) hue-rotate(180deg) brightness(0.88) contrast(1.08);
+  }
+</style>
+
+<script>
+  function setupTracklistViewers() {
+    const viewers = document.querySelectorAll('[data-tracklist-viewer]');
+
+    viewers.forEach((viewer) => {
+      const rows = Array.from(viewer.querySelectorAll('[data-track-row]'));
+
+      function closeRow(row: Element) {
+        const toggle = row.querySelector('[data-track-toggle]');
+        const panel = row.querySelector('[data-track-panel]');
+        const icon = row.querySelector('[data-play-icon]');
+        const chevron = row.querySelector('[data-chevron]') as HTMLElement | null;
+
+        row.classList.remove('border-neonPurple/50', 'bg-black/50');
+        toggle?.setAttribute('aria-expanded', 'false');
+        panel?.classList.add('hidden');
+        panel?.classList.remove('flex');
+        if (icon) {
+          icon.classList.remove('fa-xmark');
+          icon.classList.add('fa-play', 'ml-0.5');
+        }
+        if (chevron) {
+          chevron.style.transform = 'rotate(0deg)';
+        }
+      }
+
+      function openRow(row: Element) {
+        // Single-row accordion: close every other open row in this viewer
+        rows.forEach((other) => {
+          if (other !== row) closeRow(other);
+        });
+
+        const toggle = row.querySelector('[data-track-toggle]');
+        const panel = row.querySelector('[data-track-panel]');
+        const icon = row.querySelector('[data-play-icon]');
+        const chevron = row.querySelector('[data-chevron]') as HTMLElement | null;
+
+        row.classList.add('border-neonPurple/50', 'bg-black/50');
+        toggle?.setAttribute('aria-expanded', 'true');
+        panel?.classList.remove('hidden');
+        panel?.classList.add('flex');
+        if (icon) {
+          icon.classList.remove('fa-play', 'ml-0.5');
+          icon.classList.add('fa-xmark');
+        }
+        if (chevron) {
+          chevron.style.transform = 'rotate(180deg)';
+        }
+
+        // Lazy-load embeds on first open
+        const embeds = panel?.querySelectorAll<HTMLIFrameElement>('iframe[data-embed-src]') || [];
+        embeds.forEach((iframe) => {
+          const lazySrc = iframe.getAttribute('data-embed-src');
+          if (lazySrc && !iframe.getAttribute('src')) {
+            iframe.setAttribute('src', lazySrc);
+          }
+        });
+      }
+
+      rows.forEach((row) => {
+        const toggle = row.querySelector('[data-track-toggle]');
+        if (!toggle) return;
+
+        function handleToggle() {
+          const isOpen = toggle?.getAttribute('aria-expanded') === 'true';
+          if (isOpen) {
+            closeRow(row);
+          } else {
+            openRow(row);
+          }
+        }
+
+        toggle.addEventListener('click', handleToggle);
+        toggle.addEventListener('keydown', (e: Event) => {
+          const ke = e as KeyboardEvent;
+          if (ke.key === 'Enter' || ke.key === ' ') {
+            ke.preventDefault();
+            handleToggle();
+          }
+        });
+      });
+    });
+  }
+
+  setupTracklistViewers();
+  document.addEventListener('astro:page-load', setupTracklistViewers);
+</script>

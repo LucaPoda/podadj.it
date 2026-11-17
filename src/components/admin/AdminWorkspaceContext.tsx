@@ -27,6 +27,8 @@ import type { SiteLinks } from '../../schemas/siteLinks';
 export interface AdminDashboardStats {
   eventsCount: number;
   eventsWithoutTracklist: number;
+  tracklistsCount: number;
+  totalTracksCount: number;
   demosCount: number;
   liveSetsCount: number;
   techPackagesCount: number;
@@ -92,6 +94,14 @@ function computeStatsFromSnapshot(
     return !ev || !Array.isArray(ev.tracklist) || ev.tracklist.length === 0;
   }).length;
 
+  const tracklistKeys = keys.filter(
+    (k) => k.startsWith('src/content/tracklists/') && k.endsWith('.json')
+  );
+  const totalTracksCount = tracklistKeys.reduce((acc, k) => {
+    const tl = files[k] as { tracks?: unknown[] } | undefined;
+    return acc + (Array.isArray(tl?.tracks) ? tl.tracks.length : 0);
+  }, 0);
+
   const demos = files['src/data/demos.json'];
   const liveSets = files['src/data/liveSets.json'];
   const techSide = files['src/data/techSide.json'] as { techPackages?: unknown[] } | undefined;
@@ -100,6 +110,8 @@ function computeStatsFromSnapshot(
   return {
     eventsCount: eventKeys.length,
     eventsWithoutTracklist,
+    tracklistsCount: tracklistKeys.length,
+    totalTracksCount,
     demosCount: Array.isArray(demos) ? demos.length : fallback.demosCount,
     liveSetsCount: Array.isArray(liveSets) ? liveSets.length : fallback.liveSetsCount,
     techPackagesCount: Array.isArray(techSide?.techPackages)

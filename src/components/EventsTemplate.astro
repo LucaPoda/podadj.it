@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from './Footer.astro';
 import HeroBanner from './HeroBanner.astro';
+import TracklistViewer from './TracklistViewer.astro';
 import { type Locale, useTranslations } from '../i18n/ui';
 import { getFormatMeta } from '../schemas/common';
 
@@ -110,28 +111,11 @@ function formatDisplayDate(dateStr: string, currentLocale: Locale): string {
                   <span>{t.common.tracklist}</span>
                 </span>
 
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr class="border-b border-white/10 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">
-                        <th class="py-2 px-3 w-10">#</th>
-                        <th class="py-2 px-3">{t.common.trackTitleHeader}</th>
-                        <th class="py-2 px-3">{t.common.trackArtistHeader}</th>
-                        <th class="py-2 px-3 text-right">{t.common.trackBpmHeader}</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-white/5 text-gray-200">
-                      {data.tracklist.map((track) => (
-                        <tr class="hover:bg-white/5 transition-colors">
-                          <td class="py-2 px-3 text-gray-400 font-mono">{track.index}</td>
-                          <td class="py-2 px-3 font-semibold text-white">{track.title}</td>
-                          <td class="py-2 px-3 text-gray-300">{track.artist}</td>
-                          <td class="py-2 px-3 text-right text-gray-400 font-mono">{track.bpm ? `${track.bpm}` : '-'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <TracklistViewer
+                  tracks={data.tracklist}
+                  locale={locale}
+                  accentColor={formatMeta.accentHex}
+                />
               </div>
             )}
           </article>

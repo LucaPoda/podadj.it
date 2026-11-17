@@ -7,6 +7,7 @@ import {
   LiveSetsDataSchema,
   SiteLinksSchema,
   TechSideDataSchema,
+  TracklistSchema,
 } from '../schemas';
 
 const FIXED_DATA_SCHEMAS: Record<string, ZodTypeAny> = {
@@ -20,6 +21,7 @@ const FIXED_DATA_SCHEMAS: Record<string, ZodTypeAny> = {
 };
 
 const EVENT_PATH_RE = /^src\/content\/events\/[a-z0-9][a-z0-9_-]*\.json$/;
+const TRACKLIST_PATH_RE = /^src\/content\/tracklists\/[a-z0-9][a-z0-9_-]*\.json$/;
 const SAFE_BINARY_ASSET_RE = /^assets\/[a-zA-Z0-9][a-zA-Z0-9._/-]*$/;
 
 export interface ValidationIssue {
@@ -38,7 +40,7 @@ export function isAllowedContentPath(filePath: string): boolean {
   if (filePath in FIXED_DATA_SCHEMAS) {
     return true;
   }
-  return EVENT_PATH_RE.test(filePath);
+  return EVENT_PATH_RE.test(filePath) || TRACKLIST_PATH_RE.test(filePath);
 }
 
 export function isEditableTreeJsonPath(filePath: string): boolean {
@@ -55,6 +57,9 @@ export function getSchemaForContentPath(filePath: string): ZodTypeAny | null {
   }
   if (EVENT_PATH_RE.test(filePath)) {
     return EventSchema;
+  }
+  if (TRACKLIST_PATH_RE.test(filePath)) {
+    return TracklistSchema;
   }
   return null;
 }
