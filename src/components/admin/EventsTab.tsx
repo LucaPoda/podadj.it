@@ -9,6 +9,7 @@ import {
   isEventPast,
 } from '../../lib/eventsLifecycle';
 import { useAdminWorkspace } from './AdminWorkspaceContext';
+import { AiBilingualField } from './AiBilingualField';
 
 const EVENT_PREFIX = 'src/content/events/';
 const TRACKLIST_PREFIX = 'src/content/tracklists/';
@@ -348,40 +349,19 @@ export const EventsTab: React.FC<EventsTabProps> = ({
               </div>
 
               {/* Titles IT / EN */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                    Titolo (IT)
-                  </label>
-                  <input
-                    type="text"
-                    value={activeEvent.title.it}
-                    onChange={(e) =>
-                      saveEvent(
-                        { ...activeEvent, title: { ...activeEvent.title, it: e.target.value } },
-                        activePath
-                      )
-                    }
-                    className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                    Title (EN)
-                  </label>
-                  <input
-                    type="text"
-                    value={activeEvent.title.en}
-                    onChange={(e) =>
-                      saveEvent(
-                        { ...activeEvent, title: { ...activeEvent.title, en: e.target.value } },
-                        activePath
-                      )
-                    }
-                    className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                  />
-                </div>
-              </div>
+              <AiBilingualField
+                labelIt="Titolo (IT)"
+                labelEn="Title (EN)"
+                valueIt={activeEvent.title.it}
+                valueEn={activeEvent.title.en}
+                onChangeIt={(it) =>
+                  saveEvent({ ...activeEvent, title: { ...activeEvent.title, it } }, activePath)
+                }
+                onChangeEn={(en) =>
+                  saveEvent({ ...activeEvent, title: { ...activeEvent.title, en } }, activePath)
+                }
+                context="event"
+              />
 
               {/* Location, Venue, Format */}
               <div className="grid grid-cols-3 gap-3">
@@ -624,40 +604,21 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                    Note Tecniche / Debriefing (IT)
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={activeEvent.notes.it}
-                    onChange={(e) =>
-                      saveEvent(
-                        { ...activeEvent, notes: { ...activeEvent.notes, it: e.target.value } },
-                        activePath
-                      )
-                    }
-                    className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                    Technical Notes / Debriefing (EN)
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={activeEvent.notes.en}
-                    onChange={(e) =>
-                      saveEvent(
-                        { ...activeEvent, notes: { ...activeEvent.notes, en: e.target.value } },
-                        activePath
-                      )
-                    }
-                    className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                  />
-                </div>
-              </div>
+              <AiBilingualField
+                labelIt="Note Tecniche / Debriefing (IT)"
+                labelEn="Technical Notes / Debriefing (EN)"
+                valueIt={activeEvent.notes.it}
+                valueEn={activeEvent.notes.en}
+                onChangeIt={(it) =>
+                  saveEvent({ ...activeEvent, notes: { ...activeEvent.notes, it } }, activePath)
+                }
+                onChangeEn={(en) =>
+                  saveEvent({ ...activeEvent, notes: { ...activeEvent.notes, en } }, activePath)
+                }
+                context="event"
+                multiline
+                rows={3}
+              />
 
               {/* Rename Slug ID */}
               <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">

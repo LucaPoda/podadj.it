@@ -5,9 +5,11 @@ import { AdminApp } from '../../components/admin/AdminApp';
 import { tryGetAdminSession } from '../../lib/auth';
 import { demosData } from '../../data/demos';
 import { liveSetsData } from '../../data/liveSets';
-import { techPackages } from '../../data/techEquipment';
+import { techPackages, equipmentBreakdown, techGallery } from '../../data/techEquipment';
 import { cardFramingConfig } from '../../config/imageFraming';
 import { siteLinks } from '../../data/siteLinks';
+import itMessages from '../../i18n/it.json';
+import enMessages from '../../i18n/en.json';
 
 export const prerender = false;
 
@@ -31,6 +33,14 @@ const fallbackSnapshot: Record<string, unknown> = {
   'src/data/siteLinks.json': siteLinks,
   'src/data/demos.json': demosData,
   'src/data/liveSets.json': liveSetsData,
+  'src/data/techSide.json': {
+    techPackages,
+    equipmentBreakdown,
+    techGallery,
+  },
+  'src/data/imageFraming.json': cardFramingConfig,
+  'src/i18n/it.json': itMessages,
+  'src/i18n/en.json': enMessages,
 };
 for (const ev of events) {
   fallbackSnapshot[`src/content/events/${ev.data.id}.json`] = ev.data;

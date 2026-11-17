@@ -19,6 +19,15 @@ const PublishBodySchema = z.object({
     )
     .default([]),
   deletes: z.array(z.string().min(1)).default([]),
+  binaryUpserts: z
+    .array(
+      z.object({
+        path: z.string().min(1),
+        contentBase64: z.string().min(1),
+      })
+    )
+    .default([]),
+  binaryDeletes: z.array(z.string().min(1)).default([]),
   diffSummary: z
     .array(
       z.object({

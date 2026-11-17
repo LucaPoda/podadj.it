@@ -82,12 +82,12 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     shortLabel: 'Tech Side',
     icon: 'fas fa-sliders',
     desktopOnly: true,
-    phase: 'Fase 4',
-    summary: 'Configurazione pacchetti service, specifiche hardware e galleria fotografica in techSide.json.',
+    phase: 'Fase 5',
+    summary: 'Configurazione pacchetti service, specifiche hardware e galleria fotografica con upload foto ottimizzate in techSide.json.',
     plannedFeatures: [
-      'Editor pacchetti Chiavi in Mano e badge TOP CHOICE',
-      'Gestione scheda hardware (Proel, Behringer, Pioneer, DMX)',
-      'Ordinamento e didascalie IT/EN della galleria foto',
+      'Editor pacchetti Chiavi in Mano e badge TOP CHOICE con AI IT/EN',
+      'Gestione scheda hardware (Proel, Behringer, Pioneer, DMX) con icon picker FontAwesome',
+      'Upload foto compresse verso assets/tech-gallery/ con conversione automatica .webp/.jpg',
     ],
   },
   {
@@ -96,7 +96,7 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     shortLabel: 'Framing',
     icon: 'fas fa-crop-simple',
     desktopOnly: true,
-    phase: 'Fase 5',
+    phase: 'Fase 6',
     summary: 'Calibrazione visuale di posizione, zoom e transform-origin per Desktop e Mobile in imageFraming.json.',
     plannedFeatures: [
       'Anteprima live side-by-side delle card desktop Bento e mobile Linktree',
@@ -111,11 +111,11 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     icon: 'fas fa-language',
     desktopOnly: false,
     phase: 'Fase 5',
-    summary: 'Gestione centralizzata di siteLinks.json e dei copy bilingue it.json / en.json.',
+    summary: 'Gestione centralizzata di siteLinks.json e dei copy bilingue it.json / en.json con assistente AI Gemini.',
     plannedFeatures: [
-      'Modifica email ufficiale, handle social, link Privacy Policy',
-      'Editor copy IT / EN organizzato per pagina e sezione',
-      'Controllo parità chiavi tra italiano e inglese',
+      'Modifica email ufficiale, handle social, link Privacy Policy con sync footer IT/EN',
+      'Editor copy IT / EN ricercabile per sezione con controllo parità chiavi e Zod',
+      'Ottimizzazione DJ-style e traduzione Pro-Audio IT → EN con Gemini AI',
     ],
   },
   {

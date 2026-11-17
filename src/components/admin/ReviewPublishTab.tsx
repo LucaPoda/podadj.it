@@ -29,13 +29,16 @@ export const ReviewPublishTab: React.FC = () => {
     discardingDraft,
     publishing,
     activeBranch,
+    pendingAssets,
     localUnsavedDiffs,
     totalPendingDiffs,
+    hasAnyPendingBinary,
     validation,
     feedback,
     clearFeedback,
     refreshStatus,
     resetLocalChanges,
+    unstageBinaryAsset,
     discardActiveDraft,
     saveAsDraft,
     publishToMain,
@@ -47,9 +50,10 @@ export const ReviewPublishTab: React.FC = () => {
   const [prNotes, setPrNotes] = useState('');
   const [expandedFiles, setExpandedFiles] = useState<Record<string, boolean>>({});
 
+  const pendingAssetList = Object.values(pendingAssets);
   const isWorkingOnDraft = activeBranch.startsWith('draft/');
-  const hasLocalUnsaved = localUnsavedDiffs.length > 0;
-  const hasAnyPendingChanges = totalPendingDiffs.length > 0;
+  const hasLocalUnsaved = localUnsavedDiffs.length > 0 || hasAnyPendingBinary;
+  const hasAnyPendingChanges = totalPendingDiffs.length > 0 || hasAnyPendingBinary;
   const canSaveDraft = githubConfigured && hasLocalUnsaved && validation.ok && !savingDraft && !publishing;
   const canPublish =
     githubConfigured &&
@@ -445,6 +449,46 @@ export const ReviewPublishTab: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {pendingAssetList.length > 0 && (
+          <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-purple-300">
+              Asset Immagini in Coda ({pendingAssetList.length})
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {pendingAssetList.map((asset) => (
+                <div
+                  key={asset.path}
+                  className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 flex items-center justify-between gap-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <img
+                      src={asset.previewDataUrl}
+                      alt={asset.path}
+                      className="w-12 h-12 rounded-xl object-cover border border-white/15 flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <code className="text-[11px] text-white font-mono block truncate">
+                        {asset.path}
+                      </code>
+                      <span className="text-[10px] text-emerald-300">
+                        Compresso • pronto per upload atomico
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => unstageBinaryAsset(asset.path)}
+                    title="Rimuovi immagine dalla coda"
+                    className="px-2.5 py-1 rounded-full bg-red-500/15 hover:bg-red-500/30 text-red-200 text-[10px] font-bold"
+                  >
+                    Rimuovi
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </section>

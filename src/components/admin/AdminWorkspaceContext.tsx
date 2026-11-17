@@ -22,6 +22,7 @@ import {
   validateSnapshotFiles,
   type ValidationIssue,
 } from '../../lib/contentValidation';
+import type { AiAssistAction, AiAssistContext } from '../../lib/gemini';
 import type { SiteLinks } from '../../schemas/siteLinks';
 
 export interface AdminDashboardStats {
@@ -33,6 +34,13 @@ export interface AdminDashboardStats {
   liveSetsCount: number;
   techPackagesCount: number;
   framingCardsCount: number;
+}
+
+export interface PendingBinaryAsset {
+  path: string;
+  base64: string;
+  previewDataUrl: string;
+  mimeType: string;
 }
 
 export interface WorkspaceFeedback {
@@ -58,18 +66,32 @@ interface AdminWorkspaceContextValue {
   baselineSnapshot: Record<string, unknown>;
   remoteDraftSnapshot: Record<string, unknown> | null;
   workingSnapshot: Record<string, unknown>;
+  pendingAssets: Record<string, PendingBinaryAsset>;
+  committedDraftAssets: Record<string, PendingBinaryAsset>;
   localUnsavedDiffs: FileDiffSummary[];
   totalPendingDiffs: FileDiffSummary[];
+  hasAnyPendingBinary: boolean;
   validation: { ok: boolean; errors: Record<string, ValidationIssue[]> };
   stats: AdminDashboardStats;
   siteLinks: SiteLinks;
   feedback: WorkspaceFeedback | null;
+  aiRateLimitedUntil: number | null;
+  aiDisabledReason: string | null;
+  aiIsBlocked: boolean;
+  clearAiNotice: () => void;
+  requestAiAssist: (
+    action: AiAssistAction,
+    text: string,
+    context?: AiAssistContext
+  ) => Promise<{ ok: true; text: string } | { ok: false; error: string }>;
   clearFeedback: () => void;
   refreshStatus: () => Promise<void>;
   resumeDraft: () => Promise<void>;
   discardActiveDraft: () => Promise<void>;
   updateContentFile: (filePath: string, data: unknown) => void;
   deleteContentFile: (filePath: string) => void;
+  stageBinaryAsset: (asset: PendingBinaryAsset) => void;
+  unstageBinaryAsset: (assetPath: string) => void;
   resetLocalChanges: () => void;
   saveAsDraft: (options?: { draftTitle?: string; message?: string }) => Promise<SaveDraftResult | null>;
   publishToMain: (options?: { title?: string; notes?: string }) => Promise<PublishDraftResult | null>;
@@ -159,7 +181,108 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
   const [workingSnapshot, setWorkingSnapshot] = useState<Record<string, unknown>>(() =>
     cloneRecord(fallbackSnapshot)
   );
+  const [pendingAssets, setPendingAssets] = useState<Record<string, PendingBinaryAsset>>({});
+  const [committedDraftAssets, setCommittedDraftAssets] = useState<
+    Record<string, PendingBinaryAsset>
+  >({});
   const [feedback, setFeedback] = useState<WorkspaceFeedback | null>(null);
+
+  // Global AI quota / configuration state
+  const [aiRateLimitedUntil, setAiRateLimitedUntil] = useState<number | null>(null);
+  const [aiDisabledReason, setAiDisabledReason] = useState<string | null>(null);
+
+  const aiIsBlocked = useMemo(() => {
+    if (aiRateLimitedUntil && Date.now() < aiRateLimitedUntil) return true;
+    return Boolean(aiDisabledReason);
+  }, [aiDisabledReason, aiRateLimitedUntil]);
+
+  useEffect(() => {
+    if (!aiRateLimitedUntil) return;
+    const remaining = aiRateLimitedUntil - Date.now();
+    if (remaining <= 0) {
+      setAiRateLimitedUntil(null);
+      setAiDisabledReason(null);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setAiRateLimitedUntil(null);
+      setAiDisabledReason(null);
+    }, remaining);
+    return () => window.clearTimeout(timer);
+  }, [aiRateLimitedUntil]);
+
+  const clearAiNotice = useCallback(() => {
+    setAiRateLimitedUntil(null);
+    setAiDisabledReason(null);
+  }, []);
+
+  const requestAiAssist = useCallback(
+    async (
+      action: AiAssistAction,
+      text: string,
+      context: AiAssistContext = 'general'
+    ): Promise<{ ok: true; text: string } | { ok: false; error: string }> => {
+      if (!text.trim()) {
+        return { ok: false, error: 'Inserisci prima del testo in italiano.' };
+      }
+      if (aiRateLimitedUntil && Date.now() < aiRateLimitedUntil) {
+        const secs = Math.ceil((aiRateLimitedUntil - Date.now()) / 1000);
+        return {
+          ok: false,
+          error: `AI temporaneamente in pausa per limite quota (riprova tra ${secs}s). Puoi comunque modificare manualmente.`,
+        };
+      }
+
+      try {
+        const res = await fetch('/api/admin/ai/assist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, text, context }),
+        });
+
+        const payload = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          text?: string;
+          code?: string;
+          retryAfterSeconds?: number;
+          error?: string;
+        };
+
+        if (res.status === 429 || payload.code === 'RATE_LIMIT') {
+          const retrySecs = payload.retryAfterSeconds ?? 60;
+          setAiRateLimitedUntil(Date.now() + retrySecs * 1000);
+          setAiDisabledReason(
+            payload.error ||
+              `Quota Gemini temporaneamente esaurita (429). Puoi continuare a scrivere e pubblicare manualmente.`
+          );
+          return {
+            ok: false,
+            error: payload.error || 'Limite quota AI raggiunto (429).',
+          };
+        }
+
+        if (res.status === 503 || payload.code === 'NOT_CONFIGURED') {
+          setAiDisabledReason(
+            payload.error ||
+              'GEMINI_API_KEY non configurata: assistente AI disabilitato (editing manuale sempre attivo).'
+          );
+          return {
+            ok: false,
+            error: payload.error || 'GEMINI_API_KEY non configurata.',
+          };
+        }
+
+        if (!res.ok || !payload.ok || !payload.text) {
+          return { ok: false, error: payload.error || 'Errore risposta assistente AI.' };
+        }
+
+        return { ok: true, text: payload.text };
+      } catch {
+        return { ok: false, error: 'Impossibile raggiungere /api/admin/ai/assist.' };
+      }
+    },
+    [aiRateLimitedUntil]
+  );
 
   const fetchSnapshot = useCallback(async (ref: string): Promise<ContentSnapshot> => {
     const res = await fetch(`/api/admin/draft/load?ref=${encodeURIComponent(ref)}`);
@@ -213,6 +336,8 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
         setRemoteDraftSnapshot(null);
         setWorkingSnapshot(cloneRecord(baseSnap.files));
       }
+      setPendingAssets({});
+      setCommittedDraftAssets({});
     } catch (err) {
       setFeedback({
         type: 'error',
@@ -258,6 +383,7 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
       setActiveBranch(draftBranch);
       setRemoteDraftSnapshot(draftSnap.files);
       setWorkingSnapshot(cloneRecord(draftSnap.files));
+      setPendingAssets({});
       setShowDraftPrompt(false);
       setFeedback({
         type: 'info',
@@ -302,6 +428,8 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
       setActiveBranch(baseBranch);
       setRemoteDraftSnapshot(null);
       setWorkingSnapshot(cloneRecord(baselineSnapshot));
+      setPendingAssets({});
+      setCommittedDraftAssets({});
       setShowDraftPrompt(false);
       setFeedback({
         type: 'info',
@@ -335,9 +463,25 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
     });
   }, []);
 
+  const stageBinaryAsset = useCallback((asset: PendingBinaryAsset) => {
+    setPendingAssets((prev) => ({
+      ...prev,
+      [asset.path]: asset,
+    }));
+  }, []);
+
+  const unstageBinaryAsset = useCallback((assetPath: string) => {
+    setPendingAssets((prev) => {
+      const next = { ...prev };
+      delete next[assetPath];
+      return next;
+    });
+  }, []);
+
   const resetLocalChanges = useCallback(() => {
     const origin = remoteDraftSnapshot ?? baselineSnapshot;
     setWorkingSnapshot(cloneRecord(origin));
+    setPendingAssets({});
     setFeedback({
       type: 'info',
       title: 'Modifiche locali annullate',
@@ -355,26 +499,32 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
     [baselineSnapshot, workingSnapshot]
   );
 
+  const hasAnyPendingBinary = Object.keys(pendingAssets).length > 0;
+
   const validation = useMemo(
     () => validateSnapshotFiles(workingSnapshot),
     [workingSnapshot]
   );
 
   useEffect(() => {
-    if (localUnsavedDiffs.length === 0) return;
+    if (localUnsavedDiffs.length === 0 && !hasAnyPendingBinary) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [localUnsavedDiffs.length]);
+  }, [hasAnyPendingBinary, localUnsavedDiffs.length]);
 
   const saveAsDraft = useCallback(
     async (options?: { draftTitle?: string; message?: string }): Promise<SaveDraftResult | null> => {
       const baseForSave = remoteDraftSnapshot ?? baselineSnapshot;
       const ops = buildSnapshotOperations(baseForSave, workingSnapshot);
+      const binaryUpserts = Object.values(pendingAssets).map((a) => ({
+        path: a.path,
+        contentBase64: a.base64,
+      }));
 
-      if (ops.upserts.length === 0 && ops.deletes.length === 0) {
+      if (ops.upserts.length === 0 && ops.deletes.length === 0 && binaryUpserts.length === 0) {
         setFeedback({
           type: 'info',
           title: 'Nessuna nuova modifica locale',
@@ -404,6 +554,7 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
             message: options?.message,
             upserts: ops.upserts,
             deletes: ops.deletes,
+            binaryUpserts,
           }),
         });
         const data = (await res.json().catch(() => ({}))) as Partial<SaveDraftResult> & {
@@ -416,6 +567,8 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
 
         setActiveBranch(data.branch);
         setRemoteDraftSnapshot(cloneRecord(workingSnapshot));
+        setCommittedDraftAssets((prev) => ({ ...prev, ...pendingAssets }));
+        setPendingAssets({});
         await refreshStatusOnly();
         setFeedback({
           type: 'success',
@@ -442,6 +595,7 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
     [
       activeBranch,
       baselineSnapshot,
+      pendingAssets,
       refreshStatusOnly,
       remoteDraftSnapshot,
       validation.ok,
@@ -462,9 +616,18 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
 
       const baseForCommit = remoteDraftSnapshot ?? baselineSnapshot;
       const ops = buildSnapshotOperations(baseForCommit, workingSnapshot);
+      const binaryUpserts = Object.values(pendingAssets).map((a) => ({
+        path: a.path,
+        contentBase64: a.base64,
+      }));
       const isExistingDraft = activeBranch.startsWith('draft/');
 
-      if (!isExistingDraft && ops.upserts.length === 0 && ops.deletes.length === 0) {
+      if (
+        !isExistingDraft &&
+        ops.upserts.length === 0 &&
+        ops.deletes.length === 0 &&
+        binaryUpserts.length === 0
+      ) {
         setFeedback({
           type: 'info',
           title: 'Nessuna modifica da pubblicare',
@@ -485,6 +648,7 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
             notes: options?.notes,
             upserts: ops.upserts,
             deletes: ops.deletes,
+            binaryUpserts,
             diffSummary: totalPendingDiffs.map((d) => ({
               path: d.filePath,
               status: d.status,
@@ -513,6 +677,8 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
 
         setActiveBranch(data.branch);
         setRemoteDraftSnapshot(cloneRecord(workingSnapshot));
+        setCommittedDraftAssets((prev) => ({ ...prev, ...pendingAssets }));
+        setPendingAssets({});
         await refreshStatusOnly();
 
         setFeedback({
@@ -540,6 +706,7 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
       activeBranch,
       baseBranch,
       baselineSnapshot,
+      pendingAssets,
       refreshStatusOnly,
       remoteDraftSnapshot,
       totalPendingDiffs,
@@ -578,18 +745,28 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
     baselineSnapshot,
     remoteDraftSnapshot,
     workingSnapshot,
+    pendingAssets,
+    committedDraftAssets,
     localUnsavedDiffs,
     totalPendingDiffs,
+    hasAnyPendingBinary,
     validation,
     stats,
     siteLinks,
     feedback,
+    aiRateLimitedUntil,
+    aiDisabledReason,
+    aiIsBlocked,
+    clearAiNotice,
+    requestAiAssist,
     clearFeedback,
     refreshStatus,
     resumeDraft,
     discardActiveDraft,
     updateContentFile,
     deleteContentFile,
+    stageBinaryAsset,
+    unstageBinaryAsset,
     resetLocalChanges,
     saveAsDraft,
     publishToMain,

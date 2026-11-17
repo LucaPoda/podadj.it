@@ -22,7 +22,8 @@ const FIXED_DATA_SCHEMAS: Record<string, ZodTypeAny> = {
 
 const EVENT_PATH_RE = /^src\/content\/events\/[a-z0-9][a-z0-9_-]*\.json$/;
 const TRACKLIST_PATH_RE = /^src\/content\/tracklists\/[a-z0-9][a-z0-9_-]*\.json$/;
-const SAFE_BINARY_ASSET_RE = /^assets\/[a-zA-Z0-9][a-zA-Z0-9._/-]*$/;
+const SAFE_BINARY_ASSET_RE =
+  /^assets\/(?:tech-gallery|uploads)\/[a-z0-9][a-z0-9._-]*\.(?:jpg|jpeg|png|webp)$/i;
 
 export interface ValidationIssue {
   path: string;
@@ -47,8 +48,15 @@ export function isEditableTreeJsonPath(filePath: string): boolean {
   return isAllowedContentPath(filePath);
 }
 
+export function isAllowedBinaryAssetPath(filePath: string): boolean {
+  if (!filePath || filePath.includes('..') || filePath.startsWith('/')) {
+    return false;
+  }
+  return SAFE_BINARY_ASSET_RE.test(filePath);
+}
+
 export function isAllowedRepoWritePath(filePath: string): boolean {
-  return isAllowedContentPath(filePath) || SAFE_BINARY_ASSET_RE.test(filePath);
+  return isAllowedContentPath(filePath) || isAllowedBinaryAssetPath(filePath);
 }
 
 export function getSchemaForContentPath(filePath: string): ZodTypeAny | null {

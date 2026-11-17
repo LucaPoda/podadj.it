@@ -7,7 +7,8 @@ import { TracklistsTab } from './TracklistsTab';
 import { EventsTab } from './EventsTab';
 import { DemosLiveSetsTab } from './DemosLiveSetsTab';
 import { ReviewPublishTab } from './ReviewPublishTab';
-import type { SiteLinks } from '../../schemas/siteLinks';
+import { TechSideTab } from './TechSideTab';
+import { TextsLinksTab } from './TextsLinksTab';
 
 interface AdminShellProps {
   onLogout: () => void;
@@ -18,7 +19,9 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
     githubConfigured,
     activeBranch,
     totalPendingDiffs,
-    siteLinks,
+    aiIsBlocked,
+    aiDisabledReason,
+    clearAiNotice,
   } = useAdminWorkspace();
 
   const [activeTabId, setActiveTabId] = useState<AdminTabId>('overview');
@@ -165,6 +168,39 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
         </nav>
       </header>
 
+      {/* Global Non-Blocking AI Quota / Config Notice */}
+      {aiDisabledReason && (
+        <div
+          role="status"
+          className="mb-4 rounded-2xl border border-amber-400/35 bg-amber-500/10 px-4 py-3 flex items-start justify-between gap-3 text-xs text-amber-100"
+        >
+          <div className="flex items-start gap-2.5">
+            <i
+              className={`fas ${
+                aiIsBlocked ? 'fa-hourglass-half' : 'fa-wand-magic-sparkles'
+              } text-amber-300 mt-0.5`}
+            />
+            <div>
+              <strong className="font-bold text-amber-200">
+                Assistente AI Gemini temporaneamente non disponibile:
+              </strong>{' '}
+              <span>{aiDisabledReason}</span>
+              <span className="text-amber-200/80 ml-1">
+                (Tutte le modifiche manuali, bozze e pubblicazioni PR continuano a funzionare.)
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={clearAiNotice}
+            title="Chiudi avviso"
+            className="text-amber-200 hover:text-white flex-shrink-0"
+          >
+            <i className="fas fa-xmark" />
+          </button>
+        </div>
+      )}
+
       {/* Main Workspace */}
       <main className="w-full">
         {activeTab.desktopOnly ? (
@@ -220,6 +256,8 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
                 />
               ) : activeTab.id === 'demo-live' ? (
                 <DemosLiveSetsTab onOpenTracklist={openTracklistInTab} />
+              ) : activeTab.id === 'tech-side' ? (
+                <TechSideTab />
               ) : (
                 <TabPlaceholderPanel tab={activeTab} />
               )}
@@ -234,55 +272,12 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
         ) : activeTab.id === 'review-publish' ? (
           <ReviewPublishTab />
         ) : (
-          <TextsLinksPlaceholder tab={activeTab} siteLinks={siteLinks} />
+          <TextsLinksTab />
         )}
       </main>
     </div>
   );
 };
-
-const TextsLinksPlaceholder: React.FC<{ tab: AdminTabConfig; siteLinks: SiteLinks }> = ({
-  tab,
-  siteLinks,
-}) => (
-  <div className="flex flex-col gap-5">
-    <TabPlaceholderPanel tab={tab} />
-    <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-5 sm:p-6 shadow-xl">
-      <h2 className="text-sm font-extrabold uppercase tracking-wider text-white mb-3 flex items-center gap-2">
-        <i className="fas fa-link text-neonPurple text-xs" />
-        <span>Sorgente Attuale: siteLinks.json (Solo Lettura)</span>
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-        <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
-            Email Ufficiale
-          </span>
-          <span className="text-white font-mono">{siteLinks.email}</span>
-        </div>
-        <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
-            Instagram PODA
-          </span>
-          <span className="text-white font-mono">{siteLinks.socials.instagramPoda.handle}</span>
-        </div>
-        <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
-            TikTok
-          </span>
-          <span className="text-white font-mono">{siteLinks.socials.tiktok.handle}</span>
-        </div>
-        <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
-            Instagram Partyhive
-          </span>
-          <span className="text-white font-mono">
-            {siteLinks.socials.instagramPartyhive.handle}
-          </span>
-        </div>
-      </div>
-    </section>
-  </div>
-);
 
 const TabPlaceholderPanel: React.FC<{ tab: AdminTabConfig }> = ({ tab }) => {
   return (

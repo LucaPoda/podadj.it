@@ -10,6 +10,7 @@ import type {
 } from './cmsTypes';
 import {
   formatCanonicalJson,
+  isAllowedBinaryAssetPath,
   isAllowedContentPath,
   isAllowedRepoWritePath,
   isEditableTreeJsonPath,
@@ -690,17 +691,26 @@ export async function commitChangesAtomically(
   };
 }
 
+export interface BinaryAssetUpsert {
+  path: string;
+  contentBase64: string;
+}
+
 export interface SaveDraftParams {
   branch?: string;
   draftTitle?: string;
   message?: string;
   upserts: Array<{ path: string; data: unknown }>;
   deletes: string[];
+  binaryUpserts?: BinaryAssetUpsert[];
+  binaryDeletes?: string[];
 }
 
 function validateAllJsonMutations(
   upserts: Array<{ path: string; data: unknown }>,
-  deletes: string[]
+  deletes: string[],
+  binaryUpserts: BinaryAssetUpsert[] = [],
+  binaryDeletes: string[] = []
 ): void {
   for (const delPath of deletes) {
     if (!isAllowedContentPath(delPath)) {
@@ -718,6 +728,24 @@ function validateAllJsonMutations(
       );
     }
   }
+
+  for (const bin of binaryUpserts) {
+    if (!isAllowedBinaryAssetPath(bin.path)) {
+      throw new GitHubApiError(
+        400,
+        `Path asset binario non consentito (consentite solo sottocartelle assets/tech-gallery/ o assets/uploads/): "${bin.path}"`
+      );
+    }
+    if (!bin.contentBase64 || bin.contentBase64.length > 4_200_000) {
+      throw new GitHubApiError(400, `Dimensione asset binario non valida per "${bin.path}"`);
+    }
+  }
+
+  for (const binDel of binaryDeletes) {
+    if (!isAllowedBinaryAssetPath(binDel)) {
+      throw new GitHubApiError(400, `Path eliminazione asset binario non consentito: "${binDel}"`);
+    }
+  }
 }
 
 export async function saveDraft(
@@ -725,11 +753,19 @@ export async function saveDraft(
   params: SaveDraftParams,
   fetchImpl: FetchLike = fetch
 ): Promise<SaveDraftResult> {
-  if (params.upserts.length === 0 && params.deletes.length === 0) {
+  const binaryUpserts = params.binaryUpserts ?? [];
+  const binaryDeletes = params.binaryDeletes ?? [];
+
+  if (
+    params.upserts.length === 0 &&
+    params.deletes.length === 0 &&
+    binaryUpserts.length === 0 &&
+    binaryDeletes.length === 0
+  ) {
     throw new GitHubApiError(400, 'Nessuna modifica da salvare in bozza.');
   }
 
-  validateAllJsonMutations(params.upserts, params.deletes);
+  validateAllJsonMutations(params.upserts, params.deletes, binaryUpserts, binaryDeletes);
 
   const existingDrafts = await listDraftRefs(config, fetchImpl);
   let targetBranch = params.branch?.trim();
@@ -759,11 +795,18 @@ export async function saveDraft(
   const rawMsg = (params.message || 'Aggiornamento contenuti dal portale admin').trim();
   const commitMessage = rawMsg.startsWith('[DRAFT]') ? rawMsg : `[DRAFT] ${rawMsg}`;
 
-  const atomicUpserts: AtomicFileUpsert[] = params.upserts.map((u) => ({
-    path: u.path,
-    content: formatCanonicalJson(u.data),
-    encoding: 'utf-8',
-  }));
+  const atomicUpserts: AtomicFileUpsert[] = [
+    ...params.upserts.map((u) => ({
+      path: u.path,
+      content: formatCanonicalJson(u.data),
+      encoding: 'utf-8' as const,
+    })),
+    ...binaryUpserts.map((b) => ({
+      path: b.path,
+      content: b.contentBase64,
+      encoding: 'base64' as const,
+    })),
+  ];
 
   const committed = await commitChangesAtomically(
     config,
@@ -772,7 +815,7 @@ export async function saveDraft(
       baseBranch: config.baseBranch,
       message: commitMessage,
       upserts: atomicUpserts,
-      deletes: params.deletes,
+      deletes: [...params.deletes, ...binaryDeletes],
     },
     fetchImpl
   );
@@ -862,6 +905,8 @@ export interface PublishDraftParams {
   notes?: string;
   upserts: Array<{ path: string; data: unknown }>;
   deletes: string[];
+  binaryUpserts?: BinaryAssetUpsert[];
+  binaryDeletes?: string[];
   diffSummary?: Array<{ path: string; status: string; changesCount: number }>;
 }
 
@@ -892,6 +937,13 @@ function buildPullRequestBody(params: PublishDraftParams, workBranch: string): s
     }
   }
 
+  if (params.binaryUpserts && params.binaryUpserts.length > 0) {
+    lines.push('', '### Nuovi Asset Immagini (`assets/`)');
+    for (const b of params.binaryUpserts) {
+      lines.push(`- \`${b.path}\` (caricato per ottimizzazione Sharp in build)`);
+    }
+  }
+
   lines.push(
     '',
     '---',
@@ -906,10 +958,17 @@ export async function publishDraft(
   params: PublishDraftParams,
   fetchImpl: FetchLike = fetch
 ): Promise<PublishDraftResult> {
-  // Always validate all JSON upserts via Zod before touching GitHub
-  validateAllJsonMutations(params.upserts, params.deletes);
+  const binaryUpserts = params.binaryUpserts ?? [];
+  const binaryDeletes = params.binaryDeletes ?? [];
 
-  const hasLocalDiffs = params.upserts.length > 0 || params.deletes.length > 0;
+  // Always validate all JSON upserts via Zod and binary paths before touching GitHub
+  validateAllJsonMutations(params.upserts, params.deletes, binaryUpserts, binaryDeletes);
+
+  const hasLocalDiffs =
+    params.upserts.length > 0 ||
+    params.deletes.length > 0 ||
+    binaryUpserts.length > 0 ||
+    binaryDeletes.length > 0;
   const prTitle = (
     params.title?.trim() ||
     `CMS: Aggiornamento contenuti (${new Date().toISOString().slice(0, 10)})`
@@ -918,15 +977,23 @@ export async function publishDraft(
   let workBranch: string;
   let headCommitSha: string;
 
+  const atomicUpserts: AtomicFileUpsert[] = [
+    ...params.upserts.map((u) => ({
+      path: u.path,
+      content: formatCanonicalJson(u.data),
+      encoding: 'utf-8' as const,
+    })),
+    ...binaryUpserts.map((b) => ({
+      path: b.path,
+      content: b.contentBase64,
+      encoding: 'base64' as const,
+    })),
+  ];
+
   if (params.branch && isSafeDraftBranch(params.branch)) {
     workBranch = params.branch;
 
     if (hasLocalDiffs) {
-      const atomicUpserts: AtomicFileUpsert[] = params.upserts.map((u) => ({
-        path: u.path,
-        content: formatCanonicalJson(u.data),
-        encoding: 'utf-8',
-      }));
       const committed = await commitChangesAtomically(
         config,
         {
@@ -934,7 +1001,7 @@ export async function publishDraft(
           baseBranch: config.baseBranch,
           message: `cms: ${prTitle}`,
           upserts: atomicUpserts,
-          deletes: params.deletes,
+          deletes: [...params.deletes, ...binaryDeletes],
         },
         fetchImpl
       );
@@ -965,11 +1032,6 @@ export async function publishDraft(
       throw new GitHubApiError(400, 'Nessuna modifica da pubblicare.');
     }
     workBranch = `publish/cms-${formatTimestampCompact()}`;
-    const atomicUpserts: AtomicFileUpsert[] = params.upserts.map((u) => ({
-      path: u.path,
-      content: formatCanonicalJson(u.data),
-      encoding: 'utf-8',
-    }));
     const committed = await commitChangesAtomically(
       config,
       {
@@ -977,7 +1039,7 @@ export async function publishDraft(
         baseBranch: config.baseBranch,
         message: `cms: ${prTitle}`,
         upserts: atomicUpserts,
-        deletes: params.deletes,
+        deletes: [...params.deletes, ...binaryDeletes],
       },
       fetchImpl
     );

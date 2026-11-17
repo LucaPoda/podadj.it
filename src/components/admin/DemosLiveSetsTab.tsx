@@ -4,6 +4,7 @@ import type { LiveSet, MediaType } from '../../schemas/liveSets';
 import type { EventData } from '../../schemas/events';
 import type { TracklistData } from '../../schemas/tracklist';
 import { useAdminWorkspace } from './AdminWorkspaceContext';
+import { AiBilingualField } from './AiBilingualField';
 
 const DEMOS_PATH = 'src/data/demos.json';
 const LIVE_SETS_PATH = 'src/data/liveSets.json';
@@ -280,34 +281,15 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Titolo (IT)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeDemo.title.it}
-                      onChange={(e) =>
-                        updateActiveDemo({ title: { ...activeDemo.title, it: e.target.value } })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Title (EN)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeDemo.title.en}
-                      onChange={(e) =>
-                        updateActiveDemo({ title: { ...activeDemo.title, en: e.target.value } })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
+                <AiBilingualField
+                  labelIt="Titolo (IT)"
+                  labelEn="Title (EN)"
+                  valueIt={activeDemo.title.it}
+                  valueEn={activeDemo.title.en}
+                  onChangeIt={(it) => updateActiveDemo({ title: { ...activeDemo.title, it } })}
+                  onChangeEn={(en) => updateActiveDemo({ title: { ...activeDemo.title, en } })}
+                  context="demo"
+                />
 
                 <div className="grid grid-cols-3 gap-3">
                   <div className="col-span-2">
@@ -337,38 +319,21 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Descrizione (IT)
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={activeDemo.description.it}
-                      onChange={(e) =>
-                        updateActiveDemo({
-                          description: { ...activeDemo.description, it: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Description (EN)
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={activeDemo.description.en}
-                      onChange={(e) =>
-                        updateActiveDemo({
-                          description: { ...activeDemo.description, en: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
+                <AiBilingualField
+                  labelIt="Descrizione (IT)"
+                  labelEn="Description (EN)"
+                  valueIt={activeDemo.description.it}
+                  valueEn={activeDemo.description.en}
+                  onChangeIt={(it) =>
+                    updateActiveDemo({ description: { ...activeDemo.description, it } })
+                  }
+                  onChangeEn={(en) =>
+                    updateActiveDemo({ description: { ...activeDemo.description, en } })
+                  }
+                  context="demo"
+                  multiline
+                  rows={2}
+                />
 
                 {/* Linked Tracklist + Tags */}
                 <div className="grid grid-cols-2 gap-3">
@@ -586,34 +551,15 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Titolo (IT)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeSet.title.it}
-                      onChange={(e) =>
-                        updateActiveSet({ title: { ...activeSet.title, it: e.target.value } })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Title (EN)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeSet.title.en}
-                      onChange={(e) =>
-                        updateActiveSet({ title: { ...activeSet.title, en: e.target.value } })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
+                <AiBilingualField
+                  labelIt="Titolo (IT)"
+                  labelEn="Title (EN)"
+                  valueIt={activeSet.title.it}
+                  valueEn={activeSet.title.en}
+                  onChangeIt={(it) => updateActiveSet({ title: { ...activeSet.title, it } })}
+                  onChangeEn={(en) => updateActiveSet({ title: { ...activeSet.title, en } })}
+                  context="event"
+                />
 
                 <div className="grid grid-cols-3 gap-3">
                   <div>
@@ -727,71 +673,35 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Fascia Oraria (IT)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeSet.timeSlot.it}
-                      onChange={(e) =>
-                        updateActiveSet({
-                          timeSlot: { ...activeSet.timeSlot, it: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Time Slot (EN)
-                    </label>
-                    <input
-                      type="text"
-                      value={activeSet.timeSlot.en}
-                      onChange={(e) =>
-                        updateActiveSet({
-                          timeSlot: { ...activeSet.timeSlot, en: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
+                <AiBilingualField
+                  labelIt="Fascia Oraria (IT)"
+                  labelEn="Time Slot (EN)"
+                  valueIt={activeSet.timeSlot.it}
+                  valueEn={activeSet.timeSlot.en}
+                  onChangeIt={(it) =>
+                    updateActiveSet({ timeSlot: { ...activeSet.timeSlot, it } })
+                  }
+                  onChangeEn={(en) =>
+                    updateActiveSet({ timeSlot: { ...activeSet.timeSlot, en } })
+                  }
+                  context="event"
+                />
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Descrizione (IT)
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={activeSet.description.it}
-                      onChange={(e) =>
-                        updateActiveSet({
-                          description: { ...activeSet.description, it: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
-                      Description (EN)
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={activeSet.description.en}
-                      onChange={(e) =>
-                        updateActiveSet({
-                          description: { ...activeSet.description, en: e.target.value },
-                        })
-                      }
-                      className="w-full rounded-xl bg-black/50 border border-white/15 px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
+                <AiBilingualField
+                  labelIt="Descrizione (IT)"
+                  labelEn="Description (EN)"
+                  valueIt={activeSet.description.it}
+                  valueEn={activeSet.description.en}
+                  onChangeIt={(it) =>
+                    updateActiveSet({ description: { ...activeSet.description, it } })
+                  }
+                  onChangeEn={(en) =>
+                    updateActiveSet({ description: { ...activeSet.description, en } })
+                  }
+                  context="event"
+                  multiline
+                  rows={3}
+                />
               </>
             )}
           </section>
