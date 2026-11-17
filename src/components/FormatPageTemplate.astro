@@ -1,9 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from './Footer.astro';
 import HeroBanner from './HeroBanner.astro';
 import SoundcloudPlayer from './SoundcloudPlayer.astro';
 import LiveSetAccordion from './LiveSetAccordion.astro';
+import TracklistViewer from './TracklistViewer.astro';
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
 import { liveSetsData } from '../data/liveSets';
 import { demosData } from '../data/demos';
@@ -43,6 +45,12 @@ const framingKeys = {
 
 // Fetch matching demo
 const demo = demosData.find((d) => d.format === formatKey) || demosData[0];
+
+// Optional full tracklist linked via demo.tracklistId
+const allTracklists = await getCollection('tracklists');
+const linkedDemoTracklist = demo.tracklistId
+  ? allTracklists.find((t) => t.data.id === demo.tracklistId)?.data
+  : undefined;
 
 // Format-specific live sets
 const formatLiveSets = liveSetsData.filter((s) => s.format === formatKey);
@@ -143,25 +151,33 @@ const accentQuoteBorders = {
           )}
         </div>
 
-        <!-- Tracklist highlights -->
+        <!-- Tracklist highlights / Linked TracklistViewer -->
         <div class="flex flex-col gap-2 border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-5">
           <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
             {formatStrings.tracklistTitle}
           </span>
-          <ul class="flex flex-col gap-1.5 font-mono text-[11px]">
-            {demo.tracklistHighlights.map((track, i) => (
-              <li class="flex items-baseline gap-2 truncate text-gray-300">
-                <span class="text-gray-500 text-[10px]">0{i + 1}.</span>
-                <span class="text-white font-sans font-semibold">{track.title}</span>
-                <span class="text-gray-400 font-sans truncate">— {track.artist}</span>
-                {track.remix && (
-                  <span class="text-[10px] font-sans" style={`color: ${accentHex};`}>
-                    ({track.remix})
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+          {linkedDemoTracklist && linkedDemoTracklist.tracks.length > 0 ? (
+            <TracklistViewer
+              tracks={linkedDemoTracklist.tracks}
+              locale={locale}
+              accentColor={accentHex}
+            />
+          ) : (
+            <ul class="flex flex-col gap-1.5 font-mono text-[11px]">
+              {demo.tracklistHighlights.map((track, i) => (
+                <li class="flex items-baseline gap-2 truncate text-gray-300">
+                  <span class="text-gray-500 text-[10px]">0{i + 1}.</span>
+                  <span class="text-white font-sans font-semibold">{track.title}</span>
+                  <span class="text-gray-400 font-sans truncate">— {track.artist}</span>
+                  {track.remix && (
+                    <span class="text-[10px] font-sans" style={`color: ${accentHex};`}>
+                      ({track.remix})
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </section>

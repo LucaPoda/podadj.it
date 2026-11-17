@@ -11,12 +11,14 @@ interface AdminAppProps {
   initialAuthenticated: boolean;
   stats: AdminDashboardStats;
   siteLinks: SiteLinks;
+  fallbackSnapshot?: Record<string, unknown>;
 }
 
 export const AdminApp: React.FC<AdminAppProps> = ({
   initialAuthenticated,
   stats,
   siteLinks,
+  fallbackSnapshot,
 }) => {
   const [authenticated, setAuthenticated] = useState(initialAuthenticated);
 
@@ -25,7 +27,11 @@ export const AdminApp: React.FC<AdminAppProps> = ({
   }
 
   return (
-    <AdminWorkspaceProvider fallbackStats={stats} fallbackSiteLinks={siteLinks}>
+    <AdminWorkspaceProvider
+      fallbackStats={stats}
+      fallbackSiteLinks={siteLinks}
+      fallbackSnapshot={fallbackSnapshot}
+    >
       <AdminShell onLogout={() => setAuthenticated(false)} />
     </AdminWorkspaceProvider>
   );

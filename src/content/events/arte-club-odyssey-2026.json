@@ -1,6 +1,8 @@
 {
   "id": "arte-club-odyssey-2026",
   "date": "2026-05-10",
+  "startAt": "2026-05-10T23:30:00+02:00",
+  "endAt": "2026-05-11T02:30:00+02:00",
   "title": {
     "it": "Underground Odyssey @ Discoteca Artè",
     "en": "Underground Odyssey @ Discoteca Artè"
@@ -14,8 +16,26 @@
     "en": "Underground club night. Seamless progression from driving 127 BPM Tech House into the darker, relentless textures of Drumcode-style Acid Techno."
   },
   "tracklist": [
-    { "index": 1, "title": "Rhyme Dust", "artist": "Dom Dolla", "bpm": 126, "key": "8A" },
-    { "index": 2, "title": "Your Mind", "artist": "Adam Beyer", "bpm": 128, "key": "11A" },
-    { "index": 3, "title": "The Sound of Techno", "artist": "Enrico Sangiuliano", "bpm": 130, "key": "4A" }
+    {
+      "index": 1,
+      "title": "Rhyme Dust",
+      "artist": "Dom Dolla",
+      "bpm": 126,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Your Mind",
+      "artist": "Adam Beyer",
+      "bpm": 128,
+      "key": "11A"
+    },
+    {
+      "index": 3,
+      "title": "The Sound of Techno",
+      "artist": "Enrico Sangiuliano",
+      "bpm": 130,
+      "key": "4A"
+    }
   ]
 }

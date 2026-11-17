@@ -1,9 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from './Footer.astro';
 import HeroBanner from './HeroBanner.astro';
 import SoundcloudPlayer from './SoundcloudPlayer.astro';
 import LiveSetAccordion from './LiveSetAccordion.astro';
+import TracklistViewer from './TracklistViewer.astro';
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
 import { liveSetsData } from '../data/liveSets';
 import { demosData } from '../data/demos';
@@ -24,6 +26,10 @@ const grooveDemoUrl = getLocalizedPath('/groove-side#demo', locale);
 
 // Filter eclectic demos (other)
 const eclecticDemos = demosData.filter((d) => d.format === 'other');
+const allTracklists = await getCollection('tracklists');
+const tracklistsById = Object.fromEntries(
+  allTracklists.map((tl) => [tl.data.id, tl.data])
+);
 
 const formatQuickCards = [
   {
@@ -154,31 +160,47 @@ const customSoundMailto = getMailtoHref(
 
       <!-- 2 Clean Side-by-Side Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {eclecticDemos.map((demo) => (
-          <div class="rounded-2xl bg-black/40 border border-white/10 hover:border-white/20 p-4 sm:p-5 backdrop-blur-md shadow-lg flex flex-col justify-between gap-3 transition-all duration-200">
-            <div>
-              <div class="flex items-center justify-between gap-2 mb-1.5">
-                <h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide text-outline">
-                  {demo.title[locale]}
-                </h3>
-                <span class="text-[11px] font-mono text-gray-400">
-                  {demo.date}
-                </span>
+        {eclecticDemos.map((demo) => {
+          const linkedTracklist = demo.tracklistId ? tracklistsById[demo.tracklistId] : undefined;
+          return (
+            <div class="rounded-2xl bg-black/40 border border-white/10 hover:border-white/20 p-4 sm:p-5 backdrop-blur-md shadow-lg flex flex-col justify-between gap-3 transition-all duration-200">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide text-outline">
+                    {demo.title[locale]}
+                  </h3>
+                  <span class="text-[11px] font-mono text-gray-400">
+                    {demo.date}
+                  </span>
+                </div>
+
+                <p class="text-xs text-gray-300 leading-relaxed font-normal mb-3">
+                  {demo.description[locale]}
+                </p>
               </div>
 
-              <p class="text-xs text-gray-300 leading-relaxed font-normal mb-3">
-                {demo.description[locale]}
-              </p>
-            </div>
+              <SoundcloudPlayer
+                url={demo.soundcloudUrl}
+                title={demo.title[locale]}
+                accentColor="#a855f7"
+                height={166}
+              />
 
-            <SoundcloudPlayer
-              url={demo.soundcloudUrl}
-              title={demo.title[locale]}
-              accentColor="#a855f7"
-              height={166}
-            />
-          </div>
-        ))}
+              {linkedTracklist && linkedTracklist.tracks.length > 0 && (
+                <div class="pt-2 border-t border-white/10 flex flex-col gap-2">
+                  <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                    {t.common.tracklist}
+                  </span>
+                  <TracklistViewer
+                    tracks={linkedTracklist.tracks}
+                    locale={locale}
+                    accentColor="#a855f7"
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
 

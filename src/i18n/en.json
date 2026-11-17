@@ -268,5 +268,18 @@
     "trackTitleHeader": "Title",
     "trackArtistHeader": "Artist",
     "trackBpmHeader": "BPM"
+  },
+  "eventsPage": {
+    "upcomingTitle": "Upcoming Events",
+    "upcomingSubtitle": "Confirmed upcoming dates on the calendar",
+    "noUpcoming": "No upcoming events scheduled at the moment. Stay tuned on socials!",
+    "pastTitle": "Past Events",
+    "pastSubtitle": "Archive of past performances with audio setup, debriefing, and tracklists",
+    "noPast": "No past events recorded.",
+    "timeLabel": "Schedule",
+    "linkedLiveSet": "Recorded Live Set",
+    "tracklistBadge": "Tracklist",
+    "liveSetBadge": "Live Set",
+    "openLiveSetExternal": "Listen on platform"
   }
 }

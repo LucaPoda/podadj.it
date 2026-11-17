@@ -1,6 +1,8 @@
 {
   "id": "sagra-rumo-2026",
   "date": "2026-09-28",
+  "startAt": "2026-09-28T22:00:00+02:00",
+  "endAt": "2026-09-29T01:00:00+02:00",
   "title": {
     "it": "Sagra di Rumo — Heavy Festival Sound",
     "en": "Sagra di Rumo — Heavy Festival Sound"
@@ -13,9 +15,28 @@
     "it": "Serata festival al coperto con energia straordinaria del pubblico. Scaletta tirata ad alta velocità tra Raw Techno, Hard Techno e Hard Dance a BPM sostenuti senza alcuna pausa.",
     "en": "Indoor festival tent with relentless crowd energy. High-speed tracklist journeying through Raw Techno, Hard Techno, and Hard Dance at pounding BPMs with zero downtime."
   },
+  "liveSetId": "sagra-rumo-2026",
   "tracklist": [
-    { "index": 1, "title": "The Age of Love (Charlotte de Witte Rework)", "artist": "Age of Love", "bpm": 134, "key": "1A" },
-    { "index": 2, "title": "Move Your Body (Techno Mix)", "artist": "PODA Bootleg", "bpm": 138, "key": "4A" },
-    { "index": 3, "title": "Imaginary", "artist": "Brennan Heart & Jonathan Mendelsohn", "bpm": 150, "key": "12B" }
+    {
+      "index": 1,
+      "title": "The Age of Love (Charlotte de Witte Rework)",
+      "artist": "Age of Love",
+      "bpm": 134,
+      "key": "1A"
+    },
+    {
+      "index": 2,
+      "title": "Move Your Body (Techno Mix)",
+      "artist": "PODA Bootleg",
+      "bpm": 138,
+      "key": "4A"
+    },
+    {
+      "index": 3,
+      "title": "Imaginary",
+      "artist": "Brennan Heart & Jonathan Mendelsohn",
+      "bpm": 150,
+      "key": "12B"
+    }
   ]
 }

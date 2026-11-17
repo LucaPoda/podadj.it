@@ -26,6 +26,18 @@ const stats = {
   techPackagesCount: techPackages.length,
   framingCardsCount: Object.keys(cardFramingConfig).length,
 };
+
+const fallbackSnapshot: Record<string, unknown> = {
+  'src/data/siteLinks.json': siteLinks,
+  'src/data/demos.json': demosData,
+  'src/data/liveSets.json': liveSetsData,
+};
+for (const ev of events) {
+  fallbackSnapshot[`src/content/events/${ev.data.id}.json`] = ev.data;
+}
+for (const tl of tracklists) {
+  fallbackSnapshot[`src/content/tracklists/${tl.data.id}.json`] = tl.data;
+}
 ---
 
 <BaseLayout
@@ -40,6 +52,7 @@ const stats = {
       initialAuthenticated={isAuthenticated}
       stats={stats}
       siteLinks={siteLinks}
+      fallbackSnapshot={fallbackSnapshot}
     >
       <div slot="fallback" class="w-full min-h-[75vh] flex items-center justify-center px-2 py-8">
         <div class="w-full max-w-md rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-6 sm:p-8 shadow-2xl text-center">

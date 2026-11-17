@@ -9,6 +9,7 @@ export interface RekordboxPlaylistNode {
   type: 'folder' | 'playlist';
   path: string;
   isHistory: boolean;
+  historyScope?: string;
   trackIds: string[];
   children: RekordboxPlaylistNode[];
 }
@@ -172,22 +173,27 @@ function parsePlaylistNode(
   node: LightweightXmlNode,
   parentPath: string,
   parentIsHistory: boolean,
+  parentScope: string | undefined,
   historyNodes: RekordboxPlaylistNode[]
 ): RekordboxPlaylistNode {
   const name = (node.attributes.Name || 'Unnamed').trim();
   const nodeType = node.attributes.Type === '1' ? 'playlist' : 'folder';
   const currentPath = parentPath ? `${parentPath} / ${name}` : name;
-  const isHistory =
-    parentIsHistory ||
-    name.toUpperCase() === 'HISTORIES' ||
-    name.toUpperCase() === 'HISTORY';
+
+  const isEventsYearFolder = nodeType === 'folder' && /^events\s+\d{4}$/i.test(name);
+  const currentScope = isEventsYearFolder ? name : parentScope;
+
+  const isHistoriesFolder =
+    nodeType === 'folder' &&
+    (name.toUpperCase() === 'HISTORIES' || name.toUpperCase() === 'HISTORY');
+  const isHistory = parentIsHistory || isHistoriesFolder;
 
   const trackIds = findChildren(node, 'TRACK')
     .map((t) => (t.attributes.Key || t.attributes.TrackID || '').trim())
     .filter(Boolean);
 
   const children = findChildren(node, 'NODE').map((child) =>
-    parsePlaylistNode(child, currentPath, isHistory, historyNodes)
+    parsePlaylistNode(child, currentPath, isHistory, currentScope, historyNodes)
   );
 
   const parsed: RekordboxPlaylistNode = {
@@ -195,6 +201,7 @@ function parsePlaylistNode(
     type: nodeType,
     path: currentPath,
     isHistory,
+    ...(currentScope ? { historyScope: currentScope } : {}),
     trackIds,
     children,
   };
@@ -252,9 +259,11 @@ export function parseRekordboxXml(xmlText: string): ParsedRekordboxXml {
 
   if (playlistsRoot) {
     for (const node of findChildren(playlistsRoot, 'NODE')) {
-      playlists.push(parsePlaylistNode(node, '', false, historyNodes));
+      playlists.push(parsePlaylistNode(node, '', false, undefined, historyNodes));
     }
   }
+
+  historyNodes.sort((a, b) => b.path.localeCompare(a.path));
 
   return {
     totalTracks: Object.keys(tracksById).length,

@@ -1,11 +1,13 @@
 import type { TracklistData, TracklistEntry } from '../../schemas/tracklist';
 import {
+  analyzeFormatting,
+  buildTracklistEntryFromRaw,
   hashFilePath,
   normalizeArtistsForMatch,
   normalizeForMatch,
   type RawRekordboxTrack,
 } from './trackNormalizer';
-import type { ParsedRekordboxXml } from './xmlParser';
+import type { ParsedRekordboxXml, RekordboxPlaylistNode } from './xmlParser';
 
 export type SyncMatchConfidence = 'exact' | 'ambiguous' | 'unmatched';
 
@@ -318,5 +320,224 @@ export async function syncTracklistsWithXml(
     tracksWithUpdates,
     items,
     updatedTracklists,
+  };
+}
+
+export interface HistoryUpdateSummary {
+  tracklistId: string;
+  title: string;
+  sourceName: string;
+  previousCount: number;
+  nextCount: number;
+  updatedTracklist: TracklistData;
+}
+
+export interface NewHistoryCandidate {
+  nodePath: string;
+  name: string;
+  historyScope?: string;
+  suggestedId: string;
+  suggestedTitle: string;
+  recordedDate?: string;
+  anomaliesCount: number;
+  tracklist: TracklistData;
+}
+
+export interface FullXmlAutoSyncResult {
+  tagSyncReport: SyncReport;
+  updatedHistories: HistoryUpdateSummary[];
+  newHistories: NewHistoryCandidate[];
+  mergedUpdatedTracklists: Record<string, TracklistData>;
+}
+
+function slugifyHistoryId(input: string): string {
+  const cleaned = input
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);
+  return cleaned || `history-${Date.now()}`;
+}
+
+function extractIsoDateFromName(name: string): string | undefined {
+  const isoMatch = name.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+  if (isoMatch) return isoMatch[1];
+  const dmyMatch = name.match(/\b(\d{2})[-./](\d{2})[-./](\d{4})\b/);
+  if (dmyMatch) return `${dmyMatch[3]}-${dmyMatch[2]}-${dmyMatch[1]}`;
+  return undefined;
+}
+
+function findMatchingHistoryTracklist(
+  node: RekordboxPlaylistNode,
+  historyTracklists: TracklistData[]
+): TracklistData | undefined {
+  const nodeNameNorm = normalizeForMatch(node.name);
+  const nodePathNorm = normalizeForMatch(node.path);
+  const nodeSlug = slugifyHistoryId(node.name);
+  const nodeDate = extractIsoDateFromName(node.name);
+
+  return historyTracklists.find((tl) => {
+    const srcNorm = normalizeForMatch(tl.sourceName);
+    if (srcNorm && (srcNorm === nodeNameNorm || srcNorm === nodePathNorm || nodePathNorm.endsWith(srcNorm))) {
+      return true;
+    }
+    if (tl.id === nodeSlug) {
+      return true;
+    }
+    if (nodeDate && tl.recordedDate === nodeDate && normalizeForMatch(tl.title) === nodeNameNorm) {
+      return true;
+    }
+    return false;
+  });
+}
+
+function preservePreviewLinks(
+  rebuilt: TracklistEntry,
+  existingEntries: TracklistEntry[]
+): TracklistEntry {
+  const match = existingEntries.find((prev) => {
+    if (rebuilt.syncMeta.filePathHash && prev.syncMeta.filePathHash) {
+      if (rebuilt.syncMeta.filePathHash === prev.syncMeta.filePathHash) return true;
+    }
+    return (
+      prev.syncMeta.normalizedTitle === rebuilt.syncMeta.normalizedTitle &&
+      prev.syncMeta.normalizedArtists === rebuilt.syncMeta.normalizedArtists
+    );
+  });
+
+  if (!match) return rebuilt;
+
+  return {
+    ...rebuilt,
+    playedVersion: {
+      ...rebuilt.playedVersion,
+      ...(match.playedVersion.spotifyUrl ? { spotifyUrl: match.playedVersion.spotifyUrl } : {}),
+      ...(match.playedVersion.soundcloudUrl
+        ? { soundcloudUrl: match.playedVersion.soundcloudUrl }
+        : {}),
+    },
+    originalTracks: rebuilt.originalTracks.map((orig, idx) => {
+      const prevOrig = match.originalTracks[idx];
+      if (!prevOrig) return orig;
+      return {
+        ...orig,
+        ...(prevOrig.spotifyUrl ? { spotifyUrl: prevOrig.spotifyUrl } : {}),
+        ...(prevOrig.soundcloudUrl ? { soundcloudUrl: prevOrig.soundcloudUrl } : {}),
+      };
+    }),
+  };
+}
+
+export async function runFullXmlAutoSync(
+  existingTracklists: TracklistData[],
+  parsedXml: ParsedRekordboxXml
+): Promise<FullXmlAutoSyncResult> {
+  // 1. Global tag & metadata sync across ALL existing tracklists (manual, file, playlist, history)
+  const tagSyncReport = await syncTracklistsWithXml(existingTracklists, parsedXml);
+  const mergedUpdatedTracklists: Record<string, TracklistData> = {
+    ...tagSyncReport.updatedTracklists,
+  };
+
+  // 2. Inspect HISTORIES nodes (including Events 2025/HISTORIES, Events 2026/HISTORIES, etc.)
+  const historyTracklists = existingTracklists.filter((tl) => tl.sourceType === 'history');
+  const existingIds = new Set(existingTracklists.map((t) => t.id));
+  const updatedHistories: HistoryUpdateSummary[] = [];
+  const newHistories: NewHistoryCandidate[] = [];
+
+  for (const node of parsedXml.historyNodes) {
+    const rawTracks: RawRekordboxTrack[] = [];
+    for (const tid of node.trackIds) {
+      const raw = parsedXml.tracksById[tid];
+      if (raw) rawTracks.push(raw);
+    }
+    if (rawTracks.length === 0) continue;
+
+    const matchedExisting = findMatchingHistoryTracklist(node, historyTracklists);
+
+    if (matchedExisting) {
+      const currentTl = mergedUpdatedTracklists[matchedExisting.id] || matchedExisting;
+      const rebuiltEntries: TracklistEntry[] = [];
+      for (let i = 0; i < rawTracks.length; i += 1) {
+        const built = await buildTracklistEntryFromRaw(rawTracks[i], i + 1);
+        rebuiltEntries.push(preservePreviewLinks(built, currentTl.tracks));
+      }
+
+      const prevSig = currentTl.tracks
+        .map((t) => `${t.index}:${t.syncMeta.normalizedTitle}:${t.syncMeta.normalizedArtists}`)
+        .join('|');
+      const nextSig = rebuiltEntries
+        .map((t) => `${t.index}:${t.syncMeta.normalizedTitle}:${t.syncMeta.normalizedArtists}`)
+        .join('|');
+
+      if (prevSig !== nextSig) {
+        const nextTl: TracklistData = {
+          ...currentTl,
+          sourceName: node.path.replace(/^ROOT\s*\/\s*/i, ''),
+          updatedAt: new Date().toISOString(),
+          tracks: rebuiltEntries,
+        };
+        mergedUpdatedTracklists[currentTl.id] = nextTl;
+        updatedHistories.push({
+          tracklistId: currentTl.id,
+          title: currentTl.title,
+          sourceName: node.name,
+          previousCount: currentTl.tracks.length,
+          nextCount: rebuiltEntries.length,
+          updatedTracklist: nextTl,
+        });
+      }
+      continue;
+    }
+
+    // New history detected in XML
+    let suggestedId = slugifyHistoryId(node.name);
+    let suffix = 2;
+    while (existingIds.has(suggestedId) || newHistories.some((n) => n.suggestedId === suggestedId)) {
+      suggestedId = `${slugifyHistoryId(node.name)}-${suffix}`;
+      suffix += 1;
+    }
+
+    const entries: TracklistEntry[] = [];
+    let anomaliesCount = 0;
+    for (let i = 0; i < rawTracks.length; i += 1) {
+      const entry = await buildTracklistEntryFromRaw(rawTracks[i], i + 1);
+      entries.push(entry);
+      anomaliesCount += analyzeFormatting(
+        entry.title,
+        entry.artist,
+        entry.trackType === 'original'
+      ).length;
+    }
+
+    const recordedDate = extractIsoDateFromName(node.name);
+    const newTl: TracklistData = {
+      id: suggestedId,
+      title: node.name,
+      sourceType: 'history',
+      sourceName: node.path.replace(/^ROOT\s*\/\s*/i, ''),
+      ...(recordedDate ? { recordedDate } : {}),
+      updatedAt: new Date().toISOString(),
+      tracks: entries,
+    };
+
+    newHistories.push({
+      nodePath: node.path,
+      name: node.name,
+      historyScope: node.historyScope,
+      suggestedId,
+      suggestedTitle: node.name,
+      recordedDate,
+      anomaliesCount,
+      tracklist: newTl,
+    });
+  }
+
+  return {
+    tagSyncReport,
+    updatedHistories,
+    newHistories,
+    mergedUpdatedTracklists,
   };
 }

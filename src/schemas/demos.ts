@@ -20,6 +20,7 @@ export const DemoSchema = z.object({
   description: LocalizedTextSchema,
   styleNotes: LocalizedTextSchema.optional(),
   tags: z.array(z.string().min(1)),
+  tracklistId: z.string().min(1).optional(),
   tracklistHighlights: z.array(TrackHighlightSchema),
 });
 

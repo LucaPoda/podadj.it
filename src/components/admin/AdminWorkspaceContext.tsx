@@ -127,12 +127,14 @@ function computeStatsFromSnapshot(
 interface ProviderProps {
   fallbackStats: AdminDashboardStats;
   fallbackSiteLinks: SiteLinks;
+  fallbackSnapshot?: Record<string, unknown>;
   children: React.ReactNode;
 }
 
 export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
   fallbackStats,
   fallbackSiteLinks,
+  fallbackSnapshot = {},
   children,
 }) => {
   const [githubConfigured, setGithubConfigured] = useState(true);
@@ -148,11 +150,15 @@ export const AdminWorkspaceProvider: React.FC<ProviderProps> = ({
 
   const [showDraftPrompt, setShowDraftPrompt] = useState(false);
   const [activeBranch, setActiveBranch] = useState('main');
-  const [baselineSnapshot, setBaselineSnapshot] = useState<Record<string, unknown>>({});
+  const [baselineSnapshot, setBaselineSnapshot] = useState<Record<string, unknown>>(() =>
+    cloneRecord(fallbackSnapshot)
+  );
   const [remoteDraftSnapshot, setRemoteDraftSnapshot] = useState<Record<string, unknown> | null>(
     null
   );
-  const [workingSnapshot, setWorkingSnapshot] = useState<Record<string, unknown>>({});
+  const [workingSnapshot, setWorkingSnapshot] = useState<Record<string, unknown>>(() =>
+    cloneRecord(fallbackSnapshot)
+  );
   const [feedback, setFeedback] = useState<WorkspaceFeedback | null>(null);
 
   const fetchSnapshot = useCallback(async (ref: string): Promise<ContentSnapshot> => {

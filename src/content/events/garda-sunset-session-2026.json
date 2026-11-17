@@ -1,6 +1,8 @@
 {
   "id": "garda-sunset-session-2026",
   "date": "2026-06-20",
+  "startAt": "2026-06-20T18:30:00+02:00",
+  "endAt": "2026-06-20T22:30:00+02:00",
   "title": {
     "it": "Sunset Electronic Aperitif @ Garda Beach",
     "en": "Sunset Electronic Aperitif @ Garda Beach"
@@ -14,7 +16,19 @@
     "en": "Lakeside summer aperitif with sunny house and warm vocal cuts. Volume built gradually towards sunset until night dancefloor peak."
   },
   "tracklist": [
-    { "index": 1, "title": "(It Goes Like) Nanana", "artist": "Peggy Gou", "bpm": 130, "key": "8A" },
-    { "index": 2, "title": "Move Your Body", "artist": "Marshall Jefferson, Solardo", "bpm": 126, "key": "1A" }
+    {
+      "index": 1,
+      "title": "(It Goes Like) Nanana",
+      "artist": "Peggy Gou",
+      "bpm": 130,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Move Your Body",
+      "artist": "Marshall Jefferson, Solardo",
+      "bpm": 126,
+      "key": "1A"
+    }
   ]
 }

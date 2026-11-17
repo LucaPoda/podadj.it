@@ -210,6 +210,19 @@ export const I18nSchema = z.object({
     trackArtistHeader: NonEmptyString,
     trackBpmHeader: NonEmptyString,
   }),
+  eventsPage: z.object({
+    upcomingTitle: NonEmptyString,
+    upcomingSubtitle: NonEmptyString,
+    noUpcoming: NonEmptyString,
+    pastTitle: NonEmptyString,
+    pastSubtitle: NonEmptyString,
+    noPast: NonEmptyString,
+    timeLabel: NonEmptyString,
+    linkedLiveSet: NonEmptyString,
+    tracklistBadge: NonEmptyString,
+    liveSetBadge: NonEmptyString,
+    openLiveSetExternal: NonEmptyString,
+  }),
 });
 
 export type I18nMessages = z.infer<typeof I18nSchema>;

@@ -1,6 +1,8 @@
 {
   "id": "spirito-divino-hardstyle-2026",
   "date": "2026-11-10",
+  "startAt": "2026-11-10T00:30:00+01:00",
+  "endAt": "2026-11-10T02:30:00+01:00",
   "title": {
     "it": "Spirito DiVino — Harder Side Special",
     "en": "Spirito DiVino — Harder Side Special"
@@ -13,10 +15,35 @@
     "it": "Sessione speciale fuori dai format commerciali standard: drive ipnotico, rolling kicks solidi e melodie nostalgiche Early/Classic Hardstyle anni 2000/2010. Pressione fisica notevole grazie al doppio sub 18\" a colonna.",
     "en": "Special session outside commercial standards: hypnotic drive, solid rolling kicks, and emotive early 2000s/2010s Hardstyle melodies. High sound pressure delivered by the dual 18\" sub column setup."
   },
+  "liveSetId": "spirito-divino-hardstyle-2026",
   "tracklist": [
-    { "index": 1, "title": "FTS (Original Mix)", "artist": "Showtek", "bpm": 145, "key": "11A" },
-    { "index": 2, "title": "Tonight", "artist": "Headhunterz & Wildstylez vs Noisecontrollers", "bpm": 150, "key": "8B" },
-    { "index": 3, "title": "Live The Moment", "artist": "JDX ft. Sarah Maria", "bpm": 150, "key": "1A" },
-    { "index": 4, "title": "Reignite", "artist": "Headhunterz ft. Malukah", "bpm": 150, "key": "5B" }
+    {
+      "index": 1,
+      "title": "FTS (Original Mix)",
+      "artist": "Showtek",
+      "bpm": 145,
+      "key": "11A"
+    },
+    {
+      "index": 2,
+      "title": "Tonight",
+      "artist": "Headhunterz & Wildstylez vs Noisecontrollers",
+      "bpm": 150,
+      "key": "8B"
+    },
+    {
+      "index": 3,
+      "title": "Live The Moment",
+      "artist": "JDX ft. Sarah Maria",
+      "bpm": 150,
+      "key": "1A"
+    },
+    {
+      "index": 4,
+      "title": "Reignite",
+      "artist": "Headhunterz ft. Malukah",
+      "bpm": 150,
+      "key": "5B"
+    }
   ]
 }

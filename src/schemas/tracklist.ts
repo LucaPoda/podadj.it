@@ -4,7 +4,7 @@ export const TRACK_TYPES = ['original', 'remix', 'edit', 'bootleg', 'mashup'] as
 export const TrackTypeSchema = z.enum(TRACK_TYPES);
 export type TrackType = z.infer<typeof TrackTypeSchema>;
 
-export const TRACKLIST_SOURCE_TYPES = ['history', 'playlist', 'manual'] as const;
+export const TRACKLIST_SOURCE_TYPES = ['history', 'playlist', 'file', 'manual'] as const;
 export const TracklistSourceTypeSchema = z.enum(TRACKLIST_SOURCE_TYPES);
 export type TracklistSourceType = z.infer<typeof TracklistSourceTypeSchema>;
 

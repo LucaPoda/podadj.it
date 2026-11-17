@@ -13,6 +13,8 @@ import type { SpotifyBatchQueryResult } from '../../lib/spotify';
 import { TrackRowEditor } from './tracklists/TrackRowEditor';
 import { RekordboxImportWizard } from './tracklists/RekordboxImportWizard';
 import { LibraryTagSyncPanel } from './tracklists/LibraryTagSyncPanel';
+import { SingleFileImportModal } from './tracklists/SingleFileImportModal';
+import { FullXmlAutoSyncModal } from './tracklists/FullXmlAutoSyncModal';
 
 const TRACKLIST_PREFIX = 'src/content/tracklists/';
 
@@ -31,7 +33,9 @@ function slugify(val: string): string {
   return s || `tracklist-${Date.now()}`;
 }
 
-export const TracklistsTab: React.FC = () => {
+export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = ({
+  initialTracklistId,
+}) => {
   const { workingSnapshot, updateContentFile, deleteContentFile } = useAdminWorkspace();
 
   const tracklistsMap = useMemo(() => {
@@ -53,8 +57,12 @@ export const TracklistsTab: React.FC = () => {
     [tracklistsMap]
   );
 
-  const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const [selectedPath, setSelectedPath] = useState<string | null>(
+    initialTracklistId ? toTracklistPath(initialTracklistId) : null
+  );
   const [showImportWizard, setShowImportWizard] = useState(false);
+  const [showSingleFileModal, setShowSingleFileModal] = useState(false);
+  const [showFullAutoSyncModal, setShowFullAutoSyncModal] = useState(false);
   const [showSyncPanel, setShowSyncPanel] = useState(false);
 
   const [spotifyResults, setSpotifyResults] = useState<Record<string, SpotifyBatchQueryResult>>({});
@@ -329,21 +337,39 @@ export const TracklistsTab: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
+            onClick={() => setShowFullAutoSyncModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-400 hover:bg-cyan-300 text-black shadow-[0_0_16px_rgba(34,211,238,0.3)]"
+          >
+            <i className="fas fa-wand-magic-sparkles text-[11px]" />
+            <span>Carica XML Rekordbox (Auto-Sync Completo)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowSingleFileModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/40 text-fuchsia-200"
+          >
+            <i className="fas fa-file-lines text-[11px]" />
+            <span>Importa File Singolo / Incolla Testo</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setShowImportWizard(true)}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white shadow-[0_0_16px_rgba(168,85,247,0.35)]"
           >
-            <i className="fas fa-file-import text-[11px]" />
-            <span>Importa XML Rekordbox</span>
+            <i className="fas fa-sitemap text-[11px]" />
+            <span>Sfoglia Playlist XML</span>
           </button>
 
           <button
             type="button"
             onClick={() => setShowSyncPanel(true)}
             disabled={sortedPaths.length === 0}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 disabled:opacity-45 text-cyan-200"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-white/5 hover:bg-white/15 border border-white/15 disabled:opacity-45 text-gray-200"
           >
             <i className="fas fa-arrows-rotate text-[11px]" />
-            <span>Sync Globale Tag Libreria</span>
+            <span>Solo Sync Tag</span>
           </button>
 
           <button
@@ -472,6 +498,7 @@ export const TracklistsTab: React.FC = () => {
                     >
                       <option value="history">history</option>
                       <option value="playlist">playlist</option>
+                      <option value="file">file</option>
                       <option value="manual">manual</option>
                     </select>
                   </div>
@@ -612,6 +639,35 @@ export const TracklistsTab: React.FC = () => {
           onImport={(imported) => {
             saveTracklistToWorkspace(imported);
             setShowImportWizard(false);
+          }}
+        />
+      )}
+
+      {showSingleFileModal && (
+        <SingleFileImportModal
+          onClose={() => setShowSingleFileModal(false)}
+          onImport={(imported) => {
+            saveTracklistToWorkspace(imported);
+            setShowSingleFileModal(false);
+          }}
+        />
+      )}
+
+      {showFullAutoSyncModal && (
+        <FullXmlAutoSyncModal
+          existingTracklists={sortedPaths.map((p) => tracklistsMap[p])}
+          onClose={() => setShowFullAutoSyncModal(false)}
+          onApplyAll={({ updatedTracklists, importedNewHistories }) => {
+            for (const tl of Object.values(updatedTracklists)) {
+              updateContentFile(toTracklistPath(tl.id), tl);
+            }
+            for (const newTl of importedNewHistories) {
+              updateContentFile(toTracklistPath(newTl.id), newTl);
+            }
+            if (importedNewHistories.length > 0) {
+              setSelectedPath(toTracklistPath(importedNewHistories[0].id));
+            }
+            setShowFullAutoSyncModal(false);
           }}
         />
       )}

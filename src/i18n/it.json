@@ -268,5 +268,18 @@
     "trackTitleHeader": "Titolo",
     "trackArtistHeader": "Artista",
     "trackBpmHeader": "BPM"
+  },
+  "eventsPage": {
+    "upcomingTitle": "Prossimi Eventi",
+    "upcomingSubtitle": "Le prossime date confermate in calendario",
+    "noUpcoming": "Nessun evento in programma al momento. Resta aggiornato sui canali social!",
+    "pastTitle": "Eventi Passati",
+    "pastSubtitle": "Archivio delle serate svolte con setup audio, note tecniche e tracklist",
+    "noPast": "Nessun evento passato registrato.",
+    "timeLabel": "Orario",
+    "linkedLiveSet": "Live Set Registrato",
+    "tracklistBadge": "Tracklist",
+    "liveSetBadge": "Live Set",
+    "openLiveSetExternal": "Ascolta su piattaforma"
   }
 }

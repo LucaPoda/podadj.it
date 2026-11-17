@@ -1,0 +1,24 @@
+name: Scheduled Static Rebuild (Events Lifecycle)
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger-vercel-rebuild:
+    name: Trigger Vercel Deploy Hook
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel Deploy Hook if configured
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "${VERCEL_DEPLOY_HOOK_URL}" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL secret is not configured. Skipping rebuild trigger."
+            exit 0
+          fi
+
+          curl --fail --silent --show-error -X POST "${VERCEL_DEPLOY_HOOK_URL}"
+          echo "Triggered Vercel scheduled rebuild successfully."
