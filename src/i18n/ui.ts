@@ -1,5 +1,6 @@
 import it from './it.json';
 import en from './en.json';
+import { siteLinks } from '../data/siteLinks';
 
 export const defaultLocale = 'it' as const;
 export const locales = ['it', 'en'] as const;
@@ -12,7 +13,17 @@ export const translations = {
 
 export function useTranslations(locale: Locale = defaultLocale) {
   const current = translations[locale] || translations[defaultLocale];
-  return current;
+  return {
+    ...current,
+    footer: {
+      ...current.footer,
+      email: siteLinks.email,
+      instagram: siteLinks.socials.instagramPoda.displayLabel,
+      tiktok: siteLinks.socials.tiktok.displayLabel,
+      soundcloud: siteLinks.socials.soundcloud.displayLabel,
+      mixcloud: siteLinks.socials.mixcloud.displayLabel,
+    },
+  };
 }
 
 /**

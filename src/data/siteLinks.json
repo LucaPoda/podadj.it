@@ -1,0 +1,33 @@
+{
+  "email": "info@podadj.it",
+  "socials": {
+    "instagramPoda": {
+      "handle": "@poda.dj",
+      "url": "https://www.instagram.com/poda.dj/",
+      "displayLabel": "@poda.dj"
+    },
+    "tiktok": {
+      "handle": "@poda.dj",
+      "url": "https://www.tiktok.com/@poda.dj",
+      "displayLabel": "@poda.dj"
+    },
+    "soundcloud": {
+      "handle": "poda-dj",
+      "url": "https://soundcloud.com/poda-dj/",
+      "displayLabel": "soundcloud.com/poda-dj"
+    },
+    "mixcloud": {
+      "handle": "PODA_DJ",
+      "url": "https://www.mixcloud.com/PODA_DJ/",
+      "displayLabel": "mixcloud.com/PODA_DJ"
+    },
+    "instagramPartyhive": {
+      "handle": "@partyhive.tn",
+      "url": "https://www.instagram.com/partyhive.tn/",
+      "displayLabel": "@partyhive.tn"
+    }
+  },
+  "legal": {
+    "privacyPolicyUrl": "#"
+  }
+}

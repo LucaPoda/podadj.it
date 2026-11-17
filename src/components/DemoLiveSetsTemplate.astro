@@ -8,6 +8,8 @@ import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
 import { liveSetsData } from '../data/liveSets';
 import { demosData } from '../data/demos';
 import { getFramingStyle } from '../utils/imageFraming';
+import { getMailtoHref } from '../data/siteLinks';
+import { FORMAT_META } from '../schemas/common';
 
 interface Props {
   locale: Locale;
@@ -31,7 +33,7 @@ const formatQuickCards = [
     href: mainstageDemoUrl,
     bgImage: '/assets/bg-mainstage.webp',
     accentBorder: 'hover:border-amber-400 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]',
-    badgeClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    badgeClass: FORMAT_META.mainstage.badgeClass,
   },
   {
     framingKey: 'party-side',
@@ -40,7 +42,7 @@ const formatQuickCards = [
     href: partyDemoUrl,
     bgImage: '/assets/bg-party.webp',
     accentBorder: 'hover:border-fuchsia-400 group-hover:shadow-[0_0_20px_rgba(217,70,239,0.25)]',
-    badgeClass: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30',
+    badgeClass: FORMAT_META.party.badgeClass,
   },
   {
     framingKey: 'groove-side',
@@ -49,17 +51,16 @@ const formatQuickCards = [
     href: grooveDemoUrl,
     bgImage: '/assets/bg-groove.webp',
     accentBorder: 'hover:border-cyan-400 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]',
-    badgeClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+    badgeClass: FORMAT_META.groove.badgeClass,
   },
 ];
 
-const customSoundMailto = `mailto:booking@podadj.it?subject=${encodeURIComponent(
-  locale === 'it' ? 'Richiesta Sonorità Custom' : 'Custom Sound Request'
-)}&body=${encodeURIComponent(
+const customSoundMailto = getMailtoHref(
+  locale === 'it' ? 'Richiesta Sonorità Custom' : 'Custom Sound Request',
   locale === 'it'
     ? 'Ciao Luca, vorrei richiedere informazioni per una sonorità o selezione musicale personalizzata per il mio evento.'
     : 'Hi Luca, I would like to inquire about a custom music selection tailored for my event.'
-)}`;
+);
 ---
 
 <BaseLayout title={t.meta.demoLiveTitle} description={t.meta.demoLiveDesc} locale={locale}>

@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { AdminApp } from '../../components/admin/AdminApp';
+import { tryGetAdminSession } from '../../lib/auth';
+import { demosData } from '../../data/demos';
+import { liveSetsData } from '../../data/liveSets';
+import { techPackages } from '../../data/techEquipment';
+import { cardFramingConfig } from '../../config/imageFraming';
+import { siteLinks } from '../../data/siteLinks';
+
+export const prerender = false;
+
+const session = tryGetAdminSession(Astro.request);
+const isAuthenticated = Boolean(session);
+
+const events = await getCollection('events');
+const stats = {
+  eventsCount: events.length,
+  eventsWithoutTracklist: events.filter((e) => !e.data.tracklist || e.data.tracklist.length === 0).length,
+  demosCount: demosData.length,
+  liveSetsCount: liveSetsData.length,
+  techPackagesCount: techPackages.length,
+  framingCardsCount: Object.keys(cardFramingConfig).length,
+};
+---
+
+<BaseLayout
+  title="Admin Console | Poda DJ"
+  description="Area riservata di amministrazione podadj.it"
+  locale="it"
+  noindex={true}
+>
+  <div class="w-full">
+    <AdminApp
+      client:only="react"
+      initialAuthenticated={isAuthenticated}
+      stats={stats}
+      siteLinks={siteLinks}
+    >
+      <div slot="fallback" class="w-full min-h-[75vh] flex items-center justify-center px-2 py-8">
+        <div class="w-full max-w-md rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-6 sm:p-8 shadow-2xl text-center">
+          <img
+            src="/assets/logo.png"
+            alt="Poda DJ"
+            width="140"
+            height="46"
+            class="w-32 mx-auto mb-4 drop-shadow-lg"
+          />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35 mb-2.5">
+            Private Admin Console
+          </span>
+          <h1 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-white mb-2">
+            {isAuthenticated ? 'Caricamento Console...' : 'Accesso Riservato'}
+          </h1>
+          <p class="text-xs text-gray-400">
+            {isAuthenticated
+              ? 'Inizializzazione dashboard amministrativa in corso...'
+              : 'Inizializzazione schermata di login in corso...'}
+          </p>
+        </div>
+      </div>
+    </AdminApp>
+  </div>
+</BaseLayout>

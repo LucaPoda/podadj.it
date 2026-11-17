@@ -1,6 +1,7 @@
 ---
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import { siteLinks } from '../data/siteLinks';
 
 interface Props {
   locale: Locale;
@@ -72,7 +73,7 @@ const homeUrl = getLocalizedPath('/', locale);
       <!-- Social Links -->
       <div class="flex gap-4 sm:gap-5 justify-center">
         <a
-          href="https://instagram.com/podadj_official"
+          href={siteLinks.socials.instagramPoda.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
@@ -81,7 +82,7 @@ const homeUrl = getLocalizedPath('/', locale);
           <i class="fab fa-instagram"></i>
         </a>
         <a
-          href="https://tiktok.com/@podadj_official"
+          href={siteLinks.socials.tiktok.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="TikTok"
@@ -90,7 +91,7 @@ const homeUrl = getLocalizedPath('/', locale);
           <i class="fab fa-tiktok"></i>
         </a>
         <a
-          href="https://soundcloud.com/poda-dj"
+          href={siteLinks.socials.soundcloud.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="SoundCloud"
@@ -99,7 +100,7 @@ const homeUrl = getLocalizedPath('/', locale);
           <i class="fab fa-soundcloud"></i>
         </a>
         <a
-          href="https://mixcloud.com/podadj"
+          href={siteLinks.socials.mixcloud.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Mixcloud"

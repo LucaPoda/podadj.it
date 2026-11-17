@@ -1,6 +1,7 @@
 ---
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
-import { cardFramingConfig } from '../config/imageFraming';
+import { getFramingStyle } from '../utils/imageFraming';
+import { siteLinks } from '../data/siteLinks';
 
 interface Props {
   locale: Locale;
@@ -15,16 +16,6 @@ const mainstageSideUrl = getLocalizedPath('/mainstage-side', locale);
 const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
-
-// Helper per generare lo stile dell'immagine con supporto a immagine, inquadratura, zoom e transform-origin dedicati
-function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
-  const conf = cardFramingConfig[key]?.desktop || { position: 'center center', zoom: 1.0 };
-  const webp = conf.imageWebp || defaultWebp;
-  const jpg = conf.imageJpg || defaultJpg;
-  const zoom = conf.zoom || 1.0;
-  const origin = conf.transformOrigin ? ` transform-origin: ${conf.transformOrigin};` : '';
-  return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
-}
 ---
 
 <div class="hidden md:flex flex-col w-full">
@@ -38,7 +29,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.mainstageSide.title}
     >
-      <div class="bg-image" style={getBgStyle('mainstage-side', '/assets/bg-mainstage.webp', '/assets/bg-mainstage.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('mainstage-side', 'desktop', '/assets/bg-mainstage.webp', '/assets/bg-mainstage.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state -->
@@ -73,7 +64,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.partySide.title}
     >
-      <div class="bg-image" style={getBgStyle('party-side', '/assets/bg-party.webp', '/assets/bg-party.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('party-side', 'desktop', '/assets/bg-party.webp', '/assets/bg-party.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state: Clean Title ONLY -->
@@ -108,7 +99,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.grooveSide.title}
     >
-      <div class="bg-image" style={getBgStyle('groove-side', '/assets/bg-groove.webp', '/assets/bg-groove.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('groove-side', 'desktop', '/assets/bg-groove.webp', '/assets/bg-groove.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state -->
@@ -143,7 +134,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card col-start-2 row-start-1 row-span-3 h-full w-full group relative"
       aria-label={t.cards.techSide.title}
     >
-      <div class="bg-image" style={getBgStyle('tech-side', '/assets/bg-tech.webp', '/assets/bg-tech.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('tech-side', 'desktop', '/assets/bg-tech.webp', '/assets/bg-tech.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state: Clean Title ONLY -->
@@ -196,7 +187,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.demoLive.title}
     >
-      <div class="bg-image" style={getBgStyle('demo-live', '/assets/bg-livesets.webp', '/assets/bg-livesets.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('demo-live', 'desktop', '/assets/bg-livesets.webp', '/assets/bg-livesets.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state: Clean Title ONLY -->
@@ -228,7 +219,7 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.events.title}
     >
-      <div class="bg-image" style={getBgStyle('events', '/assets/bg-events.webp', '/assets/bg-events.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('events', 'desktop', '/assets/bg-events.webp', '/assets/bg-events.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state: Clean Title ONLY -->
@@ -256,13 +247,13 @@ function getBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
 
     <!-- Lower Card 3: PARTYHIVE (Rettangolare, larghezza = The Tech Side, altezza identica alle card sopra) -->
     <a
-      href="https://instagram.com/partyhive_official"
+      href={siteLinks.socials.instagramPartyhive.url}
       target="_blank"
       rel="noopener noreferrer"
       class="format-card h-[135px] lg:h-[148px] xl:h-[160px] w-full group relative"
       aria-label={t.cards.partyhive.title}
     >
-      <div class="bg-image" style={getBgStyle('partyhive', '/assets/bg-partyhive.webp', '/assets/bg-partyhive.jpg')}></div>
+      <div class="bg-image" style={getFramingStyle('partyhive', 'desktop', '/assets/bg-partyhive.webp', '/assets/bg-partyhive.jpg')}></div>
       <div class="overlay"></div>
       
       <!-- Default state: Clean Title ONLY -->

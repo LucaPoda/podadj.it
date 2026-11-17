@@ -1,5 +1,6 @@
 ---
 import { type Locale, useTranslations } from '../i18n/ui';
+import { siteLinks } from '../data/siteLinks';
 
 interface Props {
   locale: Locale;
@@ -47,27 +48,27 @@ const t = useTranslations(locale);
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full text-sm md:text-base font-medium">
         <div class="flex flex-col gap-4">
-          <a href={`mailto:${t.footer.email}`} class="contact-link flex items-center gap-4">
+          <a href={`mailto:${siteLinks.email}`} class="contact-link flex items-center gap-4">
             <i class="fas fa-envelope text-neonPurple text-xl w-6 text-center"></i>
-            <span class="text-shadow-soft">{t.footer.email}</span>
+            <span class="text-shadow-soft">{siteLinks.email}</span>
           </a>
-          <a href="https://www.instagram.com/poda.dj/" target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+          <a href={siteLinks.socials.instagramPoda.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
             <i class="fab fa-instagram text-neonPurple text-xl w-6 text-center"></i>
-            <span class="text-shadow-soft">{t.footer.instagram}</span>
+            <span class="text-shadow-soft">{siteLinks.socials.instagramPoda.displayLabel}</span>
           </a>
-          <a href="https://www.tiktok.com/@poda_dj" target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+          <a href={siteLinks.socials.tiktok.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
             <i class="fab fa-tiktok text-neonPurple text-xl w-6 text-center"></i>
-            <span class="text-shadow-soft">{t.footer.tiktok}</span>
+            <span class="text-shadow-soft">{siteLinks.socials.tiktok.displayLabel}</span>
           </a>
         </div>
         <div class="flex flex-col gap-4">
-          <a href="https://soundcloud.com/poda-dj" target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+          <a href={siteLinks.socials.soundcloud.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
             <i class="fab fa-soundcloud text-neonPurple text-xl w-6 text-center"></i>
-            <span class="text-shadow-soft">{t.footer.soundcloud}</span>
+            <span class="text-shadow-soft">{siteLinks.socials.soundcloud.displayLabel}</span>
           </a>
-          <a href="https://www.mixcloud.com/PODA_DJ/" target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+          <a href={siteLinks.socials.mixcloud.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
             <i class="fab fa-mixcloud text-neonPurple text-xl w-6 text-center"></i>
-            <span class="text-shadow-soft">{t.footer.mixcloud}</span>
+            <span class="text-shadow-soft">{siteLinks.socials.mixcloud.displayLabel}</span>
           </a>
         </div>
       </div>
@@ -77,7 +78,7 @@ const t = useTranslations(locale);
   <div class="text-center mt-10">
     <p class="text-xs text-gray-400 font-light tracking-wide">
       {t.footer.copyright} <br />
-      <a href="#" class="hover:text-white transition-colors underline underline-offset-2 mt-2 inline-block">
+      <a href={siteLinks.legal.privacyPolicyUrl} class="hover:text-white transition-colors underline underline-offset-2 mt-2 inline-block">
         {t.footer.privacy}
       </a>
     </p>

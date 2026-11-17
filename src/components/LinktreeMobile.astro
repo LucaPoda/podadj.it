@@ -1,6 +1,7 @@
 ---
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
-import { cardFramingConfig } from '../config/imageFraming';
+import { getFramingStyle } from '../utils/imageFraming';
+import { siteLinks } from '../data/siteLinks';
 
 interface Props {
   locale: Locale;
@@ -15,16 +16,6 @@ const mainstageSideUrl = getLocalizedPath('/mainstage-side', locale);
 const techSideUrl = getLocalizedPath('/tech-side', locale);
 const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
 const eventsUrl = getLocalizedPath('/events', locale);
-
-// Helper per generare lo stile dell'immagine mobile con supporto a immagine, posizione, zoom e transform-origin dedicati
-function getMobileBgStyle(key: string, defaultWebp: string, defaultJpg: string) {
-  const conf = cardFramingConfig[key]?.mobile || { position: 'center center', zoom: 1.0 };
-  const webp = conf.imageWebp || defaultWebp;
-  const jpg = conf.imageJpg || defaultJpg;
-  const zoom = conf.zoom || 1.0;
-  const origin = conf.transformOrigin ? ` transform-origin: ${conf.transformOrigin};` : '';
-  return `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
-}
 
 // 1. I 3 Format Musicali (Nuovo Ordine: Mainstage -> Party -> Groove)
 const musicalFormats = [
@@ -83,7 +74,7 @@ const techService = {
         <!-- Background image con inquadratura & zoom configurabili -->
         <div
           class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05]"
-          style={getMobileBgStyle(item.id, item.image, item.imageJpg)}
+          style={getFramingStyle(item.id, 'mobile', item.image, item.imageJpg)}
         ></div>
 
         <!-- Sottile overlay di contrasto -->
@@ -157,7 +148,7 @@ const techService = {
     <!-- Background dedicato mobile bg-tech-mobile -->
     <div
       class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
-      style={getMobileBgStyle(techService.id, techService.image, techService.imageJpg)}
+      style={getFramingStyle(techService.id, 'mobile', techService.image, techService.imageJpg)}
     ></div>
 
     <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20 transition-colors duration-300 z-[1]"></div>
@@ -239,7 +230,7 @@ const techService = {
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
-        style={getMobileBgStyle('demo-live', '/assets/bg-livesets.webp', '/assets/bg-livesets.jpg')}
+        style={getFramingStyle('demo-live', 'mobile', '/assets/bg-livesets.webp', '/assets/bg-livesets.jpg')}
       ></div>
       <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25 z-[1]"></div>
       
@@ -267,7 +258,7 @@ const techService = {
     >
       <div
         class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
-        style={getMobileBgStyle('events', '/assets/bg-events.webp', '/assets/bg-events.jpg')}
+        style={getFramingStyle('events', 'mobile', '/assets/bg-events.webp', '/assets/bg-events.jpg')}
       ></div>
       <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25 z-[1]"></div>
       
@@ -296,7 +287,7 @@ const techService = {
   >
     <div
       class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
-      style={getMobileBgStyle('partyhive', '/assets/bg-partyhive.webp', '/assets/bg-partyhive.jpg')}
+      style={getFramingStyle('partyhive', 'mobile', '/assets/bg-partyhive.webp', '/assets/bg-partyhive.jpg')}
     ></div>
 
     <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20 transition-colors duration-300 z-[1]"></div>
@@ -312,7 +303,7 @@ const techService = {
       <div class="flex items-center justify-end w-full">
         <div class="flex items-center gap-2 flex-none">
           <a
-            href="https://instagram.com/partyhive_official"
+            href={siteLinks.socials.instagramPartyhive.url}
             target="_blank"
             rel="noopener noreferrer"
             class="w-8 h-8 rounded-full bg-black/60 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
@@ -347,7 +338,7 @@ const techService = {
         <!-- Bottoni Social Dedicati Partyhive -->
         <div class="flex flex-wrap items-center gap-2.5 w-full pt-1">
           <a
-            href="https://instagram.com/partyhive_official"
+            href={siteLinks.socials.instagramPartyhive.url}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-md active:scale-95"
@@ -357,7 +348,7 @@ const techService = {
           </a>
 
           <a
-            href="https://instagram.com/partyhive_official"
+            href={siteLinks.socials.instagramPartyhive.url}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-md active:scale-95"
@@ -382,7 +373,7 @@ const techService = {
     
     <div class="grid grid-cols-3 gap-2.5">
       <a
-        href={`mailto:${t.footer.email}`}
+        href={`mailto:${siteLinks.email}`}
         class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"
       >
         <i class="fas fa-envelope text-neonPurple text-lg"></i>
@@ -390,7 +381,7 @@ const techService = {
       </a>
 
       <a
-        href="https://instagram.com/podadj_official"
+        href={siteLinks.socials.instagramPoda.url}
         target="_blank"
         rel="noopener noreferrer"
         class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"
@@ -400,7 +391,7 @@ const techService = {
       </a>
 
       <a
-        href="https://soundcloud.com/podadj"
+        href={siteLinks.socials.soundcloud.url}
         target="_blank"
         rel="noopener noreferrer"
         class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"

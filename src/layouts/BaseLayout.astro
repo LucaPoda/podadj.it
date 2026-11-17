@@ -6,14 +6,22 @@ interface Props {
   title?: string;
   description?: string;
   locale?: Locale;
+  noindex?: boolean;
 }
 
-const { title = 'Poda DJ | Electronic Music & Audio Systems', description = 'DJ Producer & Pro Audio Solutions per festival, club ed eventi privati.', locale = 'it' } = Astro.props;
+const {
+  title = 'Poda DJ | Electronic Music & Audio Systems',
+  description = 'DJ Producer & Pro Audio Solutions per festival, club ed eventi privati.',
+  locale = 'it',
+  noindex = false,
+} = Astro.props;
 
+const siteBase = Astro.site || 'https://podadj.it';
 const currentPath = Astro.url.pathname;
-const itUrl = new URL(switchLocalePath(currentPath, 'it'), Astro.site || 'https://podadj.it').href;
-const enUrl = new URL(switchLocalePath(currentPath, 'en'), Astro.site || 'https://podadj.it').href;
-const canonicalUrl = new URL(currentPath, Astro.site || 'https://podadj.it').href;
+const itUrl = new URL(switchLocalePath(currentPath, 'it'), siteBase).href;
+const enUrl = new URL(switchLocalePath(currentPath, 'en'), siteBase).href;
+const canonicalUrl = new URL(currentPath, siteBase).href;
+const ogImageUrl = new URL('/assets/bg-page.jpg', siteBase).href;
 ---
 
 <!DOCTYPE html>
@@ -23,25 +31,30 @@ const canonicalUrl = new URL(currentPath, Astro.site || 'https://podadj.it').hre
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
-    
-    <!-- i18n alternates for SEO -->
-    <link rel="alternate" hreflang="it" href={itUrl} />
-    <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="x-default" href={itUrl} />
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <>
+        <link rel="canonical" href={canonicalUrl} />
+        <!-- i18n alternates for SEO -->
+        <link rel="alternate" hreflang="it" href={itUrl} />
+        <link rel="alternate" hreflang="en" href={enUrl} />
+        <link rel="alternate" hreflang="x-default" href={itUrl} />
+      </>
+    )}
 
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalUrl} />
+    {!noindex && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/assets/bg-page.jpg" />
+    <meta property="og:image" content={ogImageUrl} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="/assets/bg-page.jpg" />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/logo.png" />
