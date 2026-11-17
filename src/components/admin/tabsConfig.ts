@@ -124,12 +124,12 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     shortLabel: 'Pubblica',
     icon: 'fas fa-rocket',
     desktopOnly: false,
-    phase: 'Fase 6',
-    summary: 'Diff delle modifiche JSON, validazione Zod pre-deploy e pubblicazione su repository/Vercel.',
+    phase: 'Fase 2',
+    summary: 'Diff leggibile campo-per-campo, salvataggio bozza (draft/*) e apertura Pull Request verso main.',
     plannedFeatures: [
-      'Riepilogo diff dei file modificati rispetto al branch corrente',
-      'Esecuzione check Zod completo prima del commit',
-      'Commit & deploy automatico su Vercel tramite workflow sicuro',
+      'Riepilogo leggibile delle modifiche rispetto alla branch di produzione',
+      'Salvataggio bozza temporanea su branch draft/* con rilevamento e ripristino',
+      'Validazione Zod server-side e creazione/aggiornamento Pull Request con CI automatica',
     ],
   },
 ];

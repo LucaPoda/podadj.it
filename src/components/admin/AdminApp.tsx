@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { LoginForm } from './LoginForm';
-import { AdminShell, type AdminDashboardStats } from './AdminShell';
+import { AdminShell } from './AdminShell';
+import {
+  AdminWorkspaceProvider,
+  type AdminDashboardStats,
+} from './AdminWorkspaceContext';
 import type { SiteLinks } from '../../schemas/siteLinks';
 
 interface AdminAppProps {
@@ -21,10 +25,8 @@ export const AdminApp: React.FC<AdminAppProps> = ({
   }
 
   return (
-    <AdminShell
-      stats={stats}
-      siteLinks={siteLinks}
-      onLogout={() => setAuthenticated(false)}
-    />
+    <AdminWorkspaceProvider fallbackStats={stats} fallbackSiteLinks={siteLinks}>
+      <AdminShell onLogout={() => setAuthenticated(false)} />
+    </AdminWorkspaceProvider>
   );
 };
