@@ -140,7 +140,7 @@ export function buildFramingInlineStyles(
   const zoom = conf.zoom || 1.0;
   const origin = conf.transformOrigin ? ` transform-origin: ${conf.transformOrigin};` : '';
 
-  const cssText = `background-image: url('${webp}'), url('${jpg}'); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
+  const cssText = `background-image: url('${jpg}'); background-image: -webkit-image-set(url('${webp}') 1x, url('${jpg}') 1x); background-image: image-set(url('${webp}') type('image/webp'), url('${jpg}') type('image/jpeg')); background-position: ${conf.position}; transform: scale(${zoom});${origin}`;
 
   const bgImageValue = options.overridePreviewUrl
     ? `url('${options.overridePreviewUrl}')`

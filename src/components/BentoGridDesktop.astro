@@ -10,12 +10,12 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-const partySideUrl = getLocalizedPath('/party-side', locale);
-const grooveSideUrl = getLocalizedPath('/groove-side', locale);
-const mainstageSideUrl = getLocalizedPath('/mainstage-side', locale);
-const techSideUrl = getLocalizedPath('/tech-side', locale);
-const demoLiveUrl = getLocalizedPath('/demo-live-sets', locale);
-const eventsUrl = getLocalizedPath('/events', locale);
+const partySideUrl = getLocalizedPath('/wip/party-side', locale);
+const grooveSideUrl = getLocalizedPath('/wip/groove-side', locale);
+const mainstageSideUrl = getLocalizedPath('/wip/mainstage-side', locale);
+const techSideUrl = getLocalizedPath('/wip/tech-side', locale);
+const demoLiveUrl = getLocalizedPath('/wip/demo-live-sets', locale);
+const eventsUrl = getLocalizedPath('/wip/events', locale);
 ---
 
 <div class="hidden md:flex flex-col w-full">

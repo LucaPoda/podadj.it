@@ -1,0 +1,241 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBanner from './HeroBanner.astro';
+import Footer from './Footer.astro';
+import { type Locale, getLocalizedPath, useTranslations } from '../i18n/ui';
+import { siteLinks } from '../data/siteLinks';
+import { DEFAULT_WIP_SECTION, type WipSectionConfig } from '../config/wipSections';
+
+interface Props {
+  locale: Locale;
+  section?: WipSectionConfig;
+  isNotFound?: boolean;
+}
+
+const { locale, section = DEFAULT_WIP_SECTION, isNotFound = false } = Astro.props;
+const t = useTranslations(locale);
+const homeUrl = getLocalizedPath('/', locale);
+
+const sectionName = section.name[locale];
+const sectionSubtitle = isNotFound
+  ? locale === 'it'
+    ? '404 — Pagina non trovata (o non ancora scritta)'
+    : '404 — Page not found (or not written yet)'
+  : section.subtitle[locale];
+
+const pageTitle = isNotFound
+  ? `404 | Poda DJ`
+  : `${sectionName} — Work in Progress | Poda DJ`;
+
+const pageDesc =
+  locale === 'it'
+    ? `Sito ancora work in progress. Per maggiori informazioni riguardo a ${sectionName}, contattami su Instagram o via email.`
+    : `Website still work in progress. For more info about ${sectionName}, contact me via Instagram DM or email.`;
+
+const emailSubject = encodeURIComponent(
+  locale === 'it' ? `Info riguardo a ${sectionName}` : `Info about ${sectionName}`
+);
+const mailtoHref = `mailto:${siteLinks.email}?subject=${emailSubject}`;
+
+const copy =
+  locale === 'it'
+    ? {
+        badge: isNotFound ? '404 • FUORI SCALETTA' : 'WORK IN PROGRESS • SOUNDCHECK IN CORSO',
+        heading: isNotFound
+          ? 'Ops, questa traccia non esiste in scaletta!'
+          : 'Sito ancora work in progress',
+        sarcasticIntro: isNotFound
+          ? 'Hai cercato una pagina che o non esiste, o è ancora chiusa in qualche chiavetta USB insieme ai testi mancanti.'
+          : section.quips.it,
+        mainMsgPrefix: 'Per maggiori informazioni riguardo a ',
+        mainMsgMiddle: ', scrivimi in DM su Instagram o mandami una mail a ',
+        sarcasticOutro:
+          'Promesso: rispondo molto più velocemente di quanto finisco di scrivere queste pagine (spoiler: al momento preferisco stare in console che su VS Code).',
+        igCta: 'Scrivimi in DM su Instagram',
+        mailCta: 'Mandami una Mail',
+        socialsLabel: 'Oppure seguimi e ascolta i miei set qui:',
+        backHome: 'Torna alla Home',
+      }
+    : {
+        badge: isNotFound ? '404 • OFF THE TRACKLIST' : 'WORK IN PROGRESS • STILL IN SOUNDCHECK',
+        heading: isNotFound
+          ? 'Oops, that track isn’t on the tracklist!'
+          : 'Website still work in progress',
+        sarcasticIntro: isNotFound
+          ? 'You landed on a page that either doesn’t exist or is still trapped on a USB stick waiting to be written.'
+          : section.quips.en,
+        mainMsgPrefix: 'For more information about ',
+        mainMsgMiddle: ', slide into my Instagram DMs or send me an email at ',
+        sarcasticOutro:
+          'Promise I reply way faster than I finish writing web copy (spoiler: I spend way more time behind the decks than in a code editor).',
+        igCta: 'DM me on Instagram',
+        mailCta: 'Send me an Email',
+        socialsLabel: 'Or check out my socials & mixes here:',
+        backHome: 'Back to Home',
+      };
+---
+
+<BaseLayout title={pageTitle} description={pageDesc} locale={locale} noindex={true}>
+  <HeroBanner
+    locale={locale}
+    title={isNotFound ? '404' : sectionName}
+    subtitle={sectionSubtitle}
+    framingKey={section.framingKey}
+    bgImageWebp={section.bgImageWebp}
+    bgImageJpg={section.bgImageJpg}
+    accent={section.accent}
+  />
+
+  <main class="w-full max-w-5xl flex flex-col items-center">
+    <section
+      aria-label={copy.heading}
+      class="relative w-full bg-black/45 border border-white/15 backdrop-blur-md rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl overflow-hidden text-center flex flex-col items-center gap-6"
+    >
+      <!-- Subtle neon glow accents -->
+      <div class="pointer-events-none absolute -top-24 -left-24 w-64 h-64 rounded-full bg-neonPurple/15 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 -right-24 w-64 h-64 rounded-full bg-neonBlue/15 blur-3xl"></div>
+
+      <!-- Status Badge -->
+      <div class="relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neonPurple/15 border border-neonPurple/40 text-purple-200 text-[11px] sm:text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+        <i class="fas fa-sliders text-neonPurple animate-pulse"></i>
+        <span>{copy.badge}</span>
+      </div>
+
+      <!-- Main Heading & Playful Copy -->
+      <div class="relative z-10 flex flex-col items-center gap-4 max-w-2xl">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-wide text-outline">
+          {copy.heading}
+        </h2>
+
+        <p class="text-sm sm:text-base text-purple-200/90 font-medium italic leading-relaxed">
+          “{copy.sarcasticIntro}”
+        </p>
+
+        <div class="w-16 h-px bg-white/20 my-1"></div>
+
+        <p class="text-sm sm:text-base md:text-lg text-gray-100 leading-relaxed text-shadow-soft">
+          {copy.mainMsgPrefix}
+          <span class="font-bold text-white underline decoration-neonPurple decoration-2 underline-offset-4">
+            {sectionName}
+          </span>
+          {copy.mainMsgMiddle}
+          <a
+            href={mailtoHref}
+            class="font-bold text-neonBlue hover:text-white underline underline-offset-4 transition-colors"
+          >
+            {siteLinks.email}
+          </a>.
+        </p>
+
+        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xl">
+          {copy.sarcasticOutro}
+        </p>
+      </div>
+
+      <!-- Primary Contact Buttons (DM Instagram + Email) -->
+      <div class="relative z-10 w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+        <a
+          href={siteLinks.socials.instagramPoda.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-fuchsia-600/85 via-purple-600/85 to-indigo-600/85 hover:from-fuchsia-500 hover:via-purple-500 hover:to-indigo-500 border border-white/25 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-purple-900/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i class="fab fa-instagram text-xl"></i>
+          <div class="flex flex-col items-start text-left leading-tight">
+            <span>{copy.igCta}</span>
+            <span class="text-[11px] font-medium text-white/80 normal-case tracking-normal">
+              {siteLinks.socials.instagramPoda.displayLabel}
+            </span>
+          </div>
+        </a>
+
+        <a
+          href={mailtoHref}
+          class="group flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/25 hover:border-neonBlue/70 text-white font-bold text-sm uppercase tracking-wider shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i class="fas fa-envelope text-xl text-neonBlue group-hover:text-white transition-colors"></i>
+          <div class="flex flex-col items-start text-left leading-tight">
+            <span>{copy.mailCta}</span>
+            <span class="text-[11px] font-medium text-gray-300 normal-case tracking-normal">
+              {siteLinks.email}
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- All Working Social Links -->
+      <div class="relative z-10 w-full max-w-xl pt-3 border-t border-white/10 flex flex-col items-center gap-3">
+        <span class="text-xs uppercase tracking-widest font-semibold text-gray-400">
+          {copy.socialsLabel}
+        </span>
+
+        <div class="flex flex-wrap items-center justify-center gap-2.5">
+          <a
+            href={siteLinks.socials.instagramPoda.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-neonPurple/20 border border-white/15 hover:border-neonPurple/60 text-xs sm:text-sm text-gray-200 hover:text-white transition-all"
+          >
+            <i class="fab fa-instagram text-neonPurple"></i>
+            <span>Instagram</span>
+          </a>
+
+          <a
+            href={siteLinks.socials.tiktok.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-neonPurple/20 border border-white/15 hover:border-neonPurple/60 text-xs sm:text-sm text-gray-200 hover:text-white transition-all"
+          >
+            <i class="fab fa-tiktok text-neonPurple"></i>
+            <span>TikTok</span>
+          </a>
+
+          <a
+            href={siteLinks.socials.soundcloud.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-neonPurple/20 border border-white/15 hover:border-neonPurple/60 text-xs sm:text-sm text-gray-200 hover:text-white transition-all"
+          >
+            <i class="fab fa-soundcloud text-neonPurple"></i>
+            <span>SoundCloud</span>
+          </a>
+
+          <a
+            href={siteLinks.socials.mixcloud.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-neonPurple/20 border border-white/15 hover:border-neonPurple/60 text-xs sm:text-sm text-gray-200 hover:text-white transition-all"
+          >
+            <i class="fab fa-mixcloud text-neonPurple"></i>
+            <span>Mixcloud</span>
+          </a>
+
+          {section.showPartyhiveInstagram && (
+            <a
+              href={siteLinks.socials.instagramPartyhive.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-neonPurple/20 border border-white/15 hover:border-neonPurple/60 text-xs sm:text-sm text-gray-200 hover:text-white transition-all"
+            >
+              <i class="fab fa-instagram text-neonPurple"></i>
+              <span>{siteLinks.socials.instagramPartyhive.displayLabel}</span>
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Back to Home CTA -->
+      <div class="relative z-10 pt-2">
+        <a
+          href={homeUrl}
+          class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white text-black hover:bg-neonPurple hover:text-white text-xs sm:text-sm font-bold uppercase tracking-widest shadow-lg transition-all duration-300 active:scale-95"
+        >
+          <i class="fas fa-arrow-left text-xs"></i>
+          <span>{t.nav.backHome}</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

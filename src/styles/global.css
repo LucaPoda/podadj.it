@@ -17,9 +17,15 @@
     content: '';
     position: fixed;
     inset: -30px;
-    background: url('/assets/bg-page.webp') no-repeat center center,
-                url('/assets/bg-page.jpg') no-repeat center center;
+    background-repeat: no-repeat;
+    background-position: center center;
     background-size: cover;
+    background-image: url('/assets/bg-page.jpg');
+    background-image: -webkit-image-set(url('/assets/bg-page.webp') 1x, url('/assets/bg-page.jpg') 1x);
+    background-image: image-set(
+      url('/assets/bg-page.webp') type('image/webp'),
+      url('/assets/bg-page.jpg') type('image/jpeg')
+    );
     filter: blur(12px) brightness(0.45);
     z-index: -1;
     pointer-events: none;

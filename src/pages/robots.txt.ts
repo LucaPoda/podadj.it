@@ -7,6 +7,8 @@ export const GET: APIRoute = ({ site }) => {
   const content = [
     'User-agent: *',
     'Allow: /',
+    'Disallow: /wip/',
+    'Disallow: /en/wip/',
     'Disallow: /admin',
     'Disallow: /api/',
     '',

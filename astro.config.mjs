@@ -13,7 +13,10 @@ export default defineConfig({
     }),
     react(),
     sitemap({
-      filter: (page) => !page.includes('/admin'),
+      filter: (page) => {
+        const { pathname } = new URL(page);
+        return pathname === '/' || pathname === '/en' || pathname === '/en/';
+      },
     }),
   ],
   adapter: vercel(),
