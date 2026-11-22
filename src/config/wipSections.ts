@@ -82,7 +82,7 @@ export const WIP_SECTIONS: Record<string, WipSectionConfig> = {
     },
     quips: {
       it: 'L’impianto suona già alla grande, è solo la scheda tecnica online che sta facendo ancora i capricci.',
-      en: 'The sound system already slaps — it’s just the online spec sheet still missing a few cables.',
+      en: 'The sound system already slaps, it’s just the online spec sheet still missing a few cables.',
     },
     framingKey: 'hero-tech-side',
     bgImageWebp: '/assets/bg-tech.webp',
@@ -100,8 +100,8 @@ export const WIP_SECTIONS: Record<string, WipSectionConfig> = {
       en: 'Audio Archive & Live Recordings',
     },
     quips: {
-      it: 'I mix ci sono già tutti su SoundCloud e Mixcloud — qui stiamo ancora impacchettando la vetrina.',
-      en: 'The mixes are already waiting on SoundCloud and Mixcloud — we’re just still polishing this showcase.',
+      it: 'I mix non sono ancora tutti caricati su SoundCloud e Mixcloud (spoiler: è esattamente questo il motivo per cui non ho ancora finito le altre pagine).',
+      en: 'The mixes aren’t all up on SoundCloud and Mixcloud yet (spoiler: that’s the exact reason the other pages aren’t finished either).',
     },
     framingKey: 'hero-demo-live',
     bgImageWebp: '/assets/bg-livesets.webp',
@@ -134,8 +134,8 @@ export const WIP_SECTIONS: Record<string, WipSectionConfig> = {
       en: 'Partyhive',
     },
     subtitle: {
-      it: 'Collective & Events — Trentino',
-      en: 'Collective & Events — Trentino',
+      it: 'Collective & Events, Trentino',
+      en: 'Collective & Events, Trentino',
     },
     quips: {
       it: 'Nel frattempo ci trovi attivi h24 sul profilo Instagram ufficiale di Partyhive.',

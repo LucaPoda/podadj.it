@@ -19,13 +19,13 @@ const homeUrl = getLocalizedPath('/', locale);
 const sectionName = section.name[locale];
 const sectionSubtitle = isNotFound
   ? locale === 'it'
-    ? '404 — Pagina non trovata (o non ancora scritta)'
-    : '404 — Page not found (or not written yet)'
+    ? '404: Pagina non trovata (o non ancora scritta)'
+    : '404: Page not found (or not written yet)'
   : section.subtitle[locale];
 
 const pageTitle = isNotFound
   ? `404 | Poda DJ`
-  : `${sectionName} — Work in Progress | Poda DJ`;
+  : `${sectionName} | Work in Progress | Poda DJ`;
 
 const pageDesc =
   locale === 'it'
