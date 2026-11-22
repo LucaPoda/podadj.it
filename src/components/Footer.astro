@@ -1,0 +1,86 @@
+---
+import { type Locale, useTranslations } from '../i18n/ui';
+import { siteLinks } from '../data/siteLinks';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<footer class="w-full max-w-5xl mt-16 md:mt-20 mb-8">
+  <div class="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-8 md:gap-12 bg-black/40 border border-white/10 p-8 md:p-10 rounded-3xl backdrop-blur-md shadow-2xl">
+    
+    <!-- FOOTER MOBILE: Logo -->
+    <div class="flex md:hidden items-center justify-center flex-shrink-0">
+      <img src="/assets/logo.png" alt="Poda DJ" width="192" height="64" class="w-48 drop-shadow-lg" />
+    </div>
+
+    <!-- FOOTER DESKTOP: Profile Picture -->
+    <div class="hidden md:flex items-center justify-center flex-shrink-0">
+      <img
+        src="/assets/profile-pic.webp"
+        alt="Poda DJ Profile"
+        width="160"
+        height="160"
+        class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+        onerror="this.onerror=null; this.src='/assets/profile-pic.jpg';"
+      />
+    </div>
+
+    <div class="w-full h-px md:w-px md:h-auto bg-white/20"></div>
+
+    <div class="flex flex-col items-center md:items-start justify-center gap-6 w-full text-gray-200">
+      <div class="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full justify-center md:justify-start">
+        <h3 class="text-lg md:text-xl font-bold text-white uppercase tracking-widest text-outline">
+          {t.footer.bookingTitle}
+        </h3>
+        
+        <span class="hidden md:inline-block text-white/30 text-lg">|</span>
+        
+        <div class="flex items-center gap-2 text-gray-300 text-xs md:text-sm font-medium tracking-wider text-shadow-soft">
+          <i class="fas fa-map-marker-alt text-neonPurple"></i>
+          <span>{t.footer.locations}</span>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full text-sm md:text-base font-medium">
+        <div class="flex flex-col gap-4">
+          <a href={`mailto:${siteLinks.email}`} class="contact-link flex items-center gap-4">
+            <i class="fas fa-envelope text-neonPurple text-xl w-6 text-center"></i>
+            <span class="text-shadow-soft">{siteLinks.email}</span>
+          </a>
+          <a href={siteLinks.socials.instagramPoda.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+            <i class="fab fa-instagram text-neonPurple text-xl w-6 text-center"></i>
+            <span class="text-shadow-soft">{siteLinks.socials.instagramPoda.displayLabel}</span>
+          </a>
+          <a href={siteLinks.socials.tiktok.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+            <i class="fab fa-tiktok text-neonPurple text-xl w-6 text-center"></i>
+            <span class="text-shadow-soft">{siteLinks.socials.tiktok.displayLabel}</span>
+          </a>
+        </div>
+        <div class="flex flex-col gap-4">
+          <a href={siteLinks.socials.soundcloud.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+            <i class="fab fa-soundcloud text-neonPurple text-xl w-6 text-center"></i>
+            <span class="text-shadow-soft">{siteLinks.socials.soundcloud.displayLabel}</span>
+          </a>
+          <a href={siteLinks.socials.mixcloud.url} target="_blank" rel="noopener noreferrer" class="contact-link flex items-center gap-4">
+            <i class="fab fa-mixcloud text-neonPurple text-xl w-6 text-center"></i>
+            <span class="text-shadow-soft">{siteLinks.socials.mixcloud.displayLabel}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center mt-10">
+    <p class="text-xs text-gray-400 font-light tracking-wide">
+      {t.footer.copyright} <br />
+      <a href={siteLinks.legal.privacyPolicyUrl} class="hover:text-white transition-colors underline underline-offset-2 mt-2 inline-block">
+        {t.footer.privacy}
+      </a>
+    </p>
+  </div>
+</footer>

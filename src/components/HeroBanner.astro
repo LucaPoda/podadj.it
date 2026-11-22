@@ -1,0 +1,96 @@
+---
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { getFramingStyle } from '../utils/imageFraming';
+
+interface QuickNavItem {
+  label: string;
+  href: string;
+  icon?: string;
+}
+
+interface Props {
+  locale: Locale;
+  title: string;
+  subtitle?: string;
+  badge?: string;
+  framingKey: string;
+  bgImageWebp: string;
+  bgImageJpg?: string;
+  accent?: 'amber' | 'fuchsia' | 'cyan' | 'purple' | 'blue' | 'yellow';
+  quickNavItems?: QuickNavItem[];
+}
+
+const {
+  locale,
+  title,
+  subtitle,
+  framingKey,
+  bgImageWebp,
+  bgImageJpg,
+  accent = 'purple',
+} = Astro.props;
+
+const t = useTranslations(locale);
+const homeUrl = getLocalizedPath('/', locale);
+
+const accentGlow = {
+  amber: 'from-amber-600/15 via-orange-500/5 to-transparent',
+  fuchsia: 'from-fuchsia-600/15 via-purple-500/5 to-transparent',
+  cyan: 'from-cyan-600/15 via-blue-500/5 to-transparent',
+  purple: 'from-purple-600/15 via-indigo-500/5 to-transparent',
+  blue: 'from-blue-600/15 via-cyan-500/5 to-transparent',
+  yellow: 'from-yellow-600/15 via-amber-500/5 to-transparent',
+}[accent];
+
+const mobileBgStyle = getFramingStyle(framingKey, 'mobile', bgImageWebp, bgImageJpg);
+const desktopBgStyle = getFramingStyle(framingKey, 'desktop', bgImageWebp, bgImageJpg);
+---
+
+<header class="relative w-full max-w-5xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-6 sm:mb-8">
+  <!-- Mobile Background (< 768px) with mobile framing config -->
+  <div
+    class="absolute inset-0 bg-cover md:hidden filter brightness-45"
+    style={mobileBgStyle}
+  ></div>
+
+  <!-- Desktop Background (>= 768px) with desktop framing config -->
+  <div
+    class="absolute inset-0 bg-cover hidden md:block filter brightness-45"
+    style={desktopBgStyle}
+  ></div>
+
+  <!-- Atmospheric Gradient Overlays -->
+  <div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-black/55 to-black/35"></div>
+  <div class={`absolute inset-0 bg-radial-gradient ${accentGlow} opacity-30 mix-blend-screen pointer-events-none`}></div>
+
+  <!-- Minimal Top Navigation Bar -->
+  <div class="relative z-20 flex items-center justify-between p-3.5 sm:p-5 w-full">
+    <!-- Back to Home Link -->
+    <a
+      href={homeUrl}
+      class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-gray-300 hover:text-white bg-black/55 hover:bg-black/80 border border-white/15 backdrop-blur-md px-3 py-1.5 rounded-lg transition-all duration-200 hover:border-white/35"
+    >
+      <i class="fas fa-arrow-left text-[10px]"></i>
+      <span>{t.nav.backHome}</span>
+    </a>
+
+    <!-- Language Switcher -->
+    <div class="flex items-center">
+      <LanguageSwitcher currentLocale={locale} />
+    </div>
+  </div>
+
+  <!-- Clean Hero Content Center (Title + optional Subtitle only, zero oval badges or quick-nav pills) -->
+  <div class={`relative z-10 flex flex-col items-center justify-center text-center px-4 pt-2 ${subtitle ? 'pb-7 sm:pb-9' : 'pb-8 sm:pb-11'} max-w-3xl mx-auto`}>
+    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-wider text-outline">
+      {title}
+    </h1>
+
+    {subtitle && (
+      <p class="text-xs sm:text-sm text-gray-200 font-normal leading-relaxed max-w-xl text-shadow-soft mt-2.5 px-2">
+        {subtitle}
+      </p>
+    )}
+  </div>
+</header>

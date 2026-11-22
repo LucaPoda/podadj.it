@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import { type Locale, useTranslations } from '../i18n/ui';
+import { siteLinks } from '../data/siteLinks';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t.meta.partyhiveTitle} description={t.meta.partyhiveDesc} locale={locale}>
+  <!-- Hero Banner -->
+  <HeroBanner
+    locale={locale}
+    title={t.partyhive.title}
+    subtitle={t.partyhive.subtitle}
+    framingKey="hero-partyhive"
+    bgImageWebp="/assets/bg-partyhive.webp"
+    accent="yellow"
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-6 sm:gap-8">
+    
+    <!-- 1. INTRO BIO -->
+    <section aria-labelledby="about-hive-heading" class="w-full">
+      <div class="rounded-3xl bg-black/40 border border-white/10 p-5 sm:p-7 backdrop-blur-md shadow-xl flex flex-col gap-4">
+        <h2 id="about-hive-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {t.partyhive.bioTitle}
+        </h2>
+
+        <div class="flex flex-col gap-3 text-xs sm:text-sm text-gray-200 leading-relaxed font-normal text-shadow-soft">
+          <p>{t.partyhive.bioP1}</p>
+          <p>{t.partyhive.bioP2}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. COMING SOON & INSTAGRAM CTA -->
+    <section aria-labelledby="coming-soon-heading" class="w-full">
+      <div class="rounded-3xl bg-black/50 border border-yellow-500/30 p-6 sm:p-8 backdrop-blur-xl shadow-xl flex flex-col items-center text-center">
+        <h2 id="coming-soon-heading" class="text-xl sm:text-2xl font-black uppercase text-white tracking-wider text-outline mb-2 max-w-md">
+          {t.partyhive.comingSoonTitle}
+        </h2>
+
+        <p class="text-xs sm:text-sm text-gray-300 font-normal leading-relaxed max-w-md mb-6">
+          {t.partyhive.comingSoonDesc}
+        </p>
+
+        <a
+          href={siteLinks.socials.instagramPartyhive.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-black bg-yellow-400 hover:bg-yellow-300 transition-all duration-200 shadow-[0_0_15px_rgba(234,179,8,0.4)]"
+        >
+          <i class="fab fa-instagram text-sm"></i>
+          <span>{t.partyhive.followInstagram}</span>
+          <i class="fas fa-arrow-up-right-from-square text-[9px] opacity-75"></i>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

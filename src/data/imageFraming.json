@@ -1,0 +1,249 @@
+{
+  "party-side": {
+    "desktop": {
+      "position": "center 45%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    }
+  },
+  "hero-party": {
+    "desktop": {
+      "position": "center 45%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    }
+  },
+  "quicknav-party": {
+    "desktop": {
+      "position": "center 55%",
+      "zoom": 1.4,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-party.webp",
+      "imageJpg": "/assets/bg-party.jpg"
+    }
+  },
+  "groove-side": {
+    "desktop": {
+      "position": "center 79%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    },
+    "mobile": {
+      "position": "center 71%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    }
+  },
+  "hero-groove": {
+    "desktop": {
+      "position": "center 75%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    },
+    "mobile": {
+      "position": "center 70%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    }
+  },
+  "quicknav-groove": {
+    "desktop": {
+      "position": "50% 100%",
+      "zoom": 1.65,
+      "transformOrigin": "45%",
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    },
+    "mobile": {
+      "position": "center 70%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-groove.webp",
+      "imageJpg": "/assets/bg-groove.jpg"
+    }
+  },
+  "mainstage-side": {
+    "desktop": {
+      "position": "center 62%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    },
+    "mobile": {
+      "position": "center 52%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    }
+  },
+  "hero-mainstage": {
+    "desktop": {
+      "position": "center 58%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    },
+    "mobile": {
+      "position": "center 57%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    }
+  },
+  "quicknav-mainstage": {
+    "desktop": {
+      "position": "center 65%",
+      "zoom": 1.1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    },
+    "mobile": {
+      "position": "center 57%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-mainstage.webp",
+      "imageJpg": "/assets/bg-mainstage.jpg"
+    }
+  },
+  "tech-side": {
+    "desktop": {
+      "position": "left 55%",
+      "zoom": 1.1,
+      "transformOrigin": "15%",
+      "imageWebp": "/assets/bg-tech.webp",
+      "imageJpg": "/assets/bg-tech.jpg"
+    },
+    "mobile": {
+      "position": "left 58%",
+      "zoom": 1.2,
+      "transformOrigin": "15%",
+      "imageWebp": "/assets/bg-tech.webp",
+      "imageJpg": "/assets/bg-tech.jpg"
+    }
+  },
+  "hero-tech-side": {
+    "desktop": {
+      "position": "left 64%",
+      "zoom": 1,
+      "transformOrigin": "15%",
+      "imageWebp": "/assets/bg-tech.webp",
+      "imageJpg": "/assets/bg-tech.jpg"
+    },
+    "mobile": {
+      "position": "left 58%",
+      "zoom": 1.2,
+      "transformOrigin": "15%",
+      "imageWebp": "/assets/bg-tech.webp",
+      "imageJpg": "/assets/bg-tech.jpg"
+    }
+  },
+  "demo-live": {
+    "desktop": {
+      "position": "center 52%",
+      "zoom": 1.35,
+      "imageWebp": "/assets/bg-livesets.webp",
+      "imageJpg": "/assets/bg-livesets.jpg"
+    },
+    "mobile": {
+      "position": "center 45%",
+      "zoom": 1.5,
+      "imageWebp": "/assets/bg-livesets.webp",
+      "imageJpg": "/assets/bg-livesets.jpg"
+    }
+  },
+  "hero-demo-live": {
+    "desktop": {
+      "position": "center 47%",
+      "zoom": 1.45,
+      "imageWebp": "/assets/bg-livesets.webp",
+      "imageJpg": "/assets/bg-livesets.jpg"
+    },
+    "mobile": {
+      "position": "center 45%",
+      "zoom": 1.5,
+      "imageWebp": "/assets/bg-livesets.webp",
+      "imageJpg": "/assets/bg-livesets.jpg"
+    }
+  },
+  "events": {
+    "desktop": {
+      "position": "center 40%",
+      "zoom": 2,
+      "transformOrigin": "60%",
+      "imageWebp": "/assets/bg-events.webp",
+      "imageJpg": "/assets/bg-events.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 2,
+      "transformOrigin": "60%",
+      "imageWebp": "/assets/bg-events.webp",
+      "imageJpg": "/assets/bg-events.jpg"
+    }
+  },
+  "hero-events": {
+    "desktop": {
+      "position": "center 42%",
+      "zoom": 2.35,
+      "transformOrigin": "61%",
+      "imageWebp": "/assets/bg-events.webp",
+      "imageJpg": "/assets/bg-events.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 2,
+      "transformOrigin": "60%",
+      "imageWebp": "/assets/bg-events.webp",
+      "imageJpg": "/assets/bg-events.jpg"
+    }
+  },
+  "partyhive": {
+    "desktop": {
+      "position": "center 33%",
+      "zoom": 1.2,
+      "imageWebp": "/assets/bg-partyhive.webp",
+      "imageJpg": "/assets/bg-partyhive.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-partyhive.webp",
+      "imageJpg": "/assets/bg-partyhive.jpg"
+    }
+  },
+  "hero-partyhive": {
+    "desktop": {
+      "position": "center 37%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-partyhive.webp",
+      "imageJpg": "/assets/bg-partyhive.jpg"
+    },
+    "mobile": {
+      "position": "center 40%",
+      "zoom": 1,
+      "imageWebp": "/assets/bg-partyhive.webp",
+      "imageJpg": "/assets/bg-partyhive.jpg"
+    }
+  }
+}

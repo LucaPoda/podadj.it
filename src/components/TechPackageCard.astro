@@ -1,0 +1,77 @@
+---
+import type { TechPackage } from '../data/techEquipment';
+import { type Locale, useTranslations } from '../i18n/ui';
+import { getPrefilledMailto } from '../data/techEquipment';
+
+interface Props {
+  pkg: TechPackage;
+  locale: Locale;
+}
+
+const { pkg, locale } = Astro.props;
+const t = useTranslations(locale);
+const mailtoHref = getPrefilledMailto(locale, pkg.name[locale]);
+---
+
+<div
+  class={`relative flex flex-col justify-between rounded-3xl bg-black/50 border transition-all duration-300 backdrop-blur-md p-5 sm:p-6 shadow-xl overflow-hidden group ${
+    pkg.isFeatured
+      ? 'border-neonPurple/50 shadow-[0_0_25px_rgba(168,85,247,0.15)]'
+      : 'border-white/10 hover:border-white/25'
+  }`}
+>
+  <div>
+    <!-- Top Row: Subtitle -->
+    <div class="flex items-center justify-between gap-2 mb-2">
+      <span class="text-[10px] font-bold tracking-wider uppercase text-gray-400">
+        {pkg.tag[locale]}
+      </span>
+      {pkg.isFeatured && (
+        <span class="text-[10px] font-extrabold tracking-widest uppercase text-neonPurple">
+          {pkg.badge?.[locale] || ''}
+        </span>
+      )}
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-lg sm:text-xl font-black text-white uppercase tracking-wider text-outline mb-1.5">
+      {pkg.name[locale]}
+    </h3>
+
+    <!-- Capacity indicator -->
+    <div class="flex items-center gap-1.5 text-xs text-gray-300 font-medium mb-3 pb-2.5 border-b border-white/10">
+      <i class="fas fa-users text-neonPurple text-[11px]"></i>
+      <span>{pkg.capacity[locale]}</span>
+    </div>
+
+    <!-- Description -->
+    <p class="text-xs text-gray-200 leading-relaxed font-normal mb-4">
+      {pkg.description[locale]}
+    </p>
+
+    <!-- Features -->
+    <ul class="flex flex-col gap-2 text-xs text-gray-300 mb-6">
+      {pkg.features.map((feature) => (
+        <li class="flex items-start gap-2 leading-relaxed">
+          <i class="fas fa-check text-neonPurple text-[10px] flex-shrink-0 mt-1"></i>
+          <span>{feature[locale]}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="pt-3 border-t border-white/10">
+    <a
+      href={mailtoHref}
+      class={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 text-center ${
+        pkg.isFeatured
+          ? 'bg-neonPurple text-white hover:bg-neonPurple/90 shadow-[0_0_15px_rgba(168,85,247,0.5)]'
+          : 'bg-white/10 text-white hover:bg-white hover:text-black border border-white/20'
+      }`}
+    >
+      <i class="fas fa-envelope text-xs"></i>
+      <span>{t.techSide.requestQuotePackage}</span>
+    </a>
+  </div>
+</div>

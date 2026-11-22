@@ -1,0 +1,114 @@
+---
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { siteLinks } from '../data/siteLinks';
+
+interface Props {
+  locale: Locale;
+  showBackHome?: boolean;
+}
+
+const { locale, showBackHome = false } = Astro.props;
+const t = useTranslations(locale);
+const homeUrl = getLocalizedPath('/', locale);
+---
+
+<header class="flex flex-col items-center w-full">
+  <!-- Glassmorphism Header Box (Hero Section) -->
+  <div class="relative w-full max-w-5xl bg-black/40 border border-white/10 backdrop-blur-md rounded-3xl p-4 sm:p-5 md:py-5 md:px-8 shadow-2xl flex flex-col items-center justify-center text-center">
+    
+    <!-- Back to Home Link (top-left inside Hero Card) -->
+    {showBackHome && (
+      <div class="absolute top-3.5 left-4 sm:top-4 sm:left-5 z-20">
+        <a
+          href={homeUrl}
+          class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-gray-300 hover:text-neonPurple bg-black/60 border border-white/20 backdrop-blur-md px-3 py-1 rounded-full transition-all duration-300 shadow-md hover:border-neonPurple/60 hover:shadow-[0_0_12px_rgba(168,85,247,0.3)]"
+        >
+          <i class="fas fa-arrow-left text-[11px]"></i>
+          <span class="hidden sm:inline">{t.nav.backHome}</span>
+        </a>
+      </div>
+    )}
+
+    <!-- Language Switcher (integrated top-right inside Hero Card without overlaps) -->
+    <div class="absolute top-3.5 right-4 sm:top-4 sm:right-5 z-20">
+      <LanguageSwitcher currentLocale={locale} />
+    </div>
+
+    <!-- Center Content: Logo, Tagline, Bio, Socials -->
+    <div class="flex flex-col items-center justify-center gap-2.5 sm:gap-3 text-shadow-soft w-full max-w-3xl pt-5 sm:pt-4 md:pt-1">
+      
+      <!-- PODA DJ Logo -->
+      <a href={homeUrl} class="transition-transform duration-300 hover:scale-[1.02] inline-block mb-0.5">
+        <img
+          src="/assets/logo.png"
+          alt="Poda DJ Logo"
+          width="200"
+          height="65"
+          class="w-32 sm:w-36 md:w-40 lg:w-44 drop-shadow-lg"
+        />
+      </a>
+      <h1 class="sr-only">Poda DJ</h1>
+
+      <!-- Tagline items -->
+      <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-gray-200 text-[11px] sm:text-xs md:text-sm font-semibold tracking-widest uppercase px-2">
+        {t.header.tagline.map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < t.header.tagline.length - 1 && (
+              <span class="text-neonPurple/60">|</span>
+            )}
+          </>
+        ))}
+      </div>
+
+      <!-- Breve Descrizione di Contesto -->
+      <p class="text-xs md:text-sm text-gray-200 font-normal leading-relaxed max-w-2xl px-3 text-shadow-soft">
+        {t.header.bio}
+      </p>
+
+      <!-- Divider line -->
+      <div class="w-16 h-[1.5px] bg-white/20 rounded-full my-0.5"></div>
+
+      <!-- Social Links -->
+      <div class="flex gap-4 sm:gap-5 justify-center">
+        <a
+          href={siteLinks.socials.instagramPoda.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-lg md:text-xl drop-shadow-lg"
+        >
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a
+          href={siteLinks.socials.tiktok.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-lg md:text-xl drop-shadow-lg"
+        >
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a
+          href={siteLinks.socials.soundcloud.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="SoundCloud"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-lg md:text-xl drop-shadow-lg"
+        >
+          <i class="fab fa-soundcloud"></i>
+        </a>
+        <a
+          href={siteLinks.socials.mixcloud.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Mixcloud"
+          class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-lg md:text-xl drop-shadow-lg"
+        >
+          <i class="fab fa-mixcloud"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

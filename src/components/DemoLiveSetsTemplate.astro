@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import DemoAccordion from './DemoAccordion.astro';
+import LiveSetAccordion from './LiveSetAccordion.astro';
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import { liveSetsData } from '../data/liveSets';
+import { demosData } from '../data/demos';
+import { getFramingStyle } from '../utils/imageFraming';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const mainstageUrl = getLocalizedPath('/mainstage-side', locale);
+const partyUrl = getLocalizedPath('/party-side', locale);
+const grooveUrl = getLocalizedPath('/groove-side', locale);
+
+const allTracklists = await getCollection('tracklists');
+const tracklistsById = Object.fromEntries(
+  allTracklists.map((tl) => [tl.data.id, tl.data])
+);
+
+const formatQuickCards = [
+  {
+    framingKey: 'quicknav-mainstage',
+    title: t.formatPages.mainstage.title,
+    href: mainstageUrl,
+    bgImage: '/assets/bg-mainstage.webp',
+    accentBorder: 'hover:border-amber-400',
+  },
+  {
+    framingKey: 'quicknav-party',
+    title: t.formatPages.party.title,
+    href: partyUrl,
+    bgImage: '/assets/bg-party.webp',
+    accentBorder: 'hover:border-fuchsia-400',
+  },
+  {
+    framingKey: 'quicknav-groove',
+    title: t.formatPages.groove.title,
+    href: grooveUrl,
+    bgImage: '/assets/bg-groove.webp',
+    accentBorder: 'hover:border-cyan-400',
+  },
+];
+---
+
+<BaseLayout title={t.meta.demoLiveTitle} description={t.meta.demoLiveDesc} locale={locale}>
+  <!-- 1. CLEAN HERO BANNER -->
+  <HeroBanner
+    locale={locale}
+    title={t.demoLive.title}
+    framingKey="hero-demo-live"
+    bgImageWebp="/assets/bg-livesets.webp"
+    accent="purple"
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-8 sm:gap-10">
+    <!-- 2. 3 FORMAT CARDS (Clean cards, zero oval tags) -->
+    <section id="core-formats" aria-label={t.demoLive.quickNavTitle} class="w-full scroll-mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {formatQuickCards.map((card) => {
+          const mobileStyle = getFramingStyle(card.framingKey, 'mobile', card.bgImage);
+          const desktopStyle = getFramingStyle(card.framingKey, 'desktop', card.bgImage);
+
+          return (
+            <a
+              href={card.href}
+              class={`relative flex flex-col justify-end rounded-2xl overflow-hidden border border-white/10 bg-black/50 p-5 h-[135px] sm:h-[150px] md:h-[165px] transition-all duration-300 backdrop-blur-md group ${card.accentBorder}`}
+            >
+              <div
+                class="absolute inset-0 bg-cover md:hidden filter brightness-45 group-hover:scale-105 transition-transform duration-500"
+                style={mobileStyle}
+              ></div>
+
+              <div
+                class="absolute inset-0 bg-cover hidden md:block filter brightness-45 group-hover:scale-105 transition-transform duration-500"
+                style={desktopStyle}
+              ></div>
+
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20"></div>
+
+              <div class="relative z-10 flex items-center justify-between gap-2">
+                <h2 class="text-base sm:text-lg font-black text-white uppercase tracking-wider text-outline">
+                  {card.title}
+                </h2>
+                <i class="fas fa-arrow-right text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 transition-all flex-shrink-0"></i>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- 3. TWO COLUMNS: DEMO | LIVE SETS (Collapsed list with title, genre, date; click to open player) -->
+    <section aria-label={t.demoLive.title} class="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <!-- Left Column: Demo -->
+      <div id="demos-column" class="flex flex-col gap-3.5 scroll-mt-6">
+        <h2 class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          Demo
+        </h2>
+        <DemoAccordion
+          demos={demosData}
+          locale={locale}
+          accentColor="#a855f7"
+          tracklistsById={tracklistsById}
+        />
+      </div>
+
+      <!-- Right Column: Live Sets -->
+      <div id="live-sets-column" class="flex flex-col gap-3.5 scroll-mt-6">
+        <h2 class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          Live Sets
+        </h2>
+        <LiveSetAccordion
+          sets={liveSetsData}
+          locale={locale}
+          accentColor="#a855f7"
+        />
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

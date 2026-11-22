@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BentoGridDesktop from '../../components/BentoGridDesktop.astro';
+import LinktreeMobile from '../../components/LinktreeMobile.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const locale = 'en';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <!-- Header with Logo, Bio, Social, Switcher IT|EN -->
+  <Header locale={locale} />
+  
+  <main class="w-full">
+    <!-- Desktop Bento Grid (>= 768px) -->
+    <BentoGridDesktop locale={locale} />
+
+    <!-- Mobile Linktree Layout (< 768px) -->
+    <LinktreeMobile locale={locale} />
+  </main>
+
+  <!-- Footer Booking & Contact -->
+  <Footer locale={locale} />
+</BaseLayout>

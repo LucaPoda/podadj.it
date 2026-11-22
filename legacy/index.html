@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poda DJ | Electronic Music & Audio Systems</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Configurazione colori personalizzati Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonPurple: '#a855f7', 
+                        neonBlue: '#3b82f6',   
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Sfondo con immagine sfocata */
+        body {
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Pseudo-elemento per gestire il blur del background della pagina */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -30px; 
+            background: url('./assets/bg-page.jpg') no-repeat center center;
+            background-size: cover;
+            filter: blur(8px) brightness(0.5);
+            z-index: -1;
+        }
+
+        /* Testo con ombra marcata per garantire leggibilità su immagini chiare */
+        .text-outline {
+            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.9), 0px 1px 3px rgba(0, 0, 0, 1);
+        }
+
+        /* Ombra morbida per testi descrittivi */
+        .text-shadow-soft {
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Stili per le Card e Hover Effects Invertiti */
+        .format-card {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .format-card .bg-image {
+            position: absolute;
+            inset: -15px; 
+            background-size: cover;
+            background-position: center;
+            transition: all 0.6s ease;
+            filter: blur(0px) brightness(0.85); 
+        }
+
+        .format-card:hover .bg-image {
+            transform: scale(1.05);
+            filter: blur(8px) brightness(0.4); 
+        }
+
+        .format-card .overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: background-color 0.4s ease;
+        }
+
+        .format-card:hover .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .format-card .border-neon {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .format-card:hover .border-neon {
+            border: 2px solid #a855f7; 
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.6), inset 0 0 12px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Contatti Hover */
+        .contact-link {
+            transition: all 0.3s ease;
+        }
+        .contact-link:hover {
+            color: #3b82f6; 
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col items-center py-6 md:py-8 px-5">
+
+    <div class="w-full max-w-6xl flex flex-col items-center">
+        
+        <!-- 1. Header & Bio Box -->
+        <header class="flex flex-col items-center w-full">
+            
+            <img src="./assets/profile-pic.JPEG" alt="Poda DJ Profile" 
+                 class="block md:hidden w-24 h-24 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_15px_rgba(168,85,247,0.5)] mb-4">
+            
+            <div class="w-full max-w-5xl bg-black/40 border border-white/10 backdrop-blur-md rounded-3xl p-5 md:p-6 lg:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <div class="flex-1 flex flex-col items-center justify-center gap-5 text-shadow-soft w-full text-center">
+                    
+                    <div class="w-full flex justify-center">
+                        <img src="./assets/logo.png" alt="Poda DJ" class="w-40 md:w-48 lg:w-60 drop-shadow-lg mb-1">
+                        <h1 class="sr-only">Poda DJ</h1>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-gray-100 text-xs md:text-sm lg:text-sm font-medium tracking-widest uppercase px-2">
+                        <span>Electronic Music</span>
+                        <span class="text-neonPurple/60">|</span> 
+                        <span>Festival Energy</span>
+                        <span class="text-neonPurple/60 hidden sm:inline">|</span> 
+                        <span>Clubbing</span>
+                        <span class="text-neonPurple/60">|</span> 
+                        <span>Pro Audio Solutions</span>
+                    </div>
+                    
+                    <div class="w-20 h-[2px] bg-white/20 rounded-full mt-1"></div>
+
+                    <div class="flex gap-5 justify-center mt-2">
+                        <a href="#" class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"><i class="fab fa-soundcloud"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-neonBlue hover:scale-125 transition-all duration-300 text-xl md:text-2xl drop-shadow-lg"><i class="fab fa-mixcloud"></i></a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex flex-none items-center justify-end">
+                    <img src="./assets/profile-pic.JPEG" alt="Poda DJ Profile" 
+                         class="w-full max-w-[180px] lg:max-w-[220px] aspect-[4/5] object-cover rounded-2xl border border-neonPurple/50 shadow-[0_0_25px_rgba(168,85,247,0.3)]">
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Sezione Main (Le 3 Card dei Format) -->
+        <main class="w-full mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[3fr_2fr] gap-6">
+            
+            <div class="flex flex-col gap-6">
+                
+                <!-- Card 1: THE DEEPER SIDE -->
+                <a href="#" class="format-card h-[260px] md:h-[300px] w-full group">
+                    <div class="bg-image" style="background-image: url('./assets/bg-deeper.jpg');"></div>
+                    <div class="overlay"></div>
+                    
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                        <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline">The Deeper Side</h2>
+                    </div>
+
+                    <div class="absolute inset-0 flex flex-col items-center justify-between py-10 px-6 text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                        <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Deeper Side</h2>
+                        
+                        <div class="flex flex-col items-center gap-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p class="text-sm md:text-base text-gray-100 font-medium leading-relaxed text-outline">Un'atmosfera house e techno sofisticata, costruita su selezioni ricercate e completamente fuori dal circuito mainstream. Il sound ideale per club ed eventi che esigono un'identità musicale elegante, con tracce originali e mai banali.</p>
+                            <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto">Dettagli</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-neon"></div>
+                </a>
+
+                <!-- Card 2: THE HARDER SIDE -->
+                <a href="#" class="format-card h-[260px] md:h-[300px] w-full group">
+                    <div class="bg-image" style="background-image: url('./assets/bg-harder.jpg');"></div>
+                    <div class="overlay"></div>
+                    
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                        <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline">The Harder Side</h2>
+                    </div>
+
+                    <div class="absolute inset-0 flex flex-col items-center justify-between py-10 px-6 text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                        <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Harder Side</h2>
+                        
+                        <div class="flex flex-col items-center gap-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p class="text-sm md:text-base text-gray-100 font-medium leading-relaxed text-outline">Il mix perfetto tra l'adrenalina dei festival elettronici e il divertimento dei grandi party. Un'esplosione di energia che unisce techno e hardstyle alle hit del momento per garantire il massimo coinvolgimento del pubblico.</p>
+                            <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto">Dettagli</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-neon"></div>
+                </a>
+            </div>
+
+            <!-- Card 3: THE TECH SIDE -->
+            <a href="#" class="format-card h-[380px] md:h-full w-full group">
+                <div class="bg-image" style="background-image: url('./assets/bg-tech.jpg');"></div>
+                <div class="overlay"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                    <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline">The Tech Side</h2>
+                </div>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-between py-10 px-8 text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                    <h2 class="text-2xl md:text-3xl font-bold tracking-wider text-white uppercase text-outline transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Tech Side</h2>
+                    
+                    <div class="flex flex-col items-center gap-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <p class="text-sm md:text-base text-gray-100 font-medium leading-relaxed text-outline">Soluzioni audio professionali e servizio "chiavi in mano" per DJ set ed eventi privati fino a 250 persone. Tu goditi la festa e i tuoi ospiti, a garantire un suono impeccabile e senza imprevisti ci penso io.</p>
+                        <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto">Dettagli</span>
+                    </div>
+                </div>
+                
+                <div class="border-neon"></div>
+            </a>
+        </main>
+
+        <!-- 3. Link Rapidi Semplificati (Nuove Card Quadrate) -->
+        <div class="w-full mt-16 mb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Card Quadra 1: DEMO & LIVE SETS -->
+            <a href="#" class="format-card aspect-square w-full group">
+                <div class="bg-image" style="background-image: url('./assets/bg-livesets.jpg');"></div>
+                <div class="overlay"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                    <h3 class="text-lg md:text-xl font-bold tracking-wider text-white uppercase text-outline">Demo & Live Sets</h3>
+                </div>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                    <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto transform translate-y-4 group-hover:translate-y-0 transition-transform">Dettagli</span>
+                </div>
+                <div class="border-neon"></div>
+            </a>
+
+            <!-- Card Quadra 2: EVENTS -->
+            <a href="#" class="format-card aspect-square w-full group">
+                <div class="bg-image" style="background-image: url('./assets/bg-events.jpg');"></div>
+                <div class="overlay"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                    <h3 class="text-lg md:text-xl font-bold tracking-wider text-white uppercase text-outline">Events</h3>
+                </div>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                    <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto transform translate-y-4 group-hover:translate-y-0 transition-transform">Dettagli</span>
+                </div>
+                <div class="border-neon"></div>
+            </a>
+
+            <!-- Card Quadra 3: PARTYHIVE -->
+            <a href="#" class="format-card aspect-square w-full group">
+                <div class="bg-image" style="background-image: url('./assets/bg-partyhive.jpg');"></div>
+                <div class="overlay"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-500 opacity-100 group-hover:opacity-0 group-hover:scale-95">
+                    <h3 class="text-lg md:text-xl font-bold tracking-wider text-white uppercase text-outline">Partyhive</h3>
+                </div>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                    <span class="px-5 py-2 border border-white/50 rounded-full text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-lg pointer-events-auto transform translate-y-4 group-hover:translate-y-0 transition-transform">Dettagli</span>
+                </div>
+                <div class="border-neon"></div>
+            </a>
+            
+        </div>
+
+        <!-- 4. Footer / Contatti Estesi -->
+        <footer class="w-full max-w-5xl mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-8 md:gap-12 bg-black/40 border border-white/10 p-8 md:p-10 rounded-3xl backdrop-blur-md shadow-2xl">
+                
+                <!-- FOOTER MOBILE: Logo -->
+                <div class="flex md:hidden items-center justify-center flex-shrink-0">
+                    <img src="./assets/logo.png" alt="Poda DJ" class="w-48 drop-shadow-lg">
+                </div>
+
+                <!-- FOOTER DESKTOP: Foto Profilo -->
+                <div class="hidden md:flex items-center justify-center flex-shrink-0">
+                    <img src="./assets/profile-pic.JPEG" alt="Poda DJ Profile" class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full border-2 border-neonPurple shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                </div>
+
+                <div class="w-full h-px md:w-px md:h-auto bg-white/20"></div>
+
+                <div class="flex flex-col items-center md:items-start justify-center gap-6 w-full text-gray-200">
+                    
+                    <div class="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full justify-center md:justify-start">
+                        <h3 class="text-lg md:text-xl font-bold text-white uppercase tracking-widest text-outline">Booking & Contact</h3>
+                        
+                        <span class="hidden md:inline-block text-white/30 text-lg">|</span>
+                        
+                        <div class="flex items-center gap-2 text-gray-300 text-xs md:text-sm font-medium tracking-wider text-shadow-soft">
+                            <i class="fas fa-map-marker-alt text-neonPurple"></i>
+                            <span>Brescia, Trento, Garda</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full text-sm md:text-base font-medium">
+                        <div class="flex flex-col gap-4">
+                            <a href="mailto:info@tuodominio.com" class="contact-link flex items-center gap-4">
+                                <i class="fas fa-envelope text-neonPurple text-xl w-6 text-center"></i>
+                                <span class="text-shadow-soft">booking@podadj.com</span>
+                            </a>
+                            <a href="#" class="contact-link flex items-center gap-4">
+                                <i class="fab fa-instagram text-neonPurple text-xl w-6 text-center"></i>
+                                <span class="text-shadow-soft">@podadj_official</span>
+                            </a>
+                            <a href="#" class="contact-link flex items-center gap-4">
+                                <i class="fab fa-tiktok text-neonPurple text-xl w-6 text-center"></i>
+                                <span class="text-shadow-soft">@podadj_official</span>
+                            </a>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <a href="#" class="contact-link flex items-center gap-4">
+                                <i class="fab fa-soundcloud text-neonPurple text-xl w-6 text-center"></i>
+                                <span class="text-shadow-soft">soundcloud.com/podadj</span>
+                            </a>
+                            <a href="#" class="contact-link flex items-center gap-4">
+                                <i class="fab fa-mixcloud text-neonPurple text-xl w-6 text-center"></i>
+                                <span class="text-shadow-soft">mixcloud.com/podadj</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <p class="text-xs text-gray-400 font-light tracking-wide">
+                    &copy; 2026 Poda DJ. Tutti i diritti riservati. <br>
+                    <a href="#" class="hover:text-white transition-colors underline underline-offset-2 mt-2 inline-block">Privacy Policy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

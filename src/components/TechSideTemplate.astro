@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import TechPackageCard from './TechPackageCard.astro';
+import { type Locale, useTranslations } from '../i18n/ui';
+import {
+  techPackages,
+  equipmentBreakdown,
+  techGallery,
+  getPrefilledMailto,
+} from '../data/techEquipment';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const generalMailto = getPrefilledMailto(locale);
+---
+
+<BaseLayout title={t.meta.techSideTitle} description={t.meta.techSideDesc} locale={locale}>
+  <!-- Hero Banner -->
+  <HeroBanner
+    locale={locale}
+    title={t.techSide.title}
+    subtitle={t.techSide.subtitle}
+    framingKey="hero-tech-side"
+    bgImageWebp="/assets/bg-tech.webp"
+    accent="blue"
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-8 sm:gap-10">
+    
+    <!-- 1. PHILOSOPHY: UNIFIED MINIMAL CARD -->
+    <section aria-labelledby="philosophy-heading" class="w-full">
+      <div class="rounded-3xl bg-black/40 border border-white/10 p-5 sm:p-7 backdrop-blur-md shadow-xl flex flex-col gap-5">
+        <!-- Quote with left blue accent -->
+        <div class="border-l-2 border-blue-400 pl-4 sm:pl-5 py-0.5">
+          <blockquote class="text-sm sm:text-base font-medium text-white italic leading-relaxed text-shadow-soft">
+            "{t.techSide.philosophyQuote}"
+          </blockquote>
+        </div>
+
+        <!-- 3 Inline Pillars -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/10 text-xs">
+          <div class="flex items-start gap-2.5 text-gray-200">
+            <i class="fas fa-headphones text-blue-400 text-sm mt-0.5 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white block font-semibold">{t.techSide.philosophyFeature1Title}</strong>
+              <span class="text-gray-400 text-[11px] leading-snug block">{t.techSide.philosophyFeature1Desc}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2.5 text-gray-200">
+            <i class="fas fa-tablet-screen-button text-blue-400 text-sm mt-0.5 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white block font-semibold">{t.techSide.philosophyFeature2Title}</strong>
+              <span class="text-gray-400 text-[11px] leading-snug block">{t.techSide.philosophyFeature2Desc}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2.5 text-gray-200">
+            <i class="fas fa-shield-halved text-blue-400 text-sm mt-0.5 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white block font-semibold">{t.techSide.philosophyFeature3Title}</strong>
+              <span class="text-gray-400 text-[11px] leading-snug block">{t.techSide.philosophyFeature3Desc}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. MODULAR PACKAGES (#packages) -->
+    <section id="packages" aria-labelledby="packages-heading" class="w-full scroll-mt-6">
+      <div class="mb-3.5">
+        <h2 id="packages-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {t.techSide.packagesTitle}
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+        {techPackages.map((pkg) => (
+          <TechPackageCard pkg={pkg} locale={locale} />
+        ))}
+      </div>
+    </section>
+
+    <!-- 3. DETAILED HARDWARE SPECS (#hardware) -->
+    <section id="hardware" aria-labelledby="hardware-heading" class="w-full scroll-mt-6">
+      <div class="mb-3.5">
+        <h2 id="hardware-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {t.techSide.equipmentTitle}
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        {equipmentBreakdown.map((item) => (
+          <div class="rounded-2xl bg-black/40 border border-white/10 hover:border-white/20 p-4 sm:p-5 backdrop-blur-md shadow-lg flex flex-col justify-between transition-all duration-200">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="text-[9px] font-bold uppercase tracking-wider text-gray-400">
+                  {item.category[locale]}
+                </span>
+                <i class={`${item.icon} text-blue-400 text-xs`}></i>
+              </div>
+
+              <h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide text-outline mb-1">
+                {item.model}
+              </h3>
+
+              <p class="text-xs text-gray-300 leading-relaxed font-normal mb-3">
+                {item.highlight[locale]}
+              </p>
+
+              <ul class="flex flex-col gap-1.5 text-[11px] sm:text-xs text-gray-400 border-t border-white/10 pt-2.5">
+                {item.specs.map((spec) => (
+                  <li class="flex items-start gap-2 leading-relaxed">
+                    <span class="text-blue-400 font-bold">•</span>
+                    <span>{spec[locale]}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 4. PHOTO GALLERY (#gallery) -->
+    <section id="gallery" aria-labelledby="gallery-heading" class="w-full scroll-mt-6">
+      <div class="flex items-center justify-between gap-3 mb-3.5">
+        <h2 id="gallery-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {t.techSide.galleryTitle}
+        </h2>
+
+        <div class="hidden sm:flex items-center gap-1.5">
+          <button
+            type="button"
+            id="gallery-prev"
+            class="w-8 h-8 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors"
+            aria-label="Previous Slide"
+          >
+            <i class="fas fa-chevron-left text-[11px]"></i>
+          </button>
+          <button
+            type="button"
+            id="gallery-next"
+            class="w-8 h-8 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors"
+            aria-label="Next Slide"
+          >
+            <i class="fas fa-chevron-right text-[11px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Carousel -->
+      <div
+        id="gallery-track"
+        class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent -mx-4 px-4 sm:mx-0 sm:px-0"
+      >
+        {techGallery.map((item) => (
+          <div class="flex-shrink-0 w-[260px] sm:w-[320px] md:w-[360px] snap-center rounded-2xl overflow-hidden bg-black/50 border border-white/10 hover:border-white/25 backdrop-blur-md shadow-xl flex flex-col group transition-all duration-200">
+            <div class="relative h-44 sm:h-52 overflow-hidden bg-black/60">
+              <img
+                src={item.imageWebp}
+                alt={item.title[locale]}
+                width="360"
+                height="208"
+                loading="lazy"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter brightness-85"
+                onerror={`this.onerror=null; this.src='${item.imageJpg}';`}
+              />
+            </div>
+
+            <div class="p-3.5 flex flex-col gap-1">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-blue-300/80">
+                {item.tag[locale]}
+              </span>
+              <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider text-outline">
+                {item.title[locale]}
+              </h3>
+              <p class="text-[11px] text-gray-400 leading-relaxed font-normal">
+                {item.caption[locale]}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 5. CALL TO ACTION (#quote-cta) -->
+    <section id="quote-cta" aria-labelledby="cta-box-heading" class="w-full scroll-mt-6">
+      <div class="rounded-3xl bg-black/60 border border-neonPurple/40 p-6 sm:p-8 backdrop-blur-xl shadow-xl flex flex-col items-center text-center">
+        <h2 id="cta-box-heading" class="text-xl sm:text-2xl md:text-3xl font-black uppercase text-white tracking-wider text-outline mb-2">
+          {t.techSide.ctaBoxTitle}
+        </h2>
+
+        <p class="text-xs sm:text-sm text-gray-300 font-normal leading-relaxed max-w-lg mb-6">
+          {t.techSide.ctaBoxSubtitle}
+        </p>
+
+        <a
+          href={generalMailto}
+          class="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-neonPurple hover:bg-neonPurple/90 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+        >
+          <i class="fas fa-envelope text-xs"></i>
+          <span>{t.techSide.ctaButton}</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>
+
+<script>
+  const track = document.getElementById('gallery-track');
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+
+  if (track && prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -340, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: 340, behavior: 'smooth' });
+    });
+  }
+</script>

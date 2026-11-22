@@ -1,0 +1,15 @@
+---
+import WipPageTemplate from '../../components/WipPageTemplate.astro';
+import { WIP_SECTIONS, WIP_SLUGS } from '../../config/wipSections';
+
+export function getStaticPaths() {
+  return WIP_SLUGS.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const section = slug ? WIP_SECTIONS[slug] : undefined;
+---
+
+<WipPageTemplate locale="it" section={section} />

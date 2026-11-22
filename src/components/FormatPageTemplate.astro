@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import DemoAccordion from './DemoAccordion.astro';
+import { type Locale, useTranslations } from '../i18n/ui';
+import { demosData } from '../data/demos';
+
+interface Props {
+  locale: Locale;
+  formatKey: 'mainstage' | 'party' | 'groove';
+  accent: 'amber' | 'fuchsia' | 'cyan';
+  accentHex: string;
+  bgImageWebp: string;
+}
+
+const { locale, formatKey, accent, accentHex, bgImageWebp } = Astro.props;
+const t = useTranslations(locale);
+
+const formatStrings = t.formatPages[formatKey];
+const metaStrings = {
+  mainstage: {
+    title: t.meta.mainstageTitle,
+    desc: t.meta.mainstageDesc,
+  },
+  party: {
+    title: t.meta.partyTitle,
+    desc: t.meta.partyDesc,
+  },
+  groove: {
+    title: t.meta.grooveTitle,
+    desc: t.meta.grooveDesc,
+  },
+}[formatKey];
+
+const framingKeys = {
+  mainstage: 'hero-mainstage',
+  party: 'hero-party',
+  groove: 'hero-groove',
+};
+
+const formatDemos = demosData.filter((d) => d.format === formatKey);
+
+const allTracklists = await getCollection('tracklists');
+const tracklistsById = Object.fromEntries(
+  allTracklists.map((tl) => [tl.data.id, tl.data])
+);
+---
+
+<BaseLayout title={metaStrings.title} description={metaStrings.desc} locale={locale}>
+  <!-- 1. CLEAN HERO BANNER (Title only) -->
+  <HeroBanner
+    locale={locale}
+    title={formatStrings.title}
+    framingKey={framingKeys[formatKey]}
+    bgImageWebp={bgImageWebp}
+    accent={accent}
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-8">
+    <!-- 2. ORDERED DESCRIPTION BELOW BANNER -->
+    <section aria-label={formatStrings.identityTitle} class="w-full">
+      <div class="rounded-2xl bg-black/40 border border-white/10 p-5 sm:p-7 backdrop-blur-md shadow-xl flex flex-col gap-5">
+        <p class="text-sm sm:text-base text-gray-100 leading-relaxed font-normal">
+          {formatStrings.tagline}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/10 text-xs">
+          <div class="flex flex-col gap-1">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+              {formatStrings.genresLabel}
+            </span>
+            <p class="text-gray-200 leading-relaxed font-normal">
+              {formatStrings.genres}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+              {formatStrings.targetLabel}
+            </span>
+            <p class="text-gray-300 leading-relaxed font-normal">
+              {formatStrings.target}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. COLLAPSED DEMOS ONLY (Click to open player, description & details) -->
+    <section id="demo" aria-labelledby="format-demo-heading" class="w-full scroll-mt-6">
+      <div class="mb-3.5">
+        <h2 id="format-demo-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          {formatStrings.demoSectionTitle}
+        </h2>
+      </div>
+
+      <DemoAccordion
+        demos={formatDemos}
+        locale={locale}
+        accentColor={accentHex}
+        tracklistsById={tracklistsById}
+      />
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

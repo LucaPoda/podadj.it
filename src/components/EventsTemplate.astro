@@ -1,0 +1,316 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import HeroBanner from './HeroBanner.astro';
+import LiveSetAccordion from './LiveSetAccordion.astro';
+import TracklistViewer from './TracklistViewer.astro';
+import { type Locale, useTranslations } from '../i18n/ui';
+import { getFormatMeta } from '../schemas/common';
+import { liveSetsData, type LiveSet } from '../data/liveSets';
+import { formatEventTimeRange, isEventPast } from '../lib/eventsLifecycle';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const rawEvents = await getCollection('events');
+const rawTracklists = await getCollection('tracklists');
+
+const tracklistsById = Object.fromEntries(
+  rawTracklists.map((tl) => [tl.data.id, tl.data])
+);
+const liveSetsById: Record<string, LiveSet> = Object.fromEntries(
+  liveSetsData.map((ls) => [ls.id, ls])
+);
+
+function formatDisplayDate(dateStr: string, currentLocale: Locale): string {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(currentLocale === 'it' ? 'it-IT' : 'en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
+const now = new Date();
+const upcomingEvents = rawEvents
+  .filter((e) => !isEventPast(e.data, now))
+  .sort((a, b) => Date.parse(a.data.startAt) - Date.parse(b.data.startAt));
+
+const pastEvents = rawEvents
+  .filter((e) => isEventPast(e.data, now))
+  .sort((a, b) => Date.parse(b.data.startAt) - Date.parse(a.data.startAt));
+
+const sections = [
+  {
+    key: 'upcoming' as const,
+    sectionId: 'upcoming-events',
+    listId: 'upcoming-events-list',
+    countId: 'upcoming-events-count',
+    emptyId: 'upcoming-events-empty',
+    title: t.eventsPage.upcomingTitle,
+    subtitle: t.eventsPage.upcomingSubtitle,
+    emptyText: t.eventsPage.noUpcoming,
+    badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35',
+    items: upcomingEvents,
+  },
+  {
+    key: 'past' as const,
+    sectionId: 'past-events',
+    listId: 'past-events-list',
+    countId: 'past-events-count',
+    emptyId: 'past-events-empty',
+    title: t.eventsPage.pastTitle,
+    subtitle: t.eventsPage.pastSubtitle,
+    emptyText: t.eventsPage.noPast,
+    badgeClass: 'bg-white/10 text-gray-300 border-white/20',
+    items: pastEvents,
+  },
+];
+---
+
+<BaseLayout title={t.meta.eventsTitle} description={t.meta.eventsDesc} locale={locale}>
+  <HeroBanner
+    locale={locale}
+    title={t.cards.events.title}
+    subtitle={t.cards.events.shortDesc}
+    framingKey="hero-events"
+    bgImageWebp="/assets/bg-events.webp"
+    accent="purple"
+  />
+
+  <main class="w-full max-w-5xl flex flex-col gap-10">
+    {sections.map((section) => (
+      <section id={section.sectionId} aria-labelledby={`${section.sectionId}-heading`} class="flex flex-col gap-4 scroll-mt-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <div>
+            <h2
+              id={`${section.sectionId}-heading`}
+              class="text-lg sm:text-xl font-black uppercase text-white tracking-wider text-outline"
+            >
+              {section.title}
+            </h2>
+            <p class="text-xs text-gray-400 mt-0.5">{section.subtitle}</p>
+          </div>
+          <span
+            id={section.countId}
+            class="text-xs font-bold font-mono text-gray-400"
+          >
+            {section.items.length}
+          </span>
+        </div>
+
+        <div
+          id={section.emptyId}
+          class={`rounded-2xl bg-black/40 border border-white/10 p-6 text-center text-xs text-gray-400 ${
+            section.items.length === 0 ? '' : 'hidden'
+          }`}
+        >
+          {section.emptyText}
+        </div>
+
+        <div id={section.listId} class="flex flex-col gap-3">
+          {section.items.map((event) => {
+            const data = event.data;
+            const formatMeta = getFormatMeta(data.format);
+            const timeRange = formatEventTimeRange(data.startAt, data.endAt, locale);
+            const linkedTracklist = data.tracklistId ? tracklistsById[data.tracklistId] : undefined;
+            const effectiveTracks =
+              linkedTracklist && linkedTracklist.tracks.length > 0
+                ? linkedTracklist.tracks
+                : data.tracklist || [];
+            const linkedLiveSet = data.liveSetId ? liveSetsById[data.liveSetId] : undefined;
+            const notesText = data.notes?.[locale]?.trim();
+            const hasSetup = Boolean(data.audioSetup?.trim());
+
+            return (
+              <details
+                id={data.id}
+                data-event-card
+                data-start-at={data.startAt}
+                data-end-at={data.endAt}
+                class="group rounded-3xl bg-black/50 border border-white/10 hover:border-white/25 backdrop-blur-md shadow-xl overflow-hidden scroll-mt-8 transition-all duration-200 open:border-neonPurple/40"
+              >
+                {/* Compact Summary Header */}
+                <summary class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                  <div class="flex flex-col gap-1.5 min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-gray-300">
+                      <span class="inline-flex items-center gap-1.5 font-semibold text-white">
+                        <i class="far fa-calendar-alt text-neonPurple text-[11px]"></i>
+                        <time datetime={data.startAt}>{formatDisplayDate(data.date, locale)}</time>
+                      </span>
+                      {timeRange && (
+                        <>
+                          <span class="text-white/25">•</span>
+                          <span class="font-mono text-[11px] text-gray-300">{timeRange}</span>
+                        </>
+                      )}
+                      <span class="text-white/25">•</span>
+                      <span class="text-gray-300 truncate">
+                        <i class="fas fa-location-dot text-neonPurple text-[11px] mr-1"></i>
+                        {data.venue ? `${data.venue}, ` : ''}
+                        {data.location}
+                      </span>
+                    </div>
+
+                    <h3 class="text-base sm:text-lg font-black uppercase text-white tracking-wider text-outline truncate">
+                      {data.title[locale]}
+                    </h3>
+                  </div>
+
+                  <div class="flex items-center gap-3 flex-shrink-0 text-[11px] text-gray-400">
+                    <span class="font-semibold uppercase tracking-wider text-gray-300">
+                      {formatMeta.shortLabel}
+                    </span>
+                    {effectiveTracks.length > 0 && (
+                      <>
+                        <span class="text-white/25">•</span>
+                        <span>
+                          {effectiveTracks.length} {t.eventsPage.tracklistBadge}
+                        </span>
+                      </>
+                    )}
+                    {linkedLiveSet && (
+                      <>
+                        <span class="text-white/25">•</span>
+                        <span>{t.eventsPage.liveSetBadge}</span>
+                      </>
+                    )}
+                    <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200 group-open:rotate-180 ml-1"></i>
+                  </div>
+                </summary>
+
+                {/* Expanded Panel */}
+                <div class="border-t border-white/10 p-5 sm:p-6 flex flex-col gap-5 bg-black/25">
+                  {(hasSetup || notesText) && (
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {hasSetup && (
+                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5 flex flex-col gap-2">
+                          <span class="text-[10px] uppercase font-bold tracking-wider text-neonPurple flex items-center gap-1.5">
+                            <i class="fas fa-volume-high text-xs"></i>
+                            <span>{t.common.audioSetup}</span>
+                          </span>
+                          <p class="text-xs text-gray-200 font-normal leading-relaxed">
+                            {data.audioSetup}
+                          </p>
+                        </div>
+                      )}
+
+                      {notesText && (
+                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5 flex flex-col gap-2">
+                          <span class="text-[10px] uppercase font-bold tracking-wider text-neonPurple flex items-center gap-1.5">
+                            <i class="fas fa-clipboard-list text-xs"></i>
+                            <span>{t.common.technicalNotes}</span>
+                          </span>
+                          <p class="text-xs text-gray-200 font-normal leading-relaxed">
+                            {notesText}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {linkedLiveSet && (
+                    <div class="flex flex-col gap-2">
+                      <span class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                        <i class="fas fa-wave-square text-neonPurple text-xs"></i>
+                        <span>{t.eventsPage.linkedLiveSet}</span>
+                      </span>
+                      <LiveSetAccordion
+                        sets={[linkedLiveSet]}
+                        locale={locale}
+                        accentColor={formatMeta.accentHex}
+                      />
+                    </div>
+                  )}
+
+                  {effectiveTracks.length > 0 && (
+                    <div class="flex flex-col gap-3">
+                      <span class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                        <i class="fas fa-list-ol text-neonPurple text-xs"></i>
+                        <span>{t.common.tracklist}</span>
+                      </span>
+
+                      <TracklistViewer
+                        tracks={effectiveTracks}
+                        locale={locale}
+                        accentColor={formatMeta.accentHex}
+                      />
+                    </div>
+                  )}
+                </div>
+              </details>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>
+
+<script>
+  function syncEventsLifecycleClient() {
+    const upcomingList = document.getElementById('upcoming-events-list');
+    const pastList = document.getElementById('past-events-list');
+    const upcomingCount = document.getElementById('upcoming-events-count');
+    const pastCount = document.getElementById('past-events-count');
+    const upcomingEmpty = document.getElementById('upcoming-events-empty');
+    const pastEmpty = document.getElementById('past-events-empty');
+
+    if (upcomingList && pastList) {
+      const nowMs = Date.now();
+      const cards = Array.from(upcomingList.querySelectorAll<HTMLElement>('[data-event-card]'));
+      let moved = false;
+
+      for (const card of cards) {
+        const endAt = card.getAttribute('data-end-at');
+        if (!endAt) continue;
+        const endMs = Date.parse(endAt);
+        if (!Number.isNaN(endMs) && nowMs > endMs) {
+          pastList.prepend(card);
+          moved = true;
+        }
+      }
+
+      if (moved) {
+        // Keep past list sorted descending by startAt
+        const pastCards = Array.from(pastList.querySelectorAll<HTMLElement>('[data-event-card]'));
+        pastCards.sort((a, b) => {
+          const sa = Date.parse(a.getAttribute('data-start-at') || '') || 0;
+          const sb = Date.parse(b.getAttribute('data-start-at') || '') || 0;
+          return sb - sa;
+        });
+        pastCards.forEach((c) => pastList.appendChild(c));
+
+        const uLen = upcomingList.querySelectorAll('[data-event-card]').length;
+        const pLen = pastCards.length;
+        if (upcomingCount) upcomingCount.textContent = String(uLen);
+        if (pastCount) pastCount.textContent = String(pLen);
+        if (upcomingEmpty) upcomingEmpty.classList.toggle('hidden', uLen > 0);
+        if (pastEmpty) pastEmpty.classList.toggle('hidden', pLen > 0);
+      }
+    }
+
+    // Open target event accordion automatically when navigated via #event-id hash
+    const hashId = window.location.hash?.slice(1);
+    if (hashId) {
+      const target = document.getElementById(hashId);
+      if (target && target.tagName === 'DETAILS') {
+        target.setAttribute('open', '');
+      }
+    }
+  }
+
+  syncEventsLifecycleClient();
+  document.addEventListener('astro:page-load', syncEventsLifecycleClient);
+</script>

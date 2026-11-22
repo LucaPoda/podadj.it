@@ -1,0 +1,49 @@
+{
+  "id": "aperipovo-01102025",
+  "date": "2025-10-01",
+  "startAt": "2025-10-01T18:30:00+02:00",
+  "endAt": "2025-10-01T20:00:00+02:00",
+  "title": {
+    "it": "APERIPOVO 2025 — Tech House to Hardstyle",
+    "en": "APERIPOVO 2025 — Tech House to Hardstyle"
+  },
+  "location": "Trento (TN)",
+  "venue": "Polo Scientifico Povo (UniTrento)",
+  "format": "THE PARTY SIDE",
+  "audioSetup": "Diffusione audio university party, console Pioneer DJ, microfono per animazione",
+  "notes": {
+    "it": "Registrazione integrale di 70 minuti: un percorso che attraversa l'intero spettro sonoro di PODA. Dalla morbidezza della Tech House d'ascolto per l'aperitivo fino agli anthem commerciali cantati e all'esplosione finale hardstyle.",
+    "en": "Full 70-minute live recording: a musical trip spanning the entire PODA sonic spectrum. Starting from melodic warmup Tech House up to commercial singalong anthems and final hardstyle drops."
+  },
+  "liveSetId": "aperipovo-01102025",
+  "tracklist": [
+    {
+      "index": 1,
+      "title": "B.O.T.A. (Baddest Of Them All)",
+      "artist": "Eliza Rose, Interplanetary Criminal",
+      "bpm": 137,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Ferrari",
+      "artist": "James Hype, Miggy Dela Rosa",
+      "bpm": 125,
+      "key": "8A"
+    },
+    {
+      "index": 3,
+      "title": "City Lights",
+      "artist": "PODA Edit",
+      "bpm": 140,
+      "key": "1A"
+    },
+    {
+      "index": 4,
+      "title": "Year of Summer",
+      "artist": "Wildstylez ft. Niels Geusebroek",
+      "bpm": 150,
+      "key": "4B"
+    }
+  ]
+}

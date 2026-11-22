@@ -1,0 +1,171 @@
+---
+import type { Demo } from '../schemas/demos';
+import type { TracklistData } from '../schemas/tracklist';
+import { getFormatMeta } from '../schemas/common';
+import { type Locale, useTranslations } from '../i18n/ui';
+import MediaEmbed from './MediaEmbed.astro';
+import TracklistViewer from './TracklistViewer.astro';
+
+interface Props {
+  demos: Demo[];
+  locale: Locale;
+  accentColor?: string;
+  tracklistsById?: Record<string, TracklistData>;
+}
+
+const {
+  demos,
+  locale,
+  accentColor = '#a855f7',
+  tracklistsById = {},
+} = Astro.props;
+
+const t = useTranslations(locale);
+
+const sortedDemos = [...demos].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+
+function formatDisplayDate(dateStr: string, currentLocale: Locale): string {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(currentLocale === 'it' ? 'it-IT' : 'en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
+function getDemoGenreLabel(demo: Demo): string {
+  if (Array.isArray(demo.tags) && demo.tags.length > 0) {
+    return demo.tags.slice(0, 3).join(' · ');
+  }
+  return getFormatMeta(demo.format).shortLabel;
+}
+---
+
+<div class="flex flex-col gap-2.5 w-full">
+  {sortedDemos.length === 0 ? (
+    <div class="w-full p-6 rounded-2xl bg-black/40 border border-white/10 text-center text-gray-400 text-xs">
+      {locale === 'it' ? 'Nessuna demo disponibile.' : 'No demos available yet.'}
+    </div>
+  ) : (
+    sortedDemos.map((demo) => {
+      const linkedTracklist = demo.tracklistId ? tracklistsById[demo.tracklistId] : undefined;
+      const genreLabel = getDemoGenreLabel(demo);
+      const demoColor = accentColor || getFormatMeta(demo.format).accentHex;
+
+      return (
+        <details class="group rounded-2xl bg-black/40 border border-white/10 hover:border-white/25 transition-all duration-200 overflow-hidden backdrop-blur-md open:bg-black/60 open:border-white/25">
+          <summary class="flex items-center justify-between gap-3 p-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+            <div class="flex flex-col gap-1 min-w-0 flex-1">
+              <h3 class="text-sm font-bold text-white tracking-wide truncate">
+                {demo.title[locale]}
+              </h3>
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-gray-400">
+                <time datetime={demo.date} class="font-mono text-gray-400 flex-shrink-0">
+                  {formatDisplayDate(demo.date, locale)}
+                </time>
+                <span class="text-white/25">•</span>
+                <span class="text-gray-300 truncate">{genreLabel}</span>
+              </div>
+            </div>
+
+            <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-200 group-open:rotate-180 flex-shrink-0"></i>
+          </summary>
+
+          <div class="px-4 pb-4 sm:px-5 sm:pb-5 pt-3 border-t border-white/10 text-xs text-gray-300 flex flex-col gap-3.5">
+            <!-- Media Player -->
+            <MediaEmbed
+              url={demo.soundcloudUrl}
+              type="soundcloud"
+              title={demo.title[locale]}
+              accentColor={demoColor}
+              height={166}
+            />
+
+            <!-- Description & Style Notes -->
+            <div class="flex flex-col gap-2">
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed font-normal">
+                {demo.description[locale]}
+              </p>
+              {demo.styleNotes?.[locale] && (
+                <p class="text-xs text-gray-400 leading-relaxed font-normal border-l-2 border-white/15 pl-3">
+                  {demo.styleNotes[locale]}
+                </p>
+              )}
+            </div>
+
+            <!-- Secondary Meta (Duration, Full Genres & Tracklist) -->
+            {(demo.duration || demo.tags.length > 0) && (
+              <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-400 pt-1 border-t border-white/5">
+                {demo.tags.length > 0 && (
+                  <span class="text-gray-300">
+                    {demo.tags.join(' · ')}
+                  </span>
+                )}
+                {demo.duration && (
+                  <span class="font-mono text-gray-400 flex items-center gap-1.5 flex-shrink-0">
+                    <i class="fas fa-stopwatch text-[10px]"></i>
+                    <span>{demo.duration}</span>
+                  </span>
+                )}
+              </div>
+            )}
+
+            {linkedTracklist && linkedTracklist.tracks.length > 0 ? (
+              <div class="pt-2 border-t border-white/10 flex flex-col gap-2">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                  {t.common.tracklist}
+                </span>
+                <TracklistViewer
+                  tracks={linkedTracklist.tracks}
+                  locale={locale}
+                  accentColor={demoColor}
+                />
+              </div>
+            ) : demo.tracklistHighlights.length > 0 ? (
+              <div class="pt-2 border-t border-white/10 flex flex-col gap-1.5">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                  {t.common.tracklist}
+                </span>
+                <ul class="flex flex-col gap-1 text-[11px]">
+                  {demo.tracklistHighlights.map((track, idx) => (
+                    <li class="flex items-baseline gap-2 text-gray-300 truncate">
+                      <span class="text-gray-500 font-mono text-[10px]">
+                        {String(idx + 1).padStart(2, '0')}.
+                      </span>
+                      <span class="text-white font-semibold">{track.title}</span>
+                      <span class="text-gray-400 truncate">— {track.artist}</span>
+                      {track.remix && (
+                        <span class="text-[10px]" style={`color: ${demoColor};`}>
+                          ({track.remix})
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div class="flex items-center justify-between pt-1">
+              <a
+                href={demo.soundcloudUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-300 hover:text-white transition-colors"
+              >
+                <i class="fab fa-soundcloud" style={`color: ${demoColor};`}></i>
+                <span>SoundCloud</span>
+                <i class="fas fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
+              </a>
+            </div>
+          </div>
+        </details>
+      );
+    })
+  )}
+</div>

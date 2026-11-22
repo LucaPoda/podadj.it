@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PODA DJ — Web Platform
 
-## Getting Started
+Piattaforma web ufficiale e showcase musicale per **PODA DJ** (Electronic Music & Pro Audio Systems).  
+Sviluppato con **Astro 5**, **Tailwind CSS** e architettura bilingue nativa (**IT / EN**).
 
-First, run the development server:
+---
 
+## 🚀 Guida Rapida all'Avvio (Locale)
+
+### 1. Prerequisiti
+Assicurati di avere installato **Node.js** (versione 18 o superiore):
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
+npm -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Installazione delle dipendenze (solo la prima volta)
+Se hai appena clonato il repository o cancellato la cartella `node_modules`:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Avviare il Server di Sviluppo
+Dalla cartella principale del progetto, esegui:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Una volta avviato, vedrai nel terminale:
+```text
+  astro  v5.x.x ready in ... ms
 
-## Learn More
+  ┃ Local    http://localhost:4321/
+  ┃ Network  use --host to expose
+```
 
-To learn more about Next.js, take a look at the following resources:
+👉 **Apri il browser su:**
+- **Versione Italiana (Default):** [http://localhost:4321](http://localhost:4321)
+- **Versione Inglese:** [http://localhost:4321/en](http://localhost:4321/en)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> 💡 **Come fermare il server:** Premi `CTRL + C` nel terminale in qualsiasi momento.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📱 Come Testare il Layout Mobile da Smartphone (Stessa Rete Wi-Fi)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Per testare direttamente dal tuo telefono l'interfaccia **Mobile Linktree**, puoi esporre il server locale sulla tua rete locale:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev -- --host
+```
+
+Nel terminale comparirà il tuo indirizzo IP locale:
+```text
+  ┃ Local    http://localhost:4321/
+  ┃ Network  http://192.168.1.XX:4321/
+```
+
+Apri Safari o Chrome sul tuo smartphone collegato alla stessa rete Wi-Fi e digita quell'indirizzo `http://192.168.1.XX:4321/` per navigare e toccare con mano le card Linktree con una mano sola.
+
+---
+
+## 📦 Build e Anteprima di Produzione
+
+Per testare esattamente la versione ottimizzata e compilata che andrà online su Vercel:
+
+```bash
+# 1. Compila il sito in HTML/CSS statico
+npm run build
+
+# 2. Avvia l'anteprima locale della build
+npm run preview
+```
+
+---
+
+## 🖼️ Ottimizzazione Automatica delle Immagini
+
+Se aggiungi nuove foto ad alta risoluzione (da fotocamera Canon, reflex o smartphone) nella cartella `assets/`, puoi convertirle automaticamente in formati web super-leggeri (**WebP** e JPG ottimizzati a ~150-300 KB):
+
+```bash
+npm run optimize-images
+```
+I file ottimizzati verranno generati automaticamente all'interno di `public/assets/`.
+
+---
+
+## 📂 Struttura del Progetto
+
+```text
+podadj.it/
+├── assets/                 # Immagini originali ad alta risoluzione (RAW / backup)
+├── public/                 # File statici serviti direttamente dal web server
+│   └── assets/             # Immagini ottimizzate in formato WebP, JPG e PNG
+├── src/
+│   ├── components/         # Componenti dell'interfaccia:
+│   │   ├── Header.astro              # Header con logo, bio, social e switcher IT|EN
+│   │   ├── BentoGridDesktop.astro    # Bento Grid asimmetrica per schermi desktop (>= 768px)
+│   │   ├── LinktreeMobile.astro      # Layout Linktree a colonna singola per mobile (< 768px)
+│   │   ├── LanguageSwitcher.astro    # Selettore lingua minimale IT | EN
+│   │   └── Footer.astro              # Footer "Booking & Contact"
+│   ├── content/            # Archivio dati (Eventi, Live Sets, Tracklist)
+│   ├── i18n/               # Sistema di multilingua:
+│   │   ├── it.json                   # Dizionario testi in Italiano
+│   │   ├── en.json                   # Dizionario testi in Inglese
+│   │   └── ui.ts                     # Helper di navigazione e cambio lingua
+│   ├── layouts/
+│   │   └── BaseLayout.astro          # Template HTML di base con SEO e Open Graph
+│   ├── pages/              # Routing delle pagine:
+│   │   ├── index.astro               # Home Page Italiana (/)
+│   │   └── en/
+│   │       └── index.astro           # Home Page Inglese (/en)
+│   └── styles/
+│       └── global.css                # Stili globali, Tailwind e regole neon/glass
+├── astro.config.mjs        # Configurazione Astro e impostazioni i18n
+├── tailwind.config.mjs     # Configurazione Tailwind (colori neonPurple, neonBlue)
+└── package.json            # Dipendenze e script npm
+```
+
+---
+
+## 🛠️ Portale CMS `/admin`, Validazione & Workflow PR
+
+Il portale privato `/admin` (escluso da `sitemap-index.xml`, `robots.txt` e da tutta la navigazione pubblica) gestisce contenuti JSON/asset tramite GitHub REST & Git Data API:
+
+### 1. Validazione Dati & Typecheck
+```bash
+npm run validate-data   # Valida tutti i JSON (src/data/*, src/i18n/*, src/content/*) con gli schemi Zod
+npm run build           # Esegue optimize-images (ricorsivo su assets/), SSG pubblico + SSR /admin & /api/admin/*
+```
+
+### 2. Variabili d'Ambiente su Vercel (`.env.example`)
+- **Autenticazione `/admin` (obbligatorie):** `ADMIN_PASSWORD`, `SESSION_SECRET` (min. 32 caratteri random).
+- **GitHub CMS & PR (obbligatorie per bozze/pubblicazione):** `GITHUB_TOKEN` (permessi `Contents: Read & Write` e `Pull requests: Read & Write`), `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BASE_BRANCH` (default `main`).
+- **Integrazioni opzionali:** `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` (ricerca brani tracklist), `GEMINI_API_KEY` / `GEMINI_MODEL` (assistente AI bilingue, default `gemini-2.5-flash`).
+
+### 3. Workflow Bozze (`draft/*`) & Pubblicazione
+1. Le modifiche effettuate in `/admin` (eventi, tracklist, demo, live set, setup tech, testi/link, framing desktop/mobile e foto caricate in `assets/tech-gallery/` o `assets/uploads/`) possono essere salvate su una singola branch di bozza `draft/*` su GitHub senza alterare `main`.
+2. Alla pubblicazione (`Revisione & Pubblicazione`), il server valida ogni JSON con Zod e apre/aggiorna una Pull Request verso `main`, dove GitHub Actions esegue la validazione e il build di controllo prima del merge.
+

@@ -1,0 +1,51 @@
+name: Cleanup Closed CMS PR Branch
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  cleanup-branch:
+    name: Archive & Delete CMS Branch
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        startsWith(github.event.pull_request.head.ref, 'draft/') ||
+        startsWith(github.event.pull_request.head.ref, 'cms/') ||
+        startsWith(github.event.pull_request.head.ref, 'publish/')
+      )
+
+    steps:
+      - name: Archive unmerged branch and delete source branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          WAS_MERGED: ${{ github.event.pull_request.merged }}
+        run: |
+          set -euo pipefail
+
+          if [ "$WAS_MERGED" != "true" ]; then
+            TS=$(date -u +%Y%m%d-%H%M%S)
+            TAG_NAME="archive/pr-${PR_NUMBER}-${TS}"
+            echo "PR #${PR_NUMBER} closed without merge. Creating archive tag ${TAG_NAME} at ${HEAD_SHA}..."
+            gh api "repos/${REPO}/git/refs" \
+              --method POST \
+              -f ref="refs/tags/${TAG_NAME}" \
+              -f sha="${HEAD_SHA}"
+          else
+            echo "PR #${PR_NUMBER} was merged. Skipping archive tag."
+          fi
+
+          echo "Deleting branch ${HEAD_REF}..."
+          gh api "repos/${REPO}/git/refs/heads/${HEAD_REF}" --method DELETE || true

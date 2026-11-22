@@ -1,0 +1,512 @@
+---
+import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
+import { getFramingStyle } from '../utils/imageFraming';
+import { siteLinks } from '../data/siteLinks';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const partySideUrl = getLocalizedPath('/wip/party-side', locale);
+const grooveSideUrl = getLocalizedPath('/wip/groove-side', locale);
+const mainstageSideUrl = getLocalizedPath('/wip/mainstage-side', locale);
+const techSideUrl = getLocalizedPath('/wip/tech-side', locale);
+const demoLiveUrl = getLocalizedPath('/wip/demo-live-sets', locale);
+const eventsUrl = getLocalizedPath('/wip/events', locale);
+
+// 1. I 3 Format Musicali (Nuovo Ordine: Mainstage -> Party -> Groove)
+const musicalFormats = [
+  {
+    id: 'mainstage-side',
+    title: t.cards.mainstageSide.title,
+    desc: t.cards.mainstageSide.shortDesc,
+    cta: t.cards.mainstageSide.cta,
+    url: mainstageSideUrl,
+    image: '/assets/bg-mainstage.webp',
+    imageJpg: '/assets/bg-mainstage.jpg',
+  },
+  {
+    id: 'party-side',
+    title: t.cards.partySide.title,
+    desc: t.cards.partySide.shortDesc,
+    cta: t.cards.partySide.cta,
+    url: partySideUrl,
+    image: '/assets/bg-party.webp',
+    imageJpg: '/assets/bg-party.jpg',
+  },
+  {
+    id: 'groove-side',
+    title: t.cards.grooveSide.title,
+    desc: t.cards.grooveSide.shortDesc,
+    cta: t.cards.grooveSide.cta,
+    url: grooveSideUrl,
+    image: '/assets/bg-groove.webp',
+    imageJpg: '/assets/bg-groove.jpg',
+  },
+];
+
+// 2. Service Audio & Luci
+const techService = {
+  id: 'tech-side',
+  title: t.cards.techSide.title,
+  desc: t.cards.techSide.shortDesc,
+  cta: t.cards.techSide.cta,
+  url: techSideUrl,
+  image: '/assets/bg-tech.webp',
+  imageJpg: '/assets/bg-tech.jpg',
+};
+---
+
+<nav aria-label="Menu Mobile Linktree" class="flex md:hidden flex-col w-full mt-4">
+  
+  <!-- ========================================== -->
+  <!-- GRUPPO 1: I 3 FORMAT MUSICALI (INVARIATI)  -->
+  <!-- ========================================== -->
+  <div class="flex flex-col gap-3 w-full">
+    {musicalFormats.map((item) => (
+      <div
+        class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+        data-card-id={item.id}
+      >
+        <!-- Background image con inquadratura & zoom configurabili -->
+        <div
+          class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05]"
+          style={getFramingStyle(item.id, 'mobile', item.image, item.imageJpg)}
+        ></div>
+
+        <!-- Sottile overlay di contrasto -->
+        <div class="card-overlay absolute inset-0 bg-black/25 transition-colors duration-300 z-[1]"></div>
+        
+        <!-- Header cliccabile per aprire/chiudere l'anteprima (Altezza modulare base: 92px) -->
+        <div
+          class="relative z-10 w-full min-h-[92px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer select-none"
+          data-card-toggle
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <!-- Titolo pulito -->
+          <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight pr-2">
+            {item.title}
+          </h2>
+
+          <!-- Icone di azione: Freccia Diretta + Chevron Toggle -->
+          <div class="flex items-center gap-2 flex-none">
+            <a
+              href={item.url}
+              class="w-9 h-9 rounded-full bg-black/40 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+              data-direct-link
+              title={`${t.common.details}: ${item.title}`}
+              aria-label={`${t.common.details}: ${item.title}`}
+            >
+              <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+
+            <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/70 transition-transform duration-300">
+              <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Contenuto Espandibile (Descrizione + Tasto Dettagli) -->
+        <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+          <div class="pt-1 pb-4 flex flex-col items-start gap-3 border-t border-white/15">
+            <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">
+              {item.desc}
+            </p>
+            <a
+              href={item.url}
+              class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-neonPurple hover:text-white transition-all shadow-lg active:scale-95"
+            >
+              <span>{item.cta}</span>
+              <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bordo Neon attivo al tocco/apertura -->
+        <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MARGINE VUOTO PIÙ MARCATO PRIMA DI THE TECH SIDE (SENZA ETICHETTE)         -->
+  <!-- ========================================================================= -->
+  <div class="w-full mt-7 sm:mt-8"></div>
+
+  <!-- ========================================================================= -->
+  <!-- GRUPPO 2: THE TECH SIDE (IMMAGINE DEDICATA MOBILE, SOLO TITOLO PULITO)    -->
+  <!-- ========================================================================= -->
+  <div
+    class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+    data-card-id={techService.id}
+  >
+    <!-- Background dedicato mobile bg-tech-mobile -->
+    <div
+      class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
+      style={getFramingStyle(techService.id, 'mobile', techService.image, techService.imageJpg)}
+    ></div>
+
+    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20 transition-colors duration-300 z-[1]"></div>
+    
+    <!-- Header Card Service: Altezza modulare 300px (= 3 card musicali 92px + 2 margini interni 12px) -->
+    <div
+      class="relative z-10 w-full min-h-[300px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      data-card-toggle
+      role="button"
+      tabindex="0"
+      aria-expanded="false"
+    >
+      <!-- Top Row: Solo Azioni Diretta + Chevron (Nessun badge) -->
+      <div class="flex items-center justify-end w-full">
+        <div class="flex items-center gap-2 flex-none">
+          <a
+            href={techService.url}
+            class="w-9 h-9 rounded-full bg-black/60 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+            data-direct-link
+            title={`${t.common.details}: ${techService.title}`}
+            aria-label={`${t.common.details}: ${techService.title}`}
+          >
+            <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+
+          <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/80 transition-transform duration-300 bg-black/40 rounded-full border border-white/20">
+            <i class="fas fa-chevron-down text-xs"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Bottom: Solo Titolo THE TECH SIDE Pulito (Senza etichette o sottotitoli) -->
+      <div>
+        <h2 class="text-xl sm:text-2xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight">
+          {techService.title}
+        </h2>
+      </div>
+    </div>
+
+    <!-- Drawer Descrizione Espandibile al Tap -->
+    <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+      <div class="pt-2 pb-4 flex flex-col items-start gap-3 border-t border-white/20">
+        <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">
+          {techService.desc}
+        </p>
+        <a
+          href={techService.url}
+          class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-neonPurple hover:text-white transition-all shadow-lg active:scale-95"
+        >
+          <span>{techService.cta}</span>
+          <i class="fas fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LINEA DI SEPARAZIONE FISICA PRIMA DEI LINK ARCHIVE & PROJECTS             -->
+  <!-- ========================================================================= -->
+  <div class="w-full flex items-center gap-3 my-6">
+    <div class="flex-1 h-px bg-white/20"></div>
+    <span class="text-[9px] font-bold uppercase tracking-widest text-white/40">Archive & Projects</span>
+    <div class="flex-1 h-px bg-white/20"></div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- GRUPPO 3: SEZIONE INFERIORE (ALTEZZA MODULARE 300px = 144px + 12px + 144px) -->
+  <!-- ========================================================================= -->
+  
+  <!-- 1. Grid 2 Colonne: DEMO & LIVE SETS ed EVENTS (Altezza modulare = h-[144px]) -->
+  <div class="grid grid-cols-2 gap-3 w-full mb-3">
+    
+    <!-- Card Sinistra: DEMO & LIVE SETS (Altezza modulare h-[144px], Click Diretto) -->
+    <a
+      href={demoLiveUrl}
+      class="group relative w-full h-[144px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+    >
+      <div
+        class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
+        style={getFramingStyle('demo-live', 'mobile', '/assets/bg-livesets.webp', '/assets/bg-livesets.jpg')}
+      ></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25 z-[1]"></div>
+      
+      <!-- Top Row: Icona freccia -->
+      <div class="relative z-10 flex justify-end w-full">
+        <span class="w-7 h-7 rounded-full bg-black/50 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 group-hover:bg-neonPurple group-hover:text-white transition-all shadow-md">
+          <i class="fas fa-arrow-right text-[10px]"></i>
+        </span>
+      </div>
+
+      <!-- Bottom Title: Clean Title ONLY -->
+      <div class="relative z-10">
+        <h3 class="text-sm sm:text-base font-extrabold uppercase tracking-wider text-white text-outline leading-tight">
+          {t.cards.demoLive.title}
+        </h3>
+      </div>
+      
+      <div class="absolute inset-0 rounded-2xl border border-transparent group-hover:border-neonPurple pointer-events-none transition-colors"></div>
+    </a>
+
+    <!-- Card Destra: EVENTS (Altezza modulare h-[144px], Click Diretto) -->
+    <a
+      href={eventsUrl}
+      class="group relative w-full h-[144px] rounded-2xl overflow-hidden border border-white/20 shadow-xl flex flex-col justify-between p-3.5 sm:p-4 transition-all duration-300 active:scale-[0.98] active:border-neonPurple/80"
+    >
+      <div
+        class="absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.8] contrast-[1.05] group-active:brightness-[0.7]"
+        style={getFramingStyle('events', 'mobile', '/assets/bg-events.webp', '/assets/bg-events.jpg')}
+      ></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25 z-[1]"></div>
+      
+      <!-- Top Row: Icona freccia -->
+      <div class="relative z-10 flex justify-end w-full">
+        <span class="w-7 h-7 rounded-full bg-black/50 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 group-hover:bg-neonPurple group-hover:text-white transition-all shadow-md">
+          <i class="fas fa-arrow-right text-[10px]"></i>
+        </span>
+      </div>
+
+      <!-- Bottom Title: Clean Title ONLY -->
+      <div class="relative z-10">
+        <h3 class="text-sm sm:text-base font-extrabold uppercase tracking-wider text-white text-outline leading-tight">
+          {t.cards.events.title}
+        </h3>
+      </div>
+      
+      <div class="absolute inset-0 rounded-2xl border border-transparent group-hover:border-neonPurple pointer-events-none transition-colors"></div>
+    </a>
+  </div>
+
+  <!-- 2. Card Panoramica Sotto: PARTYHIVE (Altezza modulare h-[144px], Mezzo Busto & Social) -->
+  <div
+    class="mobile-expandable-card group relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-all duration-300"
+    data-card-id="partyhive"
+  >
+    <div
+      class="card-bg absolute inset-0 bg-cover transition-all duration-500 filter brightness-[0.82] contrast-[1.05]"
+      style={getFramingStyle('partyhive', 'mobile', '/assets/bg-partyhive.webp', '/assets/bg-partyhive.jpg')}
+    ></div>
+
+    <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20 transition-colors duration-300 z-[1]"></div>
+    
+    <div
+      class="relative z-10 w-full min-h-[144px] flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none"
+      data-card-toggle
+      role="button"
+      tabindex="0"
+      aria-expanded="false"
+    >
+      <!-- Top Row: Solo Azioni Diretta + Chevron (Nessun badge) -->
+      <div class="flex items-center justify-end w-full">
+        <div class="flex items-center gap-2 flex-none">
+          <a
+            href={siteLinks.socials.instagramPartyhive.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-8 h-8 rounded-full bg-black/60 border border-white/30 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-neonPurple hover:text-white transition-all shadow-md active:scale-90"
+            data-direct-link
+            title="Instagram Partyhive"
+            aria-label="Instagram Partyhive"
+          >
+            <i class="fab fa-instagram text-xs"></i>
+          </a>
+
+          <span class="chevron-indicator w-7 h-7 flex items-center justify-center text-white/80 transition-transform duration-300 bg-black/40 rounded-full border border-white/20">
+            <i class="fas fa-chevron-down text-xs"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Bottom: Solo Titolo PARTYHIVE Pulito (Senza etichette o sottotitoli) -->
+      <div>
+        <h3 class="text-xl sm:text-2xl font-extrabold uppercase tracking-wider text-white text-outline leading-tight">
+          {t.cards.partyhive.title}
+        </h3>
+      </div>
+    </div>
+
+    <!-- Drawer Descrizione Espandibile con Bottoni Social Dedicati a Partyhive -->
+    <div class="card-drawer relative z-10 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out px-4 sm:px-5">
+      <div class="pt-2 pb-4 flex flex-col items-start gap-3 border-t border-white/20">
+        <p class="text-xs sm:text-sm text-gray-100 font-medium leading-relaxed text-outline">
+          {t.cards.partyhive.shortDesc}
+        </p>
+
+        <!-- Bottoni Social Dedicati Partyhive -->
+        <div class="flex flex-wrap items-center gap-2.5 w-full pt-1">
+          <a
+            href={siteLinks.socials.instagramPartyhive.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-md active:scale-95"
+          >
+            <i class="fab fa-instagram text-sm"></i>
+            <span>Instagram</span>
+          </a>
+
+          <a
+            href={siteLinks.socials.instagramPartyhive.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-md active:scale-95"
+          >
+            <span>Linktree / Eventi</span>
+            <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="neon-border absolute inset-0 rounded-2xl border border-transparent pointer-events-none transition-colors duration-300"></div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BARRA TAP-TO-ACTION RAPIDA PER MOBILE      -->
+  <!-- ========================================== -->
+  <div class="w-full mt-6 p-4 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md shadow-xl flex flex-col gap-3 text-center">
+    <span class="text-xs uppercase tracking-widest font-semibold text-gray-300">
+      {locale === 'it' ? 'Contatto Rapido & Booking' : 'Quick Contact & Booking'}
+    </span>
+    
+    <div class="grid grid-cols-3 gap-2.5">
+      <a
+        href={`mailto:${siteLinks.email}`}
+        class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"
+      >
+        <i class="fas fa-envelope text-neonPurple text-lg"></i>
+        <span class="text-[11px] font-medium tracking-wider">Email</span>
+      </a>
+
+      <a
+        href={siteLinks.socials.instagramPoda.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"
+      >
+        <i class="fab fa-instagram text-neonPurple text-lg"></i>
+        <span class="text-[11px] font-medium tracking-wider">Instagram</span>
+      </a>
+
+      <a
+        href={siteLinks.socials.soundcloud.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl bg-white/5 border border-white/10 hover:border-neonPurple hover:bg-neonPurple/20 transition-all text-gray-200 active:scale-95"
+      >
+        <i class="fab fa-soundcloud text-neonPurple text-lg"></i>
+        <span class="text-[11px] font-medium tracking-wider">SoundCloud</span>
+      </a>
+    </div>
+  </div>
+
+</nav>
+
+<script>
+  function setupMobileCards() {
+    const cards = document.querySelectorAll('.mobile-expandable-card');
+    
+    cards.forEach((card) => {
+      const toggle = card.querySelector('[data-card-toggle]');
+      const drawer = card.querySelector('.card-drawer');
+      const directBtns = card.querySelectorAll('[data-direct-link]');
+
+      if (!toggle || !drawer) return;
+
+      directBtns.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+
+      function toggleAccordion() {
+        const isOpen = card.classList.contains('is-expanded');
+
+        cards.forEach((otherCard) => {
+          if (otherCard !== card && otherCard.classList.contains('is-expanded')) {
+            closeCard(otherCard);
+          }
+        });
+
+        if (isOpen) {
+          closeCard(card);
+        } else {
+          openCard(card);
+        }
+      }
+
+      function openCard(targetCard: Element) {
+        targetCard.classList.add('is-expanded');
+        toggle?.setAttribute('aria-expanded', 'true');
+        
+        const d = targetCard.querySelector('.card-drawer') as HTMLElement;
+        const b = targetCard.querySelector('.card-bg') as HTMLElement;
+        const o = targetCard.querySelector('.card-overlay') as HTMLElement;
+        const c = targetCard.querySelector('.chevron-indicator') as HTMLElement;
+        const nb = targetCard.querySelector('.neon-border') as HTMLElement;
+
+        if (d) {
+          d.style.maxHeight = d.scrollHeight + 30 + 'px';
+          d.classList.remove('opacity-0');
+          d.classList.add('opacity-100');
+        }
+        if (b) {
+          b.style.filter = 'blur(6px) brightness(0.4)';
+        }
+        if (o) {
+          o.style.backgroundColor = 'rgba(0, 0, 0, 0.55)';
+        }
+        if (c) {
+          c.style.transform = 'rotate(180deg)';
+        }
+        if (nb) {
+          nb.style.borderColor = '#a855f7';
+          nb.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.5)';
+        }
+      }
+
+      function closeCard(targetCard: Element) {
+        targetCard.classList.remove('is-expanded');
+        toggle?.setAttribute('aria-expanded', 'false');
+
+        const d = targetCard.querySelector('.card-drawer') as HTMLElement;
+        const b = targetCard.querySelector('.card-bg') as HTMLElement;
+        const o = targetCard.querySelector('.card-overlay') as HTMLElement;
+        const c = targetCard.querySelector('.chevron-indicator') as HTMLElement;
+        const nb = targetCard.querySelector('.neon-border') as HTMLElement;
+
+        if (d) {
+          d.style.maxHeight = '0px';
+          d.classList.remove('opacity-100');
+          d.classList.add('opacity-0');
+        }
+        if (b) {
+          b.style.filter = 'brightness(0.82) contrast(1.05)';
+        }
+        if (o) {
+          o.style.backgroundColor = 'transparent';
+        }
+        if (c) {
+          c.style.transform = 'rotate(0deg)';
+        }
+        if (nb) {
+          nb.style.borderColor = 'transparent';
+          nb.style.boxShadow = 'none';
+        }
+      }
+
+      toggle.addEventListener('click', toggleAccordion);
+      toggle.addEventListener('keydown', (e: any) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAccordion();
+        }
+      });
+    });
+  }
+
+  setupMobileCards();
+  document.addEventListener('astro:page-load', setupMobileCards);
+</script>

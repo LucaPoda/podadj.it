@@ -1,0 +1,49 @@
+{
+  "id": "aperipovo-24032026",
+  "date": "2026-03-24",
+  "startAt": "2026-03-24T18:00:00+01:00",
+  "endAt": "2026-03-24T20:30:00+01:00",
+  "title": {
+    "it": "APERIPOVO (LIVE SET) — Povo Courtyard",
+    "en": "APERIPOVO (LIVE SET) — Povo Courtyard"
+  },
+  "location": "Trento (TN)",
+  "venue": "Corte Polo Scientifico Povo (UniTrento)",
+  "format": "THE MAINSTAGE SIDE",
+  "audioSetup": "Impianto audio open-air ad alta definizione, console Pioneer DJ, microfonia wireless, regia digitale",
+  "notes": {
+    "it": "Registrazione integrale stereo diretta dal mixer durante l'APERIPOVO primaverile. Transizione graduale da Tech House calda fino al takeover hardstyle, hard-dance e rave techno con la corte universitaria gremita e cori su tutte le tracce.",
+    "en": "Full stereo mixer live feed recorded at the spring APERIPOVO. Gradual build from warm Tech House into full hardstyle, hard-dance, and rave techno with a packed courtyard singing along."
+  },
+  "liveSetId": "aperipovo-24032026",
+  "tracklist": [
+    {
+      "index": 1,
+      "title": "Ferrari (Tech House Edit)",
+      "artist": "James Hype",
+      "bpm": 126,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Drugs From Amsterdam",
+      "artist": "Mau P",
+      "bpm": 125,
+      "key": "4A"
+    },
+    {
+      "index": 3,
+      "title": "Zombie (Hardstyle Rework)",
+      "artist": "Ran-D",
+      "bpm": 150,
+      "key": "11B"
+    },
+    {
+      "index": 4,
+      "title": "Before I Go",
+      "artist": "Brennan Heart",
+      "bpm": 150,
+      "key": "1A"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "club-night-trento-2026",
+  "date": "2026-11-09",
+  "startAt": "2026-11-09T01:00:00+01:00",
+  "endAt": "2026-11-09T03:30:00+01:00",
+  "title": {
+    "it": "Club Night Trento — Deeper & Underground",
+    "en": "Club Night Trento — Deeper & Underground"
+  },
+  "location": "Trento (TN)",
+  "venue": "Clubroom Underground",
+  "format": "THE GROOVE SIDE",
+  "audioSetup": "Club PA Sound System, Pioneer DJ, Allen & Heath Xone mixer, luci ambientali soffuse",
+  "notes": {
+    "it": "Dedicato al clubbing notturno più cupo. Warmup progressivo da Tech House solida a 126 BPM verso un picco di Techno ipnotica e Acid Techno Drumcode style a 130 BPM.",
+    "en": "Dedicated to deep underground clubbing. Progressive warmup starting with solid 126 BPM Tech House building into hypnotic Techno and Drumcode-style Acid Techno at 130 BPM."
+  },
+  "liveSetId": "club-night-trento-2026",
+  "tracklist": [
+    {
+      "index": 1,
+      "title": "Rhyme Dust",
+      "artist": "Dom Dolla",
+      "bpm": 126,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Your Mind",
+      "artist": "Adam Beyer, Bart Skils",
+      "bpm": 128,
+      "key": "11A"
+    },
+    {
+      "index": 3,
+      "title": "Astronautin",
+      "artist": "Enrico Sangiuliano",
+      "bpm": 130,
+      "key": "4A"
+    }
+  ]
+}

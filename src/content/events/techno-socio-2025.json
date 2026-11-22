@@ -1,0 +1,42 @@
+{
+  "id": "techno-socio-2025",
+  "date": "2025-08-12",
+  "startAt": "2025-08-12T00:00:00+02:00",
+  "endAt": "2025-08-12T01:00:00+02:00",
+  "title": {
+    "it": "TECHNO-SOCIO (PART 1)",
+    "en": "TECHNO-SOCIO (PART 1)"
+  },
+  "location": "Brescia (BS)",
+  "venue": "Studio & Club Session",
+  "format": "THE GROOVE SIDE",
+  "audioSetup": "Studio monitor rig, Pioneer DJ Controller, Direct Digital Master Recording",
+  "notes": {
+    "it": "Un'ora di techno pura, scura e incalzante a 130 BPM con sonorità analogiche e linee di basso 303 ipnotiche. Mixato dal vivo e pubblicato integralmente su Mixcloud.",
+    "en": "One hour of pure, dark, and driving techno at 130 BPM with analog textures and hypnotic 303 basslines. Mixed live and published on Mixcloud."
+  },
+  "liveSetId": "techno-socio-2025",
+  "tracklist": [
+    {
+      "index": 1,
+      "title": "Electric Acid",
+      "artist": "Adrenaline",
+      "bpm": 130,
+      "key": "8A"
+    },
+    {
+      "index": 2,
+      "title": "Never Go Back to Sleep",
+      "artist": "Electric Acid",
+      "bpm": 130,
+      "key": "11A"
+    },
+    {
+      "index": 3,
+      "title": "Be Your Light",
+      "artist": "Hype",
+      "bpm": 130,
+      "key": "4A"
+    }
+  ]
+}
