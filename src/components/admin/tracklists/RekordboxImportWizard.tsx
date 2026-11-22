@@ -160,12 +160,12 @@ export const RekordboxImportWizard: React.FC<RekordboxImportWizardProps> = ({
         {/* Header */}
         <div className="p-5 border-b border-white/10 flex items-center justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/20 text-purple-300 border border-neonPurple/35 mb-1">
-              Parsing 100% Locale nel Browser
-            </span>
             <h2 className="text-lg font-black uppercase tracking-wider text-white">
               Importa Tracklist da XML Rekordbox
             </h2>
+            <p className="text-[11px] text-gray-400">
+              Parsing 100% locale nel browser
+            </p>
           </div>
           <button
             type="button"

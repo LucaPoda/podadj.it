@@ -90,12 +90,12 @@ export const LibraryTagSyncPanel: React.FC<LibraryTagSyncPanelProps> = ({
       <div className="w-full max-w-4xl max-h-[90vh] rounded-3xl bg-[#0a0a0c] border border-white/15 shadow-2xl flex flex-col overflow-hidden">
         <div className="p-5 border-b border-white/10 flex items-center justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/35 mb-1">
-              Doppio Controllo Hash SHA-256 + Titolo/Artisti
-            </span>
             <h2 className="text-lg font-black uppercase tracking-wider text-white">
               Sync Globale Tag Libreria ({tracklists.length} Tracklist)
             </h2>
+            <p className="text-[11px] text-gray-400">
+              Doppio controllo hash SHA-256 + titolo/artisti
+            </p>
           </div>
           <button
             type="button"
@@ -185,12 +185,12 @@ export const LibraryTagSyncPanel: React.FC<LibraryTagSyncPanelProps> = ({
                             </strong>
                           </div>
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                            className={`text-[10px] font-bold uppercase ${
                               item.confidence === 'exact'
-                                ? 'bg-emerald-500/15 text-emerald-300'
+                                ? 'text-emerald-300'
                                 : item.confidence === 'ambiguous'
-                                  ? 'bg-amber-500/15 text-amber-300'
-                                  : 'bg-white/5 text-gray-400'
+                                  ? 'text-amber-300'
+                                  : 'text-gray-400'
                             }`}
                           >
                             {item.confidence}

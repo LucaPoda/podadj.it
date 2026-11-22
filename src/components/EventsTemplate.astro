@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from './Footer.astro';
 import HeroBanner from './HeroBanner.astro';
-import MediaEmbed from './MediaEmbed.astro';
+import LiveSetAccordion from './LiveSetAccordion.astro';
 import TracklistViewer from './TracklistViewer.astro';
 import { type Locale, useTranslations } from '../i18n/ui';
 import { getFormatMeta } from '../schemas/common';
@@ -38,28 +38,6 @@ function formatDisplayDate(dateStr: string, currentLocale: Locale): string {
   } catch {
     return dateStr;
   }
-}
-
-function getLiveSetMedia(set?: LiveSet) {
-  if (!set) return null;
-  const url = set.mediaUrl || set.mixcloudUrl || set.youtubeUrl || set.soundcloudUrl;
-  if (!url) return null;
-
-  let platform: 'mixcloud' | 'youtube' | 'soundcloud' = 'soundcloud';
-  if (set.mediaType) platform = set.mediaType;
-  else if (url.includes('mixcloud.com')) platform = 'mixcloud';
-  else if (url.includes('youtube.com') || url.includes('youtu.be')) platform = 'youtube';
-
-  let isEmbeddable = false;
-  if (platform === 'mixcloud' && url.includes('mixcloud.com/')) {
-    isEmbeddable = (url.split('mixcloud.com/')[1]?.split('/').filter(Boolean) || []).length >= 2;
-  } else if (platform === 'youtube') {
-    isEmbeddable = url.includes('v=') || url.includes('youtu.be/');
-  } else if (platform === 'soundcloud' && url.includes('soundcloud.com/')) {
-    isEmbeddable = (url.split('soundcloud.com/')[1]?.split('/').filter(Boolean) || []).length >= 2;
-  }
-
-  return { url, platform, isEmbeddable };
 }
 
 const now = new Date();
@@ -104,20 +82,15 @@ const sections = [
     locale={locale}
     title={t.cards.events.title}
     subtitle={t.cards.events.shortDesc}
-    badge="EVENTS & RETROSPECTIVES"
-    framingKey="events"
+    framingKey="hero-events"
     bgImageWebp="/assets/bg-events.webp"
     accent="purple"
-    quickNavItems={[
-      { label: t.eventsPage.upcomingTitle, href: '#upcoming-events' },
-      { label: t.eventsPage.pastTitle, href: '#past-events' },
-    ]}
   />
 
   <main class="w-full max-w-5xl flex flex-col gap-10">
     {sections.map((section) => (
       <section id={section.sectionId} aria-labelledby={`${section.sectionId}-heading`} class="flex flex-col gap-4 scroll-mt-6">
-        <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
           <div>
             <h2
               id={`${section.sectionId}-heading`}
@@ -129,7 +102,7 @@ const sections = [
           </div>
           <span
             id={section.countId}
-            class={`px-3 py-1 rounded-full text-xs font-bold font-mono border ${section.badgeClass}`}
+            class="text-xs font-bold font-mono text-gray-400"
           >
             {section.items.length}
           </span>
@@ -155,7 +128,6 @@ const sections = [
                 ? linkedTracklist.tracks
                 : data.tracklist || [];
             const linkedLiveSet = data.liveSetId ? liveSetsById[data.liveSetId] : undefined;
-            const liveSetMedia = getLiveSetMedia(linkedLiveSet);
             const notesText = data.notes?.[locale]?.trim();
             const hasSetup = Boolean(data.audioSetup?.trim());
 
@@ -194,27 +166,25 @@ const sections = [
                     </h3>
                   </div>
 
-                  <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                  <div class="flex items-center gap-3 flex-shrink-0 text-[11px] text-gray-400">
+                    <span class="font-semibold uppercase tracking-wider text-gray-300">
+                      {formatMeta.shortLabel}
+                    </span>
                     {effectiveTracks.length > 0 && (
-                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-gray-200 border border-white/15">
-                        <i class="fas fa-list-ol text-neonPurple mr-1 text-[9px]"></i>
-                        {effectiveTracks.length} {t.eventsPage.tracklistBadge}
-                      </span>
+                      <>
+                        <span class="text-white/25">•</span>
+                        <span>
+                          {effectiveTracks.length} {t.eventsPage.tracklistBadge}
+                        </span>
+                      </>
                     )}
                     {linkedLiveSet && (
-                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-gray-200 border border-white/15">
-                        <i class="fas fa-headphones text-neonPurple mr-1 text-[9px]"></i>
-                        {t.eventsPage.liveSetBadge}
-                      </span>
+                      <>
+                        <span class="text-white/25">•</span>
+                        <span>{t.eventsPage.liveSetBadge}</span>
+                      </>
                     )}
-                    <span
-                      class={`px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase border ${formatMeta.eventBadgeClass}`}
-                    >
-                      {formatMeta.fullTitle}
-                    </span>
-                    <span class="w-7 h-7 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-gray-300 transition-transform duration-200 group-open:rotate-180">
-                      <i class="fas fa-chevron-down text-[10px]"></i>
-                    </span>
+                    <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200 group-open:rotate-180 ml-1"></i>
                   </div>
                 </summary>
 
@@ -248,32 +218,17 @@ const sections = [
                     </div>
                   )}
 
-                  {linkedLiveSet && liveSetMedia && (
-                    <div class="flex flex-col gap-2.5">
-                      <div class="flex items-center justify-between gap-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                          <i class="fas fa-wave-square text-neonPurple text-xs"></i>
-                          <span>{t.eventsPage.linkedLiveSet}: {linkedLiveSet.title[locale]}</span>
-                        </span>
-                        <a
-                          href={liveSetMedia.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="text-[11px] font-semibold text-gray-300 hover:text-white inline-flex items-center gap-1"
-                        >
-                          <span>{t.eventsPage.openLiveSetExternal}</span>
-                          <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
-                        </a>
-                      </div>
-                      {liveSetMedia.isEmbeddable && (
-                        <MediaEmbed
-                          url={liveSetMedia.url}
-                          type={liveSetMedia.platform}
-                          title={linkedLiveSet.title[locale]}
-                          accentColor={formatMeta.accentHex}
-                          height={liveSetMedia.platform === 'youtube' ? 240 : 120}
-                        />
-                      )}
+                  {linkedLiveSet && (
+                    <div class="flex flex-col gap-2">
+                      <span class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                        <i class="fas fa-wave-square text-neonPurple text-xs"></i>
+                        <span>{t.eventsPage.linkedLiveSet}</span>
+                      </span>
+                      <LiveSetAccordion
+                        sets={[linkedLiveSet]}
+                        locale={locale}
+                        accentColor={formatMeta.accentHex}
+                      />
                     </div>
                   )}
 

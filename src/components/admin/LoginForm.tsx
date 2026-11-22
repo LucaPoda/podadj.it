@@ -69,10 +69,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             height="46"
             className="w-32 mb-4 drop-shadow-lg"
           />
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35 mb-2.5">
-            <i className="fas fa-shield-halved text-[10px]" />
-            <span>Private Admin Console</span>
-          </span>
           <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white">
             Accesso Riservato
           </h1>

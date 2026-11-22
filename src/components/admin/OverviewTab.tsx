@@ -97,19 +97,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
       <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-5 sm:p-7 shadow-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35">
-                Fase 4 • Live Workspace
-              </span>
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 text-gray-300 border border-white/10">
-                {loading ? 'Sincronizzazione...' : `Sorgente: ${activeBranch}`}
-              </span>
-            </div>
             <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white">
               Overview &amp; To-Do
             </h1>
             <p className="text-xs sm:text-sm text-gray-400 mt-1">
-              Stato in tempo reale dei contenuti, eventi passati da completare e stato pubblicazione.
+              {loading ? 'Sincronizzazione workspace...' : `Sorgente: ${activeBranch} · `}
+              Stato contenuti ed eventi passati da completare.
             </p>
           </div>
         </div>
@@ -181,11 +174,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   className="rounded-2xl bg-white/[0.03] border border-amber-500/25 p-4 flex flex-col justify-between gap-3"
                 >
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-mono text-[11px] text-gray-400">{event.date}</span>
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase border ${formatMeta.eventBadgeClass}`}
-                      >
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                      <span className="font-mono text-gray-400">{event.date}</span>
+                      <span className="font-bold uppercase tracking-wider text-gray-300">
                         {formatMeta.shortLabel}
                       </span>
                     </div>
@@ -194,22 +185,22 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                       {event.title.it}
                     </h3>
 
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">
                       {missingTracklist && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-200 border border-amber-500/35">
-                          <i className="fas fa-music mr-1 text-[9px]" />
+                        <span className="font-semibold text-amber-300">
+                          <i className="fas fa-music mr-1 text-[10px]" />
                           Manca Tracklist
                         </span>
                       )}
                       {missingNotes && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-red-500/15 text-red-200 border border-red-500/35">
-                          <i className="fas fa-note-sticky mr-1 text-[9px]" />
+                        <span className="font-semibold text-rose-300">
+                          <i className="fas fa-note-sticky mr-1 text-[10px]" />
                           Mancano Note IT/EN
                         </span>
                       )}
                       {missingAudioSetup && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-red-500/15 text-red-200 border border-red-500/35">
-                          <i className="fas fa-volume-high mr-1 text-[9px]" />
+                        <span className="font-semibold text-rose-300">
+                          <i className="fas fa-volume-high mr-1 text-[10px]" />
                           Manca Setup Audio
                         </span>
                       )}
@@ -221,7 +212,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     <button
                       type="button"
                       onClick={() => onOpenEvent(event.id)}
-                      className="px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white transition-colors"
+                      className="px-3 py-1.5 rounded-xl text-[11px] font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white transition-colors"
                     >
                       Completa Evento
                     </button>
@@ -229,7 +220,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenTracklist(event.tracklistId)}
-                        className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-white/10 hover:bg-white/20 border border-white/15 text-gray-200 transition-colors"
+                        className="px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 hover:bg-white/20 border border-white/15 text-gray-200 transition-colors"
                       >
                         Apri Tracklists
                       </button>
@@ -297,14 +288,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             <button
               type="button"
               onClick={() => onNavigate('texts-links')}
-              className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-neonPurple text-white border border-white/15 transition-all"
+              className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-neonPurple text-white border border-white/15 transition-all"
             >
               Testi, Link &amp; Traduzioni
             </button>
             <button
               type="button"
               onClick={() => onNavigate('review-publish')}
-              className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white transition-all"
+              className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white transition-all"
             >
               Revisione &amp; Pubblicazione
             </button>

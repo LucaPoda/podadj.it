@@ -116,3 +116,25 @@ podadj.it/
 ├── tailwind.config.mjs     # Configurazione Tailwind (colori neonPurple, neonBlue)
 └── package.json            # Dipendenze e script npm
 ```
+
+---
+
+## 🛠️ Portale CMS `/admin`, Validazione & Workflow PR
+
+Il portale privato `/admin` (escluso da `sitemap-index.xml`, `robots.txt` e da tutta la navigazione pubblica) gestisce contenuti JSON/asset tramite GitHub REST & Git Data API:
+
+### 1. Validazione Dati & Typecheck
+```bash
+npm run validate-data   # Valida tutti i JSON (src/data/*, src/i18n/*, src/content/*) con gli schemi Zod
+npm run build           # Esegue optimize-images (ricorsivo su assets/), SSG pubblico + SSR /admin & /api/admin/*
+```
+
+### 2. Variabili d'Ambiente su Vercel (`.env.example`)
+- **Autenticazione `/admin` (obbligatorie):** `ADMIN_PASSWORD`, `SESSION_SECRET` (min. 32 caratteri random).
+- **GitHub CMS & PR (obbligatorie per bozze/pubblicazione):** `GITHUB_TOKEN` (permessi `Contents: Read & Write` e `Pull requests: Read & Write`), `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BASE_BRANCH` (default `main`).
+- **Integrazioni opzionali:** `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` (ricerca brani tracklist), `GEMINI_API_KEY` / `GEMINI_MODEL` (assistente AI bilingue, default `gemini-2.5-flash`).
+
+### 3. Workflow Bozze (`draft/*`) & Pubblicazione
+1. Le modifiche effettuate in `/admin` (eventi, tracklist, demo, live set, setup tech, testi/link, framing desktop/mobile e foto caricate in `assets/tech-gallery/` o `assets/uploads/`) possono essere salvate su una singola branch di bozza `draft/*` su GitHub senza alterare `main`.
+2. Alla pubblicazione (`Revisione & Pubblicazione`), il server valida ogni JSON con Zod e apre/aggiorna una Pull Request verso `main`, dove GitHub Actions esegue la validazione e il build di controllo prima del merge.
+

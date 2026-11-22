@@ -182,14 +182,12 @@ export const TrackRowEditor: React.FC<TrackRowEditorProps> = ({
           />
         </div>
 
-        <div className="col-span-2 flex items-center justify-end gap-1.5">
+        <div className="col-span-2 flex items-center justify-end gap-2">
           {anomalies.length > 0 && (
             <span
               title={anomalies.map((a) => a.message).join(' | ')}
-              className={`px-2 py-1 rounded-full text-[10px] font-bold ${
-                hasErrors
-                  ? 'bg-red-500/20 text-red-200 border border-red-500/40'
-                  : 'bg-amber-500/20 text-amber-200 border border-amber-500/40'
+              className={`text-[11px] font-bold ${
+                hasErrors ? 'text-red-300' : 'text-amber-300'
               }`}
             >
               <i className="fas fa-triangle-exclamation mr-1" />
@@ -198,13 +196,11 @@ export const TrackRowEditor: React.FC<TrackRowEditorProps> = ({
           )}
           <span
             title={hasPreview ? 'Preview disponibile' : 'Nessun link preview'}
-            className={`px-2 py-1 rounded-full text-[10px] border ${
-              hasPreview
-                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35'
-                : 'bg-white/5 text-gray-500 border-white/10'
+            className={`text-[11px] ${
+              hasPreview ? 'text-emerald-300' : 'text-gray-600'
             }`}
           >
-            <i className="fas fa-play text-[9px]" />
+            <i className="fas fa-play text-[10px]" />
           </span>
           <button
             type="button"

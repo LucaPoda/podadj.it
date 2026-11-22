@@ -46,9 +46,6 @@ export const DraftPromptModal: React.FC = () => {
             <i className="fas fa-code-branch text-base" />
           </div>
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-amber-500/15 text-amber-300 border border-amber-500/35 mb-1.5">
-              Bozza Esistente Rilevata
-            </span>
             <h2 id="draft-prompt-title" className="text-lg sm:text-xl font-black text-white">
               È presente una sessione di bozza aperta
             </h2>

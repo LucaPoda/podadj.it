@@ -177,7 +177,7 @@ const labels = {
           {/* Compact right metadata: Genre, Key, Rating, Year + Single Play Button */}
           <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             {row.genre && (
-              <span class="hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] bg-white/5 border border-white/10 text-gray-300 max-w-[120px] truncate">
+              <span class="hidden md:inline-block text-[11px] text-gray-400 max-w-[140px] truncate">
                 {row.genre}
               </span>
             )}
@@ -208,12 +208,12 @@ const labels = {
                 type="button"
                 data-play-btn
                 aria-label={`${labels.playPreview}: ${row.title}`}
-                class="w-7 h-7 rounded-full flex items-center justify-center bg-white/10 hover:bg-neonPurple text-white border border-white/20 transition-all flex-shrink-0"
+                class="w-7 h-7 rounded-lg flex items-center justify-center bg-white/10 hover:bg-neonPurple text-white border border-white/20 transition-all flex-shrink-0"
               >
                 <i class="fas fa-play text-[9px] ml-0.5" data-play-icon />
               </button>
             ) : hasExpandedContent ? (
-              <span class="w-7 h-7 rounded-full flex items-center justify-center text-gray-500 flex-shrink-0">
+              <span class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-500 flex-shrink-0">
                 <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" data-chevron />
               </span>
             ) : null}
@@ -226,33 +226,33 @@ const labels = {
             data-track-panel
             class="hidden border-t border-white/10 bg-black/40 px-4 py-3.5 flex-col gap-3 text-xs"
           >
-            {/* Secondary Metadata: BPM, Label, My Tag */}
-            <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+            {/* Secondary Metadata: BPM, Label, My Tag (Clean inline text, zero oval tags) */}
+            <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-gray-400">
               {row.bpm && (
-                <span class="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 font-mono">
+                <span class="font-mono text-gray-300">
                   {row.bpm} BPM
                 </span>
               )}
               {row.label && (
-                <span class="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10">
+                <span>
                   Label: <strong class="text-white">{row.label}</strong>
                 </span>
               )}
               {row.genre && (
-                <span class="md:hidden px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10">
+                <span class="md:hidden text-gray-300">
                   {row.genre}
                 </span>
               )}
               {row.releaseYear && (
-                <span class="sm:hidden px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 font-mono">
+                <span class="sm:hidden font-mono text-gray-400">
                   {row.releaseYear}
                 </span>
               )}
-              {row.myTags.map((tag) => (
-                <span class="px-2 py-0.5 rounded-full bg-neonPurple/15 border border-neonPurple/35 text-purple-200 text-[10px] font-semibold">
-                  #{tag}
+              {row.myTags.length > 0 && (
+                <span class="text-purple-300 font-medium">
+                  {row.myTags.join(' · ')}
                 </span>
-              ))}
+              )}
             </div>
 
             {/* Played Version Player */}

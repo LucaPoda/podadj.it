@@ -329,12 +329,12 @@ export const TechSideTab: React.FC = () => {
 
         <div className="flex items-center gap-2 text-xs">
           {schemaCheck.success ? (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 font-semibold">
+            <span className="inline-flex items-center gap-1.5 text-emerald-300 font-semibold">
               <i className="fas fa-circle-check" />
               <span>techSide.json valido (Zod)</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-300 font-semibold">
+            <span className="inline-flex items-center gap-1.5 text-rose-300 font-semibold">
               <i className="fas fa-triangle-exclamation" />
               <span>{schemaCheck.error.issues[0]?.message ?? 'Errore validazione'}</span>
             </span>
@@ -1002,7 +1002,7 @@ export const TechSideTab: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
                     {matchedStagedAsset && (
-                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-amber-500/90 text-black text-[10px] font-black">
+                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-amber-500/90 text-black text-[10px] font-black">
                         In coda upload
                       </span>
                     )}

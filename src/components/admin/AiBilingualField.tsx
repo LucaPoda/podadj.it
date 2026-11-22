@@ -82,7 +82,7 @@ export const AiBilingualField: React.FC<AiBilingualFieldProps> = ({
               disabled={aiIsBlocked || busyAction !== null || !valueIt.trim()}
               onClick={() => void handleOptimizeIt()}
               title={aiIsBlocked ? 'AI temporaneamente disabilitata' : 'Ottimizza testo IT con Gemini'}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-neonPurple/15 hover:bg-neonPurple/30 border border-neonPurple/35 text-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-neonPurple/15 hover:bg-neonPurple/30 border border-neonPurple/35 text-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
             >
               <i
                 className={`fas ${
@@ -122,7 +122,7 @@ export const AiBilingualField: React.FC<AiBilingualFieldProps> = ({
               disabled={aiIsBlocked || busyAction !== null || !valueIt.trim()}
               onClick={() => void handleTranslateEn()}
               title={aiIsBlocked ? 'AI temporaneamente disabilitata' : 'Traduci da IT a EN con Gemini'}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/35 text-cyan-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/35 text-cyan-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
             >
               <i
                 className={`fas ${

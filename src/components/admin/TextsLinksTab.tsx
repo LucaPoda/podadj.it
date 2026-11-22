@@ -305,12 +305,10 @@ export const TextsLinksTab: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 text-[11px]">
+          <div className="flex flex-wrap items-center gap-3 text-[11px]">
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-semibold ${
-                linksValidation.success
-                  ? 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'
-                  : 'bg-rose-500/15 border-rose-400/30 text-rose-300'
+              className={`inline-flex items-center gap-1.5 font-semibold ${
+                linksValidation.success ? 'text-emerald-300' : 'text-rose-300'
               }`}
             >
               <i
@@ -322,10 +320,8 @@ export const TextsLinksTab: React.FC = () => {
             </span>
 
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-semibold ${
-                itValidation.success && enValidation.success
-                  ? 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'
-                  : 'bg-rose-500/15 border-rose-400/30 text-rose-300'
+              className={`inline-flex items-center gap-1.5 font-semibold ${
+                itValidation.success && enValidation.success ? 'text-emerald-300' : 'text-rose-300'
               }`}
             >
               <i
@@ -339,10 +335,8 @@ export const TextsLinksTab: React.FC = () => {
             </span>
 
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-semibold ${
-                keyParity.ok
-                  ? 'bg-sky-500/15 border-sky-400/30 text-sky-300'
-                  : 'bg-amber-500/15 border-amber-400/30 text-amber-300'
+              className={`inline-flex items-center gap-1.5 font-semibold ${
+                keyParity.ok ? 'text-sky-300' : 'text-amber-300'
               }`}
             >
               <i className={`fas ${keyParity.ok ? 'fa-code-compare' : 'fa-circle-exclamation'}`} />
@@ -644,8 +638,8 @@ export const TextsLinksTab: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-gray-300">
-                      {filteredLeaves.length + (groupKey === 'header' ? 1 : 0)} campi
+                    <span className="text-[11px] font-mono text-gray-400">
+                      {filteredLeaves.length + (groupKey === 'header' ? 1 : 0)}
                     </span>
                     <i
                       className={`fas ${

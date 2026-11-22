@@ -72,12 +72,12 @@ export const FullXmlAutoSyncModal: React.FC<FullXmlAutoSyncModalProps> = ({
       <div className="w-full max-w-5xl max-h-[90vh] rounded-3xl bg-[#0a0a0c] border border-white/15 shadow-2xl flex flex-col overflow-hidden">
         <div className="p-5 border-b border-white/10 flex items-center justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/35 mb-1">
-              Sync Tag Globali + Events YYYY/HISTORIES
-            </span>
             <h2 className="text-lg font-black uppercase tracking-wider text-white">
               Carica XML Rekordbox (Auto-Sync Completo)
             </h2>
+            <p className="text-[11px] text-gray-400">
+              Sync tag globali + Events YYYY / HISTORIES
+            </p>
           </div>
           <button
             type="button"
@@ -184,8 +184,8 @@ export const FullXmlAutoSyncModal: React.FC<FullXmlAutoSyncModalProps> = ({
                             <div className="flex items-center gap-2">
                               <strong className="text-white truncate">{cand.suggestedTitle}</strong>
                               {cand.historyScope && (
-                                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-neonPurple/15 text-purple-300 border border-neonPurple/35">
-                                  {cand.historyScope}
+                                <span className="text-[10px] font-mono text-purple-300">
+                                  ({cand.historyScope})
                                 </span>
                               )}
                             </div>
@@ -197,7 +197,7 @@ export const FullXmlAutoSyncModal: React.FC<FullXmlAutoSyncModalProps> = ({
                         </div>
 
                         {cand.anomaliesCount > 0 && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35 flex-shrink-0">
+                          <span className="text-[11px] font-bold text-amber-300 flex-shrink-0">
                             {cand.anomaliesCount} anomalie
                           </span>
                         )}

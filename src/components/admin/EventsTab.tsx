@@ -200,9 +200,6 @@ export const EventsTab: React.FC<EventsTabProps> = ({
       {/* Top Toolbar */}
       <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-5 shadow-2xl flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35 mb-1">
-            Fase 4 • Ciclo Futuro → Passato &amp; Collegamenti
-          </span>
           <h1 className="text-xl font-black uppercase tracking-wider text-white">
             Events ({Object.keys(eventsMap).length})
           </h1>
@@ -211,7 +208,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
         <button
           type="button"
           onClick={handleCreateEvent}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white shadow-[0_0_16px_rgba(168,85,247,0.35)]"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white shadow-[0_0_16px_rgba(168,85,247,0.35)]"
         >
           <i className="fas fa-plus text-[11px]" />
           <span>Nuovo Evento</span>
@@ -316,13 +313,12 @@ export const EventsTab: React.FC<EventsTabProps> = ({
           ) : (
             <>
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <code className="text-[11px] text-purple-300 font-mono">{activePath}</code>
+                  <span className="text-white/20">•</span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
-                      isEventPast(activeEvent)
-                        ? 'bg-white/10 text-gray-300 border-white/20'
-                        : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35'
+                    className={`text-[10px] font-bold uppercase ${
+                      isEventPast(activeEvent) ? 'text-gray-400' : 'text-emerald-300'
                     }`}
                   >
                     {isEventPast(activeEvent) ? 'Passato' : 'Futuro'}
@@ -332,7 +328,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                   <button
                     type="button"
                     onClick={handleDuplicate}
-                    className="px-3 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-gray-200 font-semibold"
+                    className="px-3 py-1 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-gray-200 font-semibold"
                   >
                     <i className="fas fa-copy mr-1" />
                     Duplica
@@ -340,7 +336,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                   <button
                     type="button"
                     onClick={handleDelete}
-                    className="px-3 py-1 rounded-full bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 text-red-200 font-semibold"
+                    className="px-3 py-1 rounded-xl bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 text-red-200 font-semibold"
                   >
                     <i className="fas fa-trash-can mr-1" />
                     Elimina

@@ -107,12 +107,12 @@ export const SingleFileImportModal: React.FC<SingleFileImportModalProps> = ({
       <div className="w-full max-w-4xl max-h-[90vh] rounded-3xl bg-[#0a0a0c] border border-white/15 shadow-2xl flex flex-col overflow-hidden">
         <div className="p-5 border-b border-white/10 flex items-center justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/35 mb-1">
-              Supporta UTF-16LE / UTF-8 BOM • .txt / .tsv / .csv
-            </span>
             <h2 className="text-lg font-black uppercase tracking-wider text-white">
               Importa File Singolo / Incolla Testo Rekordbox
             </h2>
+            <p className="text-[11px] text-gray-400">
+              Supporta UTF-16LE / UTF-8 BOM • .txt / .tsv / .csv
+            </p>
           </div>
           <button
             type="button"

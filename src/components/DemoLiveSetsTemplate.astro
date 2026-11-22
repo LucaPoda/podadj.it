@@ -3,15 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from './Footer.astro';
 import HeroBanner from './HeroBanner.astro';
-import SoundcloudPlayer from './SoundcloudPlayer.astro';
+import DemoAccordion from './DemoAccordion.astro';
 import LiveSetAccordion from './LiveSetAccordion.astro';
-import TracklistViewer from './TracklistViewer.astro';
 import { type Locale, useTranslations, getLocalizedPath } from '../i18n/ui';
 import { liveSetsData } from '../data/liveSets';
 import { demosData } from '../data/demos';
 import { getFramingStyle } from '../utils/imageFraming';
-import { getMailtoHref } from '../data/siteLinks';
-import { FORMAT_META } from '../schemas/common';
 
 interface Props {
   locale: Locale;
@@ -20,12 +17,10 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-const mainstageDemoUrl = getLocalizedPath('/mainstage-side#demo', locale);
-const partyDemoUrl = getLocalizedPath('/party-side#demo', locale);
-const grooveDemoUrl = getLocalizedPath('/groove-side#demo', locale);
+const mainstageUrl = getLocalizedPath('/mainstage-side', locale);
+const partyUrl = getLocalizedPath('/party-side', locale);
+const grooveUrl = getLocalizedPath('/groove-side', locale);
 
-// Filter eclectic demos (other)
-const eclecticDemos = demosData.filter((d) => d.format === 'other');
 const allTracklists = await getCollection('tracklists');
 const tracklistsById = Object.fromEntries(
   allTracklists.map((tl) => [tl.data.id, tl.data])
@@ -33,70 +28,42 @@ const tracklistsById = Object.fromEntries(
 
 const formatQuickCards = [
   {
-    framingKey: 'mainstage-side',
+    framingKey: 'quicknav-mainstage',
     title: t.formatPages.mainstage.title,
-    badge: t.formatPages.mainstage.badge,
-    href: mainstageDemoUrl,
+    href: mainstageUrl,
     bgImage: '/assets/bg-mainstage.webp',
-    accentBorder: 'hover:border-amber-400 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]',
-    badgeClass: FORMAT_META.mainstage.badgeClass,
+    accentBorder: 'hover:border-amber-400',
   },
   {
-    framingKey: 'party-side',
+    framingKey: 'quicknav-party',
     title: t.formatPages.party.title,
-    badge: t.formatPages.party.badge,
-    href: partyDemoUrl,
+    href: partyUrl,
     bgImage: '/assets/bg-party.webp',
-    accentBorder: 'hover:border-fuchsia-400 group-hover:shadow-[0_0_20px_rgba(217,70,239,0.25)]',
-    badgeClass: FORMAT_META.party.badgeClass,
+    accentBorder: 'hover:border-fuchsia-400',
   },
   {
-    framingKey: 'groove-side',
+    framingKey: 'quicknav-groove',
     title: t.formatPages.groove.title,
-    badge: t.formatPages.groove.badge,
-    href: grooveDemoUrl,
+    href: grooveUrl,
     bgImage: '/assets/bg-groove.webp',
-    accentBorder: 'hover:border-cyan-400 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]',
-    badgeClass: FORMAT_META.groove.badgeClass,
+    accentBorder: 'hover:border-cyan-400',
   },
 ];
-
-const customSoundMailto = getMailtoHref(
-  locale === 'it' ? 'Richiesta Sonorità Custom' : 'Custom Sound Request',
-  locale === 'it'
-    ? 'Ciao Luca, vorrei richiedere informazioni per una sonorità o selezione musicale personalizzata per il mio evento.'
-    : 'Hi Luca, I would like to inquire about a custom music selection tailored for my event.'
-);
 ---
 
 <BaseLayout title={t.meta.demoLiveTitle} description={t.meta.demoLiveDesc} locale={locale}>
-  <!-- Hero Banner with exact device framing & compact padding -->
+  <!-- 1. CLEAN HERO BANNER -->
   <HeroBanner
     locale={locale}
     title={t.demoLive.title}
-    subtitle={t.demoLive.subtitle}
-    badge={t.demoLive.badge}
-    framingKey="demo-live"
+    framingKey="hero-demo-live"
     bgImageWebp="/assets/bg-livesets.webp"
     accent="purple"
-    quickNavItems={[
-      { label: t.demoLive.quickNavTitle, href: '#core-formats' },
-      { label: t.demoLive.eclecticTitle, href: '#eclectic' },
-      { label: t.demoLive.archiveTitle, href: '#all-live-sets' },
-    ]}
   />
 
   <main class="w-full max-w-5xl flex flex-col gap-8 sm:gap-10">
-    
-    <!-- 1. TOP QUICK-NAV: 3 FORMAT CARDS (Framed with exact imageFraming config) -->
-    <section id="core-formats" aria-labelledby="core-formats-heading" class="w-full scroll-mt-6">
-      <div class="mb-3.5">
-        <h2 id="core-formats-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
-          {t.demoLive.quickNavTitle}
-        </h2>
-      </div>
-
-      <!-- 3 Calibrated Horizontal Cards -->
+    <!-- 2. 3 FORMAT CARDS (Clean cards, zero oval tags) -->
+    <section id="core-formats" aria-label={t.demoLive.quickNavTitle} class="w-full scroll-mt-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         {formatQuickCards.map((card) => {
           const mobileStyle = getFramingStyle(card.framingKey, 'mobile', card.bgImage);
@@ -105,38 +72,25 @@ const customSoundMailto = getMailtoHref(
           return (
             <a
               href={card.href}
-              class={`relative flex flex-col justify-between rounded-3xl overflow-hidden border border-white/10 bg-black/50 p-5 h-[145px] sm:h-[160px] md:h-[175px] transition-all duration-300 backdrop-blur-md group ${card.accentBorder}`}
+              class={`relative flex flex-col justify-end rounded-2xl overflow-hidden border border-white/10 bg-black/50 p-5 h-[135px] sm:h-[150px] md:h-[165px] transition-all duration-300 backdrop-blur-md group ${card.accentBorder}`}
             >
-              <!-- Mobile Background Image -->
               <div
                 class="absolute inset-0 bg-cover md:hidden filter brightness-45 group-hover:scale-105 transition-transform duration-500"
                 style={mobileStyle}
               ></div>
 
-              <!-- Desktop Background Image -->
               <div
                 class="absolute inset-0 bg-cover hidden md:block filter brightness-45 group-hover:scale-105 transition-transform duration-500"
                 style={desktopStyle}
               ></div>
 
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20"></div>
 
-              <!-- Top: Category Badge -->
-              <div class="relative z-10">
-                <span class={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase border ${card.badgeClass}`}>
-                  {card.badge}
-                </span>
-              </div>
-
-              <!-- Bottom: Title and Minimal CTA -->
-              <div class="relative z-10 flex items-end justify-between gap-2">
-                <h3 class="text-base sm:text-lg font-black text-white uppercase tracking-wider text-outline">
+              <div class="relative z-10 flex items-center justify-between gap-2">
+                <h2 class="text-base sm:text-lg font-black text-white uppercase tracking-wider text-outline">
                   {card.title}
-                </h3>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider text-white bg-white/10 group-hover:bg-white group-hover:text-black border border-white/20 transition-all flex-shrink-0">
-                  <span>{t.demoLive.listenDemo}</span>
-                  <i class="fas fa-play text-[8px]"></i>
-                </span>
+                </h2>
+                <i class="fas fa-arrow-right text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 transition-all flex-shrink-0"></i>
               </div>
             </a>
           );
@@ -144,82 +98,33 @@ const customSoundMailto = getMailtoHref(
       </div>
     </section>
 
-    <!-- 2. EXTRA & ECLECTIC DEMOS ("FUORI FORMATO") -->
-    <section id="eclectic" aria-labelledby="eclectic-heading" class="w-full scroll-mt-6">
-      <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3.5">
-        <h2 id="eclectic-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
-          {t.demoLive.eclecticTitle}
+    <!-- 3. TWO COLUMNS: DEMO | LIVE SETS (Collapsed list with title, genre, date; click to open player) -->
+    <section aria-label={t.demoLive.title} class="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <!-- Left Column: Demo -->
+      <div id="demos-column" class="flex flex-col gap-3.5 scroll-mt-6">
+        <h2 class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          Demo
         </h2>
-        <a
-          href={customSoundMailto}
-          class="text-xs font-semibold text-neonPurple hover:text-white transition-colors"
-        >
-          {t.demoLive.eclecticCta} <i class="fas fa-envelope text-[10px] ml-1"></i>
-        </a>
+        <DemoAccordion
+          demos={demosData}
+          locale={locale}
+          accentColor="#a855f7"
+          tracklistsById={tracklistsById}
+        />
       </div>
 
-      <!-- 2 Clean Side-by-Side Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {eclecticDemos.map((demo) => {
-          const linkedTracklist = demo.tracklistId ? tracklistsById[demo.tracklistId] : undefined;
-          return (
-            <div class="rounded-2xl bg-black/40 border border-white/10 hover:border-white/20 p-4 sm:p-5 backdrop-blur-md shadow-lg flex flex-col justify-between gap-3 transition-all duration-200">
-              <div>
-                <div class="flex items-center justify-between gap-2 mb-1.5">
-                  <h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide text-outline">
-                    {demo.title[locale]}
-                  </h3>
-                  <span class="text-[11px] font-mono text-gray-400">
-                    {demo.date}
-                  </span>
-                </div>
-
-                <p class="text-xs text-gray-300 leading-relaxed font-normal mb-3">
-                  {demo.description[locale]}
-                </p>
-              </div>
-
-              <SoundcloudPlayer
-                url={demo.soundcloudUrl}
-                title={demo.title[locale]}
-                accentColor="#a855f7"
-                height={166}
-              />
-
-              {linkedTracklist && linkedTracklist.tracks.length > 0 && (
-                <div class="pt-2 border-t border-white/10 flex flex-col gap-2">
-                  <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
-                    {t.common.tracklist}
-                  </span>
-                  <TracklistViewer
-                    tracks={linkedTracklist.tracks}
-                    locale={locale}
-                    accentColor="#a855f7"
-                  />
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <!-- Right Column: Live Sets -->
+      <div id="live-sets-column" class="flex flex-col gap-3.5 scroll-mt-6">
+        <h2 class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
+          Live Sets
+        </h2>
+        <LiveSetAccordion
+          sets={liveSetsData}
+          locale={locale}
+          accentColor="#a855f7"
+        />
       </div>
     </section>
-
-    <!-- 3. ALL LIVE SETS ARCHIVE -->
-    <section id="all-live-sets" aria-labelledby="all-live-sets-heading" class="w-full scroll-mt-6">
-      <div class="mb-3.5">
-        <h2 id="all-live-sets-heading" class="text-lg sm:text-xl font-bold uppercase text-white tracking-wider text-outline">
-          {t.demoLive.archiveTitle}
-        </h2>
-      </div>
-
-      <LiveSetAccordion
-        sets={liveSetsData}
-        locale={locale}
-        accentColor="#a855f7"
-        showFormatBadge={true}
-      />
-    </section>
-
   </main>
 
   <Footer locale={locale} />

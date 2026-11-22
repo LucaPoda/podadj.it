@@ -8,6 +8,7 @@ import { EventsTab } from './EventsTab';
 import { DemosLiveSetsTab } from './DemosLiveSetsTab';
 import { ReviewPublishTab } from './ReviewPublishTab';
 import { TechSideTab } from './TechSideTab';
+import { FramingEditorTab } from './FramingEditorTab';
 import { TextsLinksTab } from './TextsLinksTab';
 
 interface AdminShellProps {
@@ -55,8 +56,6 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
     }
   }
 
-  const isDraftBranch = activeBranch.startsWith('draft/');
-
   return (
     <div className="w-full flex flex-col gap-5">
       <DraftPromptModal />
@@ -74,29 +73,19 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
             />
             <div className="h-6 w-px bg-white/15 hidden sm:block" />
             <div className="flex flex-col">
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2.5">
                 <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white">
                   PODA Admin
                 </span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Sessione Attiva
-                </span>
                 {githubConfigured && (
-                  <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest border ${
-                      isDraftBranch
-                        ? 'bg-amber-500/15 text-amber-300 border-amber-500/35'
-                        : 'bg-white/5 text-gray-300 border-white/15'
-                    }`}
-                  >
-                    <i className="fas fa-code-branch text-[8px]" />
-                    <span className="max-w-[160px] truncate">{activeBranch}</span>
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-gray-400">
+                    <i className="fas fa-code-branch text-[10px] text-neonPurple" />
+                    <span className="max-w-[180px] truncate">{activeBranch}</span>
                   </span>
                 )}
               </div>
               <span className="text-[11px] text-gray-400 hidden sm:inline">
-                Fase 4 — Rekordbox Auto-Sync, Events, Overview &amp; Demo/Live Sets
+                Gestione contenuti, tracklist, eventi e pubblicazione
               </span>
             </div>
           </div>
@@ -106,7 +95,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
             >
               <i className="fas fa-arrow-up-right-from-square text-[10px]" />
               <span className="hidden sm:inline">Apri Sito</span>
@@ -115,7 +104,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
               type="button"
               onClick={handleLogoutClick}
               disabled={loggingOut}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-red-200 hover:text-white bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 transition-all disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-[11px] font-bold uppercase tracking-wider text-red-200 hover:text-white bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 transition-all disabled:opacity-60"
             >
               <i className="fas fa-right-from-bracket text-[10px]" />
               <span>{loggingOut ? 'Uscita...' : 'Esci'}</span>
@@ -149,16 +138,8 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
                   />
                   <span className="whitespace-nowrap">{tab.label}</span>
                   {showPendingCount && (
-                    <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-extrabold bg-neonPurple text-white">
-                      {totalPendingDiffs.length}
-                    </span>
-                  )}
-                  {tab.desktopOnly && (
-                    <span
-                      title="Solo Desktop"
-                      className="lg:hidden inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-white/10 text-gray-300"
-                    >
-                      Desktop
+                    <span className="text-[11px] font-mono font-bold text-neonPurple">
+                      ({totalPendingDiffs.length})
                     </span>
                   )}
                 </button>
@@ -210,9 +191,9 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
               <div className="w-12 h-12 rounded-2xl bg-neonPurple/15 border border-neonPurple/35 text-neonPurple flex items-center justify-center mx-auto mb-4">
                 <i className="fas fa-desktop text-lg" />
               </div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 text-gray-300 border border-white/10 mb-2">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-purple-300 mb-1">
                 {activeTab.label}
-              </span>
+              </p>
               <h2 className="text-lg font-extrabold text-white mb-2">
                 Questa sezione è disponibile solo da desktop
               </h2>
@@ -227,14 +208,14 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
                 <button
                   type="button"
                   onClick={() => setActiveTabId('overview')}
-                  className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-neonPurple text-white hover:bg-purple-500 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonPurple text-white hover:bg-purple-500 transition-colors"
                 >
                   Vai a Overview
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTabId('review-publish')}
-                  className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-gray-200 hover:bg-white/20 border border-white/15 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 text-gray-200 hover:bg-white/20 border border-white/15 transition-colors"
                 >
                   Revisione &amp; Pubblicazione
                 </button>
@@ -259,7 +240,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
               ) : activeTab.id === 'tech-side' ? (
                 <TechSideTab />
               ) : (
-                <TabPlaceholderPanel tab={activeTab} />
+                <FramingEditorTab />
               )}
             </div>
           </>
@@ -276,45 +257,5 @@ export const AdminShell: React.FC<AdminShellProps> = ({ onLogout }) => {
         )}
       </main>
     </div>
-  );
-};
-
-const TabPlaceholderPanel: React.FC<{ tab: AdminTabConfig }> = ({ tab }) => {
-  return (
-    <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-6 sm:p-8 shadow-2xl flex flex-col gap-5">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35">
-              {tab.phase}
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 text-gray-300 border border-white/10">
-              {tab.desktopOnly ? 'Desktop-Only' : 'Desktop & Mobile'}
-            </span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white flex items-center gap-2.5">
-            <i className={`${tab.icon} text-neonPurple text-lg`} />
-            <span>{tab.label}</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-300 mt-1.5 max-w-2xl leading-relaxed">
-            {tab.summary}
-          </p>
-        </div>
-      </div>
-
-      <div className="rounded-2xl bg-white/[0.03] border border-dashed border-white/15 p-5 flex flex-col gap-3">
-        <span className="text-[11px] font-bold uppercase tracking-widest text-gray-300">
-          Modulo pronto per l&apos;implementazione ({tab.phase})
-        </span>
-        <ul className="flex flex-col gap-2 text-xs text-gray-300">
-          {tab.plannedFeatures.map((feature) => (
-            <li key={feature} className="flex items-start gap-2.5">
-              <i className="fas fa-chevron-right text-neonPurple text-[10px] mt-1 flex-shrink-0" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
   );
 };

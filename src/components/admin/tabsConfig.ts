@@ -97,11 +97,11 @@ export const ADMIN_TABS: AdminTabConfig[] = [
     icon: 'fas fa-crop-simple',
     desktopOnly: true,
     phase: 'Fase 6',
-    summary: 'Calibrazione visuale di posizione, zoom e transform-origin per Desktop e Mobile in imageFraming.json.',
+    summary: 'Calibrazione visuale di posizione X/Y, zoom (%) e transform-origin per Desktop e Mobile in imageFraming.json.',
     plannedFeatures: [
-      'Anteprima live side-by-side delle card desktop Bento e mobile Linktree',
-      'Controlli precisi per background-position, scale e transform-origin',
-      'Reset rapido ai valori calibrati esistenti',
+      'Doppia modalità Per Immagine e Per Pagina (Home Bento, Mobile Linktree, HeroBanner, Quick-Nav)',
+      'Controlli precisi Desktop/Mobile con copia tra viewport e ripristino da main',
+      'Anteprima live identica al CSS pubblico (incluso inset -15px)',
     ],
   },
   {

@@ -326,9 +326,6 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
       {/* Top Action Toolbar */}
       <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-5 shadow-2xl flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35 mb-1">
-            Fase 3 • Gestione Archivio &amp; Rekordbox XML
-          </span>
           <h1 className="text-xl font-black uppercase tracking-wider text-white">
             Tracklists ({sortedPaths.length})
           </h1>
@@ -338,7 +335,7 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
           <button
             type="button"
             onClick={() => setShowFullAutoSyncModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-400 hover:bg-cyan-300 text-black shadow-[0_0_16px_rgba(34,211,238,0.3)]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-cyan-400 hover:bg-cyan-300 text-black shadow-[0_0_16px_rgba(34,211,238,0.3)]"
           >
             <i className="fas fa-wand-magic-sparkles text-[11px]" />
             <span>Carica XML Rekordbox (Auto-Sync Completo)</span>
@@ -347,7 +344,7 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
           <button
             type="button"
             onClick={() => setShowSingleFileModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/40 text-fuchsia-200"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/40 text-fuchsia-200"
           >
             <i className="fas fa-file-lines text-[11px]" />
             <span>Importa File Singolo / Incolla Testo</span>
@@ -356,7 +353,7 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
           <button
             type="button"
             onClick={() => setShowImportWizard(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white shadow-[0_0_16px_rgba(168,85,247,0.35)]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonPurple hover:bg-purple-500 text-white shadow-[0_0_16px_rgba(168,85,247,0.35)]"
           >
             <i className="fas fa-sitemap text-[11px]" />
             <span>Sfoglia Playlist XML</span>
@@ -366,7 +363,7 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
             type="button"
             onClick={() => setShowSyncPanel(true)}
             disabled={sortedPaths.length === 0}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-white/5 hover:bg-white/15 border border-white/15 disabled:opacity-45 text-gray-200"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/15 border border-white/15 disabled:opacity-45 text-gray-200"
           >
             <i className="fas fa-arrows-rotate text-[11px]" />
             <span>Solo Sync Tag</span>
@@ -375,7 +372,7 @@ export const TracklistsTab: React.FC<{ initialTracklistId?: string | null }> = (
           <button
             type="button"
             onClick={handleCreateManual}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/15 text-white"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/15 text-white"
           >
             <i className="fas fa-plus text-[11px]" />
             <span>Nuova Manuale</span>

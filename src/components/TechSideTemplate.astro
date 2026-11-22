@@ -21,21 +21,14 @@ const generalMailto = getPrefilledMailto(locale);
 ---
 
 <BaseLayout title={t.meta.techSideTitle} description={t.meta.techSideDesc} locale={locale}>
-  <!-- Hero Banner with exact device framing & compact padding -->
+  <!-- Hero Banner -->
   <HeroBanner
     locale={locale}
     title={t.techSide.title}
     subtitle={t.techSide.subtitle}
-    badge={t.techSide.badge}
-    framingKey="tech-side"
+    framingKey="hero-tech-side"
     bgImageWebp="/assets/bg-tech.webp"
     accent="blue"
-    quickNavItems={[
-      { label: t.techSide.packagesBadge, href: '#packages' },
-      { label: t.techSide.equipmentBadge, href: '#hardware' },
-      { label: t.techSide.galleryBadge, href: '#gallery' },
-      { label: t.nav.jumpToQuote, href: '#quote-cta' },
-    ]}
   />
 
   <main class="w-full max-w-5xl flex flex-col gap-8 sm:gap-10">
@@ -179,12 +172,12 @@ const generalMailto = getPrefilledMailto(locale);
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter brightness-85"
                 onerror={`this.onerror=null; this.src='${item.imageJpg}';`}
               />
-              <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/70 border border-white/20 text-white backdrop-blur-md">
-                {item.tag[locale]}
-              </span>
             </div>
 
             <div class="p-3.5 flex flex-col gap-1">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-blue-300/80">
+                {item.tag[locale]}
+              </span>
               <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider text-outline">
                 {item.title[locale]}
               </h3>
@@ -210,7 +203,7 @@ const generalMailto = getPrefilledMailto(locale);
 
         <a
           href={generalMailto}
-          class="inline-flex items-center gap-2 px-7 py-3 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-neonPurple hover:bg-neonPurple/90 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+          class="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-neonPurple hover:bg-neonPurple/90 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
         >
           <i class="fas fa-envelope text-xs"></i>
           <span>{t.techSide.ctaButton}</span>

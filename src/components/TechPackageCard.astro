@@ -21,14 +21,14 @@ const mailtoHref = getPrefilledMailto(locale, pkg.name[locale]);
   }`}
 >
   <div>
-    <!-- Top Row: Tag / Badge -->
+    <!-- Top Row: Subtitle -->
     <div class="flex items-center justify-between gap-2 mb-2">
       <span class="text-[10px] font-bold tracking-wider uppercase text-gray-400">
         {pkg.tag[locale]}
       </span>
-      {pkg.badge && (
-        <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-widest uppercase bg-neonPurple/20 text-neonPurple border border-neonPurple/40">
-          {pkg.badge[locale]}
+      {pkg.isFeatured && (
+        <span class="text-[10px] font-extrabold tracking-widest uppercase text-neonPurple">
+          {pkg.badge?.[locale] || ''}
         </span>
       )}
     </div>
@@ -64,7 +64,7 @@ const mailtoHref = getPrefilledMailto(locale, pkg.name[locale]);
   <div class="pt-3 border-t border-white/10">
     <a
       href={mailtoHref}
-      class={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 text-center ${
+      class={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 text-center ${
         pkg.isFeatured
           ? 'bg-neonPurple text-white hover:bg-neonPurple/90 shadow-[0_0_15px_rgba(168,85,247,0.5)]'
           : 'bg-white/10 text-white hover:bg-white hover:text-black border border-white/20'

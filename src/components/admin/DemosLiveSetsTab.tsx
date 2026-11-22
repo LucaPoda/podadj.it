@@ -153,20 +153,17 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
       {/* Top Toolbar & Sub-switcher */}
       <section className="rounded-3xl bg-[#0a0a0c]/85 border border-white/10 backdrop-blur-xl p-5 shadow-2xl flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-neonPurple/15 text-purple-300 border border-neonPurple/35 mb-1">
-            Fase 4 • demos.json &amp; liveSets.json
-          </span>
           <h1 className="text-xl font-black uppercase tracking-wider text-white">
             Demo &amp; Live Sets
           </h1>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="inline-flex rounded-full bg-black/50 border border-white/15 p-1">
+          <div className="inline-flex rounded-xl bg-black/50 border border-white/15 p-1">
             <button
               type="button"
               onClick={() => setSection('demos')}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 section === 'demos'
                   ? 'bg-neonPurple text-white'
                   : 'text-gray-300 hover:text-white'
@@ -177,7 +174,7 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
             <button
               type="button"
               onClick={() => setSection('liveSets')}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 section === 'liveSets'
                   ? 'bg-neonPurple text-white'
                   : 'text-gray-300 hover:text-white'
@@ -190,7 +187,7 @@ export const DemosLiveSetsTab: React.FC<DemosLiveSetsTabProps> = ({ onOpenTrackl
           <button
             type="button"
             onClick={section === 'demos' ? handleAddDemo : handleAddLiveSet}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/15 text-white"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/15 text-white"
           >
             <i className="fas fa-plus text-[11px]" />
             <span>{section === 'demos' ? 'Nuova Demo' : 'Nuovo Live Set'}</span>
